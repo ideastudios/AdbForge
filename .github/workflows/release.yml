@@ -38,6 +38,20 @@ jobs:
           -p:PublishSingleFile=true
           -p:Version=${{ steps.ver.outputs.version }}
 
+      # 捆绑 Google 官方 platform-tools（adb + 依赖 dll + NOTICE），实现离线开箱即用
+      - name: Bundle platform-tools (adb)
+        shell: pwsh
+        run: |
+          $publish = "src/AdbToolkit/bin/Release/net8.0-windows/win-x64/publish"
+          $temp = "$env:RUNNER_TEMP/platform-tools"
+          Invoke-WebRequest -Uri "https://dl.google.com/android/repository/platform-tools-latest-windows.zip" -OutFile "$env:RUNNER_TEMP/platform-tools.zip"
+          Expand-Archive -Path "$env:RUNNER_TEMP/platform-tools.zip" -DestinationPath $temp -Force
+          New-Item "$publish/platform-tools" -ItemType Directory -Force | Out-Null
+          foreach ($f in @("adb.exe", "AdbWinApi.dll", "AdbWinUsbApi.dll", "NOTICE.txt")) {
+            Copy-Item "$temp/platform-tools/$f" "$publish/platform-tools/" -ErrorAction Stop
+          }
+          Write-Host "bundled: $((Get-ChildItem "$publish/platform-tools" | ForEach-Object { $_.Name }) -join ', ')"
+
       - name: Zip portable package
         shell: pwsh
         run: |
@@ -60,6 +74,7 @@ jobs:
       # 应用内「检查更新」的 URL 固定填：
       #   https://raw.githubusercontent.com/<用户>/<仓库>/feed/latest.json
       - name: Update feed branch
+        if: startsWith(github.ref, 'refs/tags/v')
         shell: bash
         run: |
           V="${{ steps.ver.outputs.version }}"
@@ -75,6 +90,7 @@ jobs:
           git push origin feed --force
 
       - name: Create Release & upload assets
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: |

@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <LangVersion>latest</LangVersion>
-    <Version>0.2.0</Version>
+    <Version>0.2.1</Version>
     <Product>卓匠 AdbForge - ADB 开发者工具箱</Product>
     <AssemblyTitle>卓匠 · ADB 工具箱</AssemblyTitle>
     <AssemblyName>AdbForge</AssemblyName>
