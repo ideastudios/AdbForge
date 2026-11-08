@@ -105,12 +105,12 @@
     <!-- 危险操作按钮（描边红字） -->
     <Style x:Key="BtnDanger" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Foreground" Value="{StaticResource Status.Error}"/>
-        <Setter Property="BorderBrush" Value="#F3C2BD"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Danger.Border}"/>
     </Style>
 
     <!-- ===== 文本框 ===== -->
     <Style TargetType="TextBox">
-        <Setter Property="Background" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource Bg.Input}"/>
         <Setter Property="Foreground" Value="{StaticResource Text.Primary}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -316,7 +316,7 @@
     <!-- ===== ComboBox（下拉选择框：浅色圆角、文字居中、无虚线焦点框） ===== -->
     <Style TargetType="ComboBox">
         <Setter Property="Foreground" Value="{StaticResource Text.Primary}"/>
-        <Setter Property="Background" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource Bg.Input}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="10,5"/>
@@ -396,7 +396,7 @@
                                AllowsTransparency="True"
                                Focusable="False"
                                PopupAnimation="Fade">
-                            <Border Background="White"
+                            <Border Background="{StaticResource Bg.Input}"
                                     BorderBrush="{StaticResource Border}" BorderThickness="1"
                                     CornerRadius="4"
                                     Margin="0,2,4,8"

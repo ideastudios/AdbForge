@@ -18,6 +18,15 @@ public class AppSettings
     /// <summary>上次 APK 提取目录（提取对话框记住位置）。</summary>
     public string LastExtractDir { get; set; } = "";
 
+    /// <summary>主题："light" / "dark"（启动时应用，修改后需重启）。</summary>
+    public string Theme { get; set; } = ThemeManager.Light;
+
+    /// <summary>更新服务器地址（托管版本描述 JSON）；为空表示不检查。</summary>
+    public string UpdateUrl { get; set; } = "";
+
+    /// <summary>是否已完成首次运行引导。</summary>
+    public bool FirstRunDone { get; set; }
+
     private static string Dir => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AdbToolkit");
 

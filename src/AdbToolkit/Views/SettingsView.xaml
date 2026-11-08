@@ -65,18 +65,57 @@
             </Border>
         </StackPanel>
 
-        <Border Grid.Column="1" Style="{StaticResource Card}" VerticalAlignment="Top">
-            <StackPanel>
-                <TextBlock Text="检测结果" Style="{StaticResource CardTitle}"/>
-                <TextBox Text="{Binding TestResult, Mode=OneWay}"
-                         IsReadOnly="True"
-                         FontFamily="Consolas" FontSize="12"
-                         AcceptsReturn="True"
-                         TextWrapping="NoWrap"
-                         VerticalScrollBarVisibility="Auto"
-                         HorizontalScrollBarVisibility="Auto"
-                         MinHeight="160"/>
-            </StackPanel>
-        </Border>
+        <StackPanel Grid.Column="1" Margin="0,0,0,0">
+            <Border Style="{StaticResource Card}" VerticalAlignment="Top">
+                <StackPanel>
+                    <TextBlock Text="检测结果" Style="{StaticResource CardTitle}"/>
+                    <TextBox Text="{Binding TestResult, Mode=OneWay}"
+                             IsReadOnly="True"
+                             FontFamily="Consolas" FontSize="12"
+                             AcceptsReturn="True"
+                             TextWrapping="NoWrap"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Auto"
+                             MinHeight="160"/>
+                </StackPanel>
+            </Border>
+
+            <!-- 外观与更新 -->
+            <Border Style="{StaticResource Card}" VerticalAlignment="Top" Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Text="外观与更新" Style="{StaticResource CardTitle}"/>
+
+                    <TextBlock Text="主题（切换后重启应用生效）" FontSize="11.5"
+                               Foreground="{StaticResource Text.Secondary}" Margin="0,0,0,4"/>
+                    <ComboBox ItemsSource="{Binding Themes}"
+                              SelectedItem="{Binding SelectedTheme}"/>
+
+                    <TextBlock Text="更新服务器（托管版本描述 JSON 的 URL，留空不检查）" FontSize="11.5"
+                               Foreground="{StaticResource Text.Secondary}" Margin="0,10,0,4"/>
+                    <TextBox Text="{Binding UpdateUrl, UpdateSourceTrigger=PropertyChanged}"
+                             FontFamily="Consolas" Margin="0,0,0,8"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="检查更新" Style="{StaticResource BtnAccent}"
+                                Command="{Binding CheckUpdateCommand}"/>
+                        <Button Content="打开日志文件夹" Margin="8,0,0,0"
+                                Command="{Binding OpenLogsCommand}"/>
+                        <TextBlock Text="{Binding VersionText}" VerticalAlignment="Center"
+                                   Margin="12,0,0,0" FontSize="11.5" FontWeight="SemiBold"
+                                   Foreground="{StaticResource Accent}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- 关于与隐私 -->
+            <Border Style="{StaticResource Card}" VerticalAlignment="Top" Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Text="关于与隐私" Style="{StaticResource CardTitle}"/>
+                    <TextBlock FontSize="11.5" TextWrapping="Wrap" LineHeight="19"
+                               Foreground="{StaticResource Text.Secondary}"
+                               Text="ADB 工具箱是一款面向 Android / AOSP 开发者的本地桌面工具。所有功能均通过本机 adb 与设备通信：&#x0a;· 不收集、不上传任何用户数据与设备信息&#x0a;· 唯一可能的网络访问是可选的更新检查（仅访问你在上方配置的服务器）&#x0a;· 运行日志仅保存在本机 %APPDATA%\AdbToolkit\logs，可在上方一键打开"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
     </Grid>
 </UserControl>

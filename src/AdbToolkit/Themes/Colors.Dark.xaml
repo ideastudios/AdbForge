@@ -1,0 +1,44 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ===== 深色主题调色板（与 Colors.Light.xaml 键名完全一致） ===== -->
+
+    <!-- 背景 -->
+    <SolidColorBrush x:Key="Bg.Window"   Color="#1B1E23"/>
+    <SolidColorBrush x:Key="Bg.Sidebar"  Color="#22252A"/>
+    <SolidColorBrush x:Key="Bg.Card"     Color="#262A30"/>
+    <SolidColorBrush x:Key="Bg.Hover"    Color="#2F343B"/>
+    <SolidColorBrush x:Key="Bg.Active"   Color="#293C52"/>
+    <SolidColorBrush x:Key="Bg.Sunken"   Color="#1F2226"/>
+    <SolidColorBrush x:Key="Bg.Input"    Color="#2B2F36"/>
+
+    <!-- 主题色 -->
+    <SolidColorBrush x:Key="Accent"         Color="#409EFF"/>
+    <SolidColorBrush x:Key="Accent.Hover"   Color="#66B1FF"/>
+    <SolidColorBrush x:Key="Accent.Pressed" Color="#2F8BE6"/>
+    <SolidColorBrush x:Key="Accent.Pale"    Color="#294059"/>
+
+    <!-- 文字 -->
+    <SolidColorBrush x:Key="Text.Primary"   Color="#E8EAED"/>
+    <SolidColorBrush x:Key="Text.Secondary" Color="#9AA4B2"/>
+    <SolidColorBrush x:Key="Text.Disabled"  Color="#5F6B7A"/>
+
+    <!-- 边框 -->
+    <SolidColorBrush x:Key="Border"  Color="#3A4048"/>
+    <SolidColorBrush x:Key="Divider" Color="#303540"/>
+
+    <!-- 状态色 -->
+    <SolidColorBrush x:Key="Status.OK"    Color="#6BCB7B"/>
+    <SolidColorBrush x:Key="Status.Warn"  Color="#E0A458"/>
+    <SolidColorBrush x:Key="Status.Error" Color="#FF7B72"/>
+    <SolidColorBrush x:Key="Danger.Border" Color="#6E3A3A"/>
+
+    <!-- Logcat 级别色 -->
+    <SolidColorBrush x:Key="Log.V" Color="#6B7280"/>
+    <SolidColorBrush x:Key="Log.D" Color="#6BCB7B"/>
+    <SolidColorBrush x:Key="Log.I" Color="#5FA8FF"/>
+    <SolidColorBrush x:Key="Log.W" Color="#E0A458"/>
+    <SolidColorBrush x:Key="Log.E" Color="#FF7B72"/>
+    <SolidColorBrush x:Key="Log.F" Color="#C93A3A"/>
+
+</ResourceDictionary>

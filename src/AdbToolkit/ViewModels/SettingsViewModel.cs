@@ -2,11 +2,15 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using AdbToolkit.Models;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
+using AdbToolkit.Models;
 using AdbToolkit.Services;
 
 namespace AdbToolkit.ViewModels;
 
-/// <summary>设置页：adb.exe 路径配置、检测、应用缓存清理。</summary>
+/// <summary>设置页：adb 路径、主题、更新检查、应用缓存清理、关于与隐私。</summary>
 public class SettingsViewModel : ObservableObject
 {
     public SettingsViewModel()
@@ -17,6 +21,8 @@ public class SettingsViewModel : ObservableObject
         RefreshCacheCommand = new RelayCommand(RefreshCacheInfo);
         ClearPcCacheCommand = new RelayCommand(async () => await RunBusyAsync(ClearPcCacheAsync));
         ClearDeviceFilesCommand = new RelayCommand(async () => await RunBusyAsync(ClearDeviceFilesAsync));
+        CheckUpdateCommand = new RelayCommand(async () => await RunBusyAsync(CheckUpdateAsync));
+        OpenLogsCommand = new RelayCommand(OpenLogs);
         RefreshCacheInfo();
     }
 
@@ -41,12 +47,51 @@ public class SettingsViewModel : ObservableObject
         private set => SetProperty(ref _cacheInfoText, value);
     }
 
+    // ---------- 外观 ----------
+
+    public List<string> Themes { get; } = new() { "浅色", "深色" };
+
+    private string _selectedTheme = AppSession.Settings.Theme == ThemeManager.Dark ? "深色" : "浅色";
+    public string SelectedTheme
+    {
+        get => _selectedTheme;
+        set
+        {
+            if (!SetProperty(ref _selectedTheme, value)) return;
+            AppSession.Settings.Theme = value == "深色" ? ThemeManager.Dark : ThemeManager.Light;
+            AppSession.Settings.Save();
+            TestResult = $"主题已切换为{value}，重启应用后生效";
+        }
+    }
+
+    // ---------- 更新 ----------
+
+    public string VersionText => $"v{UpdateService.CurrentVersion}";
+
+    private string _updateUrl = AppSession.Settings.UpdateUrl;
+    public string UpdateUrl
+    {
+        get => _updateUrl;
+        set
+        {
+            if (SetProperty(ref _updateUrl, value))
+            {
+                AppSession.Settings.UpdateUrl = value;
+                AppSession.Settings.Save();
+            }
+        }
+    }
+
+    // ---------- 缓存 ----------
+
     public RelayCommand BrowseCommand { get; }
     public RelayCommand SaveCommand { get; }
     public RelayCommand TestCommand { get; }
     public RelayCommand RefreshCacheCommand { get; }
     public RelayCommand ClearPcCacheCommand { get; }
     public RelayCommand ClearDeviceFilesCommand { get; }
+    public RelayCommand CheckUpdateCommand { get; }
+    public RelayCommand OpenLogsCommand { get; }
 
     private void Browse()
     {
@@ -73,6 +118,43 @@ public class SettingsViewModel : ObservableObject
         TestResult = result.Success
             ? result.StdOut.Trim()
             : $"检测失败：{result.Combined.Trim()}";
+    }
+
+    private async Task CheckUpdateAsync()
+    {
+        var url = UpdateUrl.Trim();
+        if (url.Length == 0)
+        {
+            TestResult = "未配置更新服务器地址（在上方输入托管版本描述 JSON 的 URL）";
+            return;
+        }
+
+        TestResult = "正在检查更新...";
+        var result = await UpdateService.CheckAsync(url);
+        TestResult = result.Message;
+        if (result.HasNewVersion && !string.IsNullOrEmpty(result.DownloadUrl))
+        {
+            var open = MessageBox.Show("现在打开下载地址吗？", "发现新版本",
+                MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (open == MessageBoxResult.Yes) UpdateService.OpenDownloadUrl(result.DownloadUrl);
+        }
+    }
+
+    private void OpenLogs()
+    {
+        try
+        {
+            Directory.CreateDirectory(LogService.LogDir);
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = LogService.LogDir,
+                UseShellExecute = true,
+            });
+        }
+        catch (Exception ex)
+        {
+            TestResult = "打开日志目录失败：" + ex.Message;
+        }
     }
 
     // ---------- 应用缓存 ----------
