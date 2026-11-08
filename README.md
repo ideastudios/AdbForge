@@ -79,7 +79,7 @@
 ### 从源码运行
 
 ```bash
-git clone https://github.com/你的用户名/AdbForge.git
+git clone https://github.com/ideastudios/AdbForge.git
 cd AdbForge
 dotnet run --project src/AdbToolkit
 ```
