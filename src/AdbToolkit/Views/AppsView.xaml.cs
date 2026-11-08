@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -67,5 +68,34 @@ public partial class AppsView : UserControl
     {
         if (Vm?.SelectedApp != null)
             await Vm.UninstallCommand.ExecuteAsync(Vm.SelectedApp);
+    }
+
+    // ---------- 拖拽批量安装 ----------
+
+    private static List<string> CollectApks(DragEventArgs e)
+    {
+        if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return new List<string>();
+        var drops = (string[])e.Data.GetData(DataFormats.FileDrop);
+        return drops
+            .SelectMany(f => Directory.Exists(f)
+                ? Directory.GetFiles(f, "*.apk", SearchOption.TopDirectoryOnly)
+                : new[] { f })
+            .Where(f => f.EndsWith(".apk", StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    private void Page_DragOver(object sender, DragEventArgs e)
+    {
+        var hasApk = CollectApks(e).Count > 0;
+        e.Effects = hasApk ? DragDropEffects.Copy : DragDropEffects.None;
+        e.Handled = true;
+    }
+
+    private void Page_Drop(object sender, DragEventArgs e)
+    {
+        var apks = CollectApks(e);
+        if (apks.Count > 0 && Vm != null)
+            _ = Vm.InstallFilesFromDropAsync(apks);
     }
 }

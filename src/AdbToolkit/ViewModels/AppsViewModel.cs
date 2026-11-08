@@ -454,18 +454,47 @@ public partial class AppsViewModel : ObservableObject
 
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            Title = "选择要安装的 APK",
+            Title = "选择要安装的 APK（可按住 Ctrl / Shift 多选）",
             Filter = "APK 文件 (*.apk)|*.apk|所有文件 (*.*)|*.*",
+            Multiselect = true,
         };
         if (dialog.ShowDialog() != true) return;
 
-        Status = $"正在安装 {System.IO.Path.GetFileName(dialog.FileName)} ...";
-        var result = await AppSession.Adb.InstallAsync(
-            serial, dialog.FileName, replace: true, grantPermissions: GrantPermissions);
+        await InstallBatchCoreAsync(serial, dialog.FileNames);
+    }
 
-        Status = result.Success
-            ? $"安装成功：{System.IO.Path.GetFileName(dialog.FileName)}"
-            : TranslateInstallError(result.Combined);
+    /// <summary>拖拽入口：批量安装拖进页面的 APK 文件（文件夹会展开取其中全部 APK）。</summary>
+    public async Task InstallFilesFromDropAsync(IReadOnlyList<string> apkFiles)
+    {
+        await RunBusyAsync(() => InstallBatchCoreAsync(DeviceStore.SelectedSerial, apkFiles));
+    }
+
+    private async Task InstallBatchCoreAsync(string? serial, IReadOnlyList<string> apkFiles)
+    {
+        if (serial is null)
+        {
+            Status = "请先在顶部选择设备";
+            return;
+        }
+        if (apkFiles.Count == 0) return;
+
+        var ok = new List<string>();
+        var failed = new List<string>();
+
+        for (var i = 0; i < apkFiles.Count; i++)
+        {
+            var name = Path.GetFileName(apkFiles[i]);
+            Status = $"正在安装 ({i + 1}/{apkFiles.Count}) {name} ...";
+            var result = await AppSession.Adb.InstallAsync(
+                serial, apkFiles[i], replace: true, grantPermissions: GrantPermissions);
+
+            if (result.Success) ok.Add(name);
+            else failed.Add($"{name}（{TranslateInstallError(result.Combined)}）");
+        }
+
+        Status = failed.Count == 0
+            ? $"批量安装完成：成功 {ok.Count}/{apkFiles.Count}"
+            : $"批量安装完成：成功 {ok.Count}/{apkFiles.Count}，失败 {failed.Count} —— {string.Join("；", failed)}";
     }
 
     private async Task UninstallAsync(AppInfo app)
