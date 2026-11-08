@@ -322,7 +322,7 @@ public partial class AppsViewModel : ObservableObject
         var app = SelectedApp;
         if (app is null) { Status = "请先选中应用"; return; }
         var text = copyPath ? app.ApkPath
-            : copyLabel ? (app.Label is "…" or "—" ? app.Package : app.Label)
+            : copyLabel ? (string.IsNullOrWhiteSpace(app.Label) ? app.Package : app.Label)
             : app.Package;
         try
         {

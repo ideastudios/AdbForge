@@ -11,8 +11,8 @@ public class AppInfo : INotifyPropertyChanged
 
     public bool IsSystem { get; init; }
 
-    /// <summary>应用显示名（从 APK manifest 解析，后台懒加载填充）。</summary>
-    private string _label = "…";
+    /// <summary>应用显示名（从 APK manifest 解析，右键获取应用名/详情后填充；未解析时留空显示包名由 UI 处理）。</summary>
+    private string _label = "";
     public string Label
     {
         get => _label;
