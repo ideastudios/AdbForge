@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <LangVersion>latest</LangVersion>
+    <Version>0.1.0</Version>
+    <Product>AdbToolkit - ADB 开发者工具箱</Product>
+    <AssemblyName>AdbToolkit</AssemblyName>
+    <RootNamespace>AdbToolkit</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- 中文路径支持 -->
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,239 @@
+<UserControl x:Class="AdbToolkit.Views.DeviceManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="380"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- 左：设备列表 -->
+        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,12,0">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="设备列表" Style="{StaticResource CardTitle}"/>
+                <TextBlock DockPanel.Dock="Bottom" FontSize="11"
+                           Foreground="{StaticResource Text.Secondary}"
+                           Margin="0,8,0,0"
+                           Text="设备每 2 秒自动刷新；未授权时请在手机上确认 USB 调试授权弹窗。"/>
+                <ListBox ItemsSource="{Binding Devices}"
+                         SelectedItem="{Binding SelectedDevice}"
+                         BorderThickness="0"
+                         Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="4,6">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Ellipse Grid.Column="0" Width="8" Height="8"
+                                             VerticalAlignment="Center" Margin="0,0,10,0">
+                                        <Ellipse.Style>
+                                            <Style TargetType="Ellipse">
+                                                <Setter Property="Fill" Value="{StaticResource Status.Error}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding StateText}" Value="已连接">
+                                                        <Setter Property="Fill" Value="{StaticResource Status.OK}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Ellipse.Style>
+                                    </Ellipse>
+
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding Serial}" FontSize="11"
+                                                   FontFamily="Consolas"
+                                                   Foreground="{StaticResource Text.Secondary}"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="2" Text="{Binding StateText}"
+                                               VerticalAlignment="Center" FontSize="11.5"
+                                               Foreground="{StaticResource Text.Secondary}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <!-- 右：操作区 -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Border Style="{StaticResource Card}" Padding="14">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Right" Text="每 2 秒刷新" FontSize="10.5"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Text.Secondary}"/>
+                        <TextBlock Text="前台与可见窗口" Style="{StaticResource CardTitle}"/>
+                    </DockPanel>
+
+                    <!-- 当前栈顶应用 -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Lbl"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="包名" FontSize="11.5" VerticalAlignment="Center"
+                                   Foreground="{StaticResource Text.Secondary}" Margin="0,0,10,0"/>
+                        <TextBlock Grid.Column="1" FontFamily="Consolas" FontSize="12.5"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding DataContext.ForegroundPackage,
+                                       RelativeSource={RelativeSource AncestorType=Window}}"
+                                   TextTrimming="CharacterEllipsis"
+                                   ToolTip="{Binding DataContext.ForegroundPackage,
+                                       RelativeSource={RelativeSource AncestorType=Window}}"/>
+                        <Button Grid.Column="2" Content="复制" Style="{StaticResource BtnMini}" Margin="6,0,0,0"
+                                Command="{Binding DataContext.CopyTextCommand,
+                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding DataContext.ForegroundPackage,
+                                    RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    </Grid>
+                    <Grid Margin="0,6,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Lbl"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="页面" FontSize="11.5" VerticalAlignment="Center"
+                                   Foreground="{StaticResource Text.Secondary}" Margin="0,0,10,0"/>
+                        <TextBlock Grid.Column="1" FontFamily="Consolas" FontSize="12.5"
+                                   Foreground="{StaticResource Accent}" VerticalAlignment="Center"
+                                   Text="{Binding DataContext.ForegroundComponent,
+                                       RelativeSource={RelativeSource AncestorType=Window}}"
+                                   TextTrimming="CharacterEllipsis"
+                                   ToolTip="{Binding DataContext.ForegroundComponent,
+                                       RelativeSource={RelativeSource AncestorType=Window}}"/>
+                        <Button Grid.Column="2" Content="复制" Style="{StaticResource BtnMini}" Margin="6,0,0,0"
+                                Command="{Binding DataContext.CopyTextCommand,
+                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding DataContext.ForegroundComponent,
+                                    RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button Content="打开应用详情" Command="{Binding DataContext.OpenAppDetailsCommand,
+                                    RelativeSource={RelativeSource AncestorType=Window}}"/>
+                        <TextBlock Text="{Binding DataContext.ForegroundSource,
+                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                   VerticalAlignment="Center" Margin="10,0,0,0" FontSize="10.5"
+                                   Foreground="{StaticResource Text.Secondary}"
+                                   ToolTip="Activity=栈顶页面；Window=焦点窗口（弹窗场景兜底）"/>
+                    </StackPanel>
+
+                    <Separator Background="{StaticResource Divider}" Margin="0,10"/>
+
+                    <!-- 所有可见窗口 -->
+                    <TextBlock Text="所有可见窗口（含系统）" FontSize="12" FontWeight="SemiBold"
+                               Margin="0,0,0,6"/>
+                    <ListBox ItemsSource="{Binding DataContext.VisibleWindows,
+                                 RelativeSource={RelativeSource AncestorType=Window}}"
+                             MaxHeight="230" BorderThickness="0" Background="Transparent"
+                             FontFamily="Consolas" FontSize="11.5"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal"
+                                                VerticalAlignment="Center">
+                                        <Button Content="包名" Style="{StaticResource BtnMini}"
+                                                Command="{Binding DataContext.CopyTextCommand,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding Package}"/>
+                                        <Button Content="Activity" Style="{StaticResource BtnMini}" Margin="4,0,0,0"
+                                                Command="{Binding DataContext.CopyTextCommand,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding ActivityName}"/>
+                                        <Button Content="组件" Style="{StaticResource BtnMini}" Margin="4,0,0,0"
+                                                Command="{Binding DataContext.CopyTextCommand,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding Component}"/>
+                                    </StackPanel>
+                                    <TextBlock DockPanel.Dock="Left" FontSize="10" VerticalAlignment="Center"
+                                               Margin="0,0,8,0" MinWidth="28">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="应用"/>
+                                                <Setter Property="Foreground" Value="{StaticResource Accent}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsSystem}" Value="True">
+                                                        <Setter Property="Text" Value="系统"/>
+                                                        <Setter Property="Foreground" Value="{StaticResource Text.Secondary}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsForeground}" Value="True">
+                                                        <Setter Property="Text" Value="前台"/>
+                                                        <Setter Property="Foreground" Value="{StaticResource Accent}"/>
+                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Component}" TextTrimming="CharacterEllipsis"
+                                               VerticalAlignment="Center"
+                                               ToolTip="{Binding Component}"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Padding="16" Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Text="无线连接" Style="{StaticResource CardTitle}"/>
+                    <TextBlock Text="设备地址（IP:端口）" FontSize="11.5"
+                               Foreground="{StaticResource Text.Secondary}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding ConnectTarget, UpdateSourceTrigger=PropertyChanged}"
+                             FontFamily="Consolas"/>
+                    <TextBlock Text="配对码（Android 11+，可选）" FontSize="11.5"
+                               Foreground="{StaticResource Text.Secondary}" Margin="0,8,0,4"/>
+                    <TextBox Text="{Binding PairCode, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <Button Content="配对并连接" Style="{StaticResource BtnAccent}"
+                                Command="{Binding ConnectCommand}"/>
+                        <Button Content="断开" Margin="8,0,0,0"
+                                Command="{Binding DisconnectCommand}"/>
+                    </StackPanel>
+                    <TextBlock FontSize="10.5" Foreground="{StaticResource Text.Secondary}"
+                               Margin="0,10,0,0" TextWrapping="Wrap"
+                               Text="提示：Android 11+ 的配对端口与连接端口不同，请先在手机「开发者选项 → 无线调试 → 使用配对码配对设备」中查看配对地址填入上方输入框。"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="重启与模式切换" Style="{StaticResource CardTitle}"/>
+                    <WrapPanel>
+                        <Button Content="重启系统" Command="{Binding RebootCommand}"/>
+                        <Button Content="Recovery" Margin="8,0,0,0"
+                                Command="{Binding RecoveryCommand}"/>
+                        <Button Content="Bootloader" Margin="8,0,0,0"
+                                Command="{Binding BootloaderCommand}"/>
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="输出" Style="{StaticResource CardTitle}"/>
+                    <TextBox Text="{Binding ResultText, Mode=OneWay}"
+                             IsReadOnly="True"
+                             FontFamily="Consolas" FontSize="12"
+                             AcceptsReturn="True"
+                             TextWrapping="NoWrap"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Auto"
+                             MinHeight="90"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
