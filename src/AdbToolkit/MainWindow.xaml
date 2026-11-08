@@ -1,7 +1,8 @@
 <Window x:Class="AdbToolkit.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ADB 工具箱"
+        Title="卓匠 · ADB 工具箱"
+        Icon="pack://application:,,,/assets/app.ico"
         Width="1240" Height="780"
         MinWidth="980" MinHeight="620"
         WindowStartupLocation="CenterScreen"
@@ -57,11 +58,18 @@
                     </Border>
                 </StackPanel>
 
-                <TextBlock DockPanel.Dock="Right"
-                           VerticalAlignment="Center"
-                           Text="ADB 工具箱"
-                           FontWeight="Bold"
-                           Foreground="{StaticResource Accent}"/>
+                <StackPanel DockPanel.Dock="Right"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <Image Source="/assets/logo.png"
+                           Width="22" Height="22"
+                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <TextBlock Text="卓匠 · ADB 工具箱"
+                               VerticalAlignment="Center"
+                               Margin="8,0,0,0"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource Accent}"/>
+                </StackPanel>
             </DockPanel>
         </Border>
 

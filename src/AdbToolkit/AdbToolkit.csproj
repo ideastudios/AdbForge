@@ -8,12 +8,19 @@
     <UseWPF>true</UseWPF>
     <LangVersion>latest</LangVersion>
     <Version>0.2.0</Version>
-    <Product>AdbToolkit - ADB 开发者工具箱</Product>
-    <AssemblyName>AdbToolkit</AssemblyName>
+    <Product>卓匠 AdbForge - ADB 开发者工具箱</Product>
+    <AssemblyTitle>卓匠 · ADB 工具箱</AssemblyTitle>
+    <AssemblyName>AdbForge</AssemblyName>
     <RootNamespace>AdbToolkit</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>assets\app.ico</ApplicationIcon>
     <!-- 中文路径支持 -->
     <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\app.ico"/>
+    <Resource Include="assets\logo.png"/>
+  </ItemGroup>
 
 </Project>

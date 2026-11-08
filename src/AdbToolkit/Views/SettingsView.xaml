@@ -111,6 +111,17 @@
             <Border Style="{StaticResource Card}" VerticalAlignment="Top" Margin="0,12,0,0">
                 <StackPanel>
                     <TextBlock Text="关于与隐私" Style="{StaticResource CardTitle}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <Image Source="/assets/logo.png" Width="40" Height="40"
+                               RenderOptions.BitmapScalingMode="HighQuality"
+                               VerticalAlignment="Center"/>
+                        <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="卓匠 · ADB 工具箱" FontWeight="Bold" FontSize="14"
+                                       Foreground="{StaticResource Text.Primary}"/>
+                            <TextBlock Text="{Binding VersionText}" FontSize="11.5"
+                                       Foreground="{StaticResource Accent}"/>
+                        </StackPanel>
+                    </StackPanel>
                     <TextBlock FontSize="11.5" TextWrapping="Wrap" LineHeight="19"
                                Foreground="{StaticResource Text.Secondary}"
                                Text="ADB 工具箱是一款面向 Android / AOSP 开发者的本地桌面工具。所有功能均通过本机 adb 与设备通信：&#x0a;· 不收集、不上传任何用户数据与设备信息&#x0a;· 唯一可能的网络访问是可选的更新检查（仅访问你在上方配置的服务器）&#x0a;· 运行日志仅保存在本机 %APPDATA%\AdbToolkit\logs，可在上方一键打开"/>

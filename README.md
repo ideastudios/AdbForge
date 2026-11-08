@@ -1,4 +1,6 @@
-# AdbToolkit — ADB 开发者工具箱
+卓匠 AdbForge — ADB 开发者工具箱
+
+> 中文名「卓匠」，英文名 **AdbForge**。卓 = Android 之"卓"，匠 = 工具箱之"匠"；Forge = 锻造工坊。
 
 面向 Android / AOSP 开发者的 Windows 桌面工具，**所有功能仅基于 adb 命令封装**，不依赖 scrcpy、jadx 等任何外部工具。
 

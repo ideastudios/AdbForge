@@ -7,8 +7,12 @@
         ResizeMode="NoResize"
         Background="{StaticResource Bg.Window}">
     <StackPanel Margin="20">
-        <TextBlock Text="欢迎使用 ADB 工具箱" FontSize="19" FontWeight="Bold"
-                   Foreground="{StaticResource Accent}" Margin="0,0,0,6"/>
+        <Image Source="/assets/logo.png" Width="64" Height="64"
+               HorizontalAlignment="Center"
+               RenderOptions.BitmapScalingMode="HighQuality" Margin="0,0,0,8"/>
+        <TextBlock Text="欢迎使用 卓匠 · ADB 工具箱" FontSize="19" FontWeight="Bold"
+                   Foreground="{StaticResource Accent}" Margin="0,0,0,6"
+                   TextAlignment="Center"/>
         <TextBlock Text="面向 Android / AOSP 开发者的 Windows 桌面工具，所有功能均通过本机 adb 与设备通信，不收集、不上传任何数据。"
                    FontSize="12" TextWrapping="Wrap" LineHeight="19"
                    Foreground="{StaticResource Text.Secondary}" Margin="0,0,0,14"/>
