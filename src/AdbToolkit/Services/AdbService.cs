@@ -45,8 +45,8 @@ public partial class AdbService
             var idx = token.IndexOf('/');
             if (idx <= 0) continue;
             var pkg = token[..idx];
-            // 包名至少含一个点，排除 "Window{"、"u0" 之类的噪音 token
-            if (!pkg.Contains('.') || pkg.Contains('{')) continue;
+            // 包名至少含一个点；排除 "Window{"、"u0"、"A=10345:com.x"（Android 12+ topResumedActivity 附加字段）等噪音
+            if (!pkg.Contains('.') || pkg.Contains('{') || pkg.Contains(':') || pkg.Contains('=')) continue;
             var act = token[(idx + 1)..];
             if (act.Length == 0) continue;
             return new ForegroundInfo(pkg, token, source);
@@ -158,7 +158,16 @@ public partial class AdbService
 
         var outTask = process.StandardOutput.ReadToEndAsync(ct);
         var errTask = process.StandardError.ReadToEndAsync(ct);
-        await process.WaitForExitAsync(ct);
+        try
+        {
+            await process.WaitForExitAsync(ct);
+        }
+        catch (OperationCanceledException)
+        {
+            // 取消/超时时结束进程树，避免 adb 客户端残留
+            try { if (!process.HasExited) process.Kill(entireProcessTree: true); } catch { }
+            throw;
+        }
         return new AdbResult(process.ExitCode, await outTask, await errTask);
     }
 

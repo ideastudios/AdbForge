@@ -27,8 +27,26 @@ public class UpdateFeed
 /// </summary>
 public static class UpdateService
 {
-    public static string CurrentVersion =>
-        Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0";
+    /// <summary>当前版本（读取 exe 的文件版本；单文件发布下 Assembly.Location 为空，需走 ProcessPath）。</summary>
+    public static string CurrentVersion
+    {
+        get
+        {
+            try
+            {
+                var path = Environment.ProcessPath;
+                if (string.IsNullOrEmpty(path))
+                    path = Assembly.GetExecutingAssembly().Location;
+                if (!string.IsNullOrEmpty(path))
+                {
+                    var v = FileVersionInfo.GetVersionInfo(path).FileVersion;
+                    if (!string.IsNullOrEmpty(v)) return v;
+                }
+            }
+            catch { /* 回退默认 */ }
+            return "0.0.0";
+        }
+    }
 
     private static readonly HttpClient Http = CreateClient();
 

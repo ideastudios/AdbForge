@@ -140,7 +140,7 @@ function Set-Theme([string]$theme) {
     $settingsPath = "$env:APPDATA\AdbToolkit\settings.json"
     $json = Get-Content $settingsPath -Raw | ConvertFrom-Json
     $json.Theme = $theme
-    $json | ConvertTo-Json | Set-Content $settingsPath -Encoding UTF8
+    [System.IO.File]::WriteAllText($settingsPath, ($json | ConvertTo-Json))
     Start-Process $ExePath
     Start-Sleep -Seconds 4
 }

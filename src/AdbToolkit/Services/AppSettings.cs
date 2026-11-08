@@ -38,7 +38,10 @@ public class AppSettings
         {
             if (File.Exists(FilePath))
             {
-                var settings = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(FilePath));
+                var json = File.ReadAllText(FilePath);
+                // 兼容 PowerShell Set-Content -Encoding UTF8 写入的 BOM（否则 JSON 解析失败、设置全部回退默认）
+                if (json.Length > 0 && json[0] == '\uFEFF') json = json[1..];
+                var settings = JsonSerializer.Deserialize<AppSettings>(json);
                 if (settings != null) return settings;
             }
         }
