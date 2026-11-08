@@ -182,15 +182,6 @@ powershell -ExecutionPolicy Bypass -File scripts/publish.ps1 -Version 0.2.0
 | `scripts/make-banner.ps1` | 重新生成 README 顶部 Banner |
 | `scripts/capture-ui.ps1` | 截取运行中的应用窗口到 `docs/images/` |
 
-## 🗺️ 路线图
-
-详见 [docs/ROADMAP.md](docs/ROADMAP.md)。近期计划：
-
-- [ ] 包名 → PID 无感过滤 Logcat
-- [ ] 内置 ADB IME（键盘透传支持中文）
-- [ ] 文件树拖拽推送
-- [ ] 崩溃 / ANR 后台监听提醒
-- [ ] 独立 adb server 端口（解决 5037 冲突）
 
 ## 🤝 贡献
 

@@ -86,16 +86,3 @@
 |---|---|
 | adb.exe 路径配置与自动探测、版本检测 | `adb version` |
 
-## 规划中 🔜
-
-| 功能 | 底层命令 | 备注 |
-|---|---|---|
-| 包名→PID 无感过滤 logcat | `pidof -s` + `logcat --pid` | Logcat 页 |
-| 免 root 瘦身（停用预装 + 一键恢复） | `pm uninstall --user 0` 等 | 应用管理页 |
-| run-as 免 root 应用数据访问 | `run-as <pkg>` | 文件传输页 |
-| 多设备并行执行 | `adb -s` 循环 | 全局 |
-| 实时设备监听替换轮询 | `adb track-devices` 协议 | 全局 |
-| 独立 adb server 端口 | `adb -P <port> start-server` | 设置页 |
-| Perfetto trace 一键抓取 | `perfetto` 命令 | 性能页 |
-| 卡顿逐帧分析（framestats） | `dumpsys gfxinfo framestats` | 性能页 |
-| UI 自动化元素点击 | `uiautomator dump` 解析 XML | 屏幕页 |
