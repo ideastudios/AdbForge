@@ -15,6 +15,9 @@ public class AppSettings
     /// <summary>Logcat 内存中保留的最大行数。</summary>
     public int LogcatBufferLines { get; set; } = 5000;
 
+    /// <summary>上次 APK 提取目录（提取对话框记住位置）。</summary>
+    public string LastExtractDir { get; set; } = "";
+
     private static string Dir => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AdbToolkit");
 

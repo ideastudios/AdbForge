@@ -252,6 +252,65 @@ public partial class AppsViewModel : ObservableObject
         }
     }
 
+    /// <summary>右键「提取 APK 到本地」：拉取应用全部 APK（含 split）到选择的文件夹。</summary>
+    public async Task ExtractApkAsync()
+    {
+        var app = SelectedApp;
+        var serial = DeviceStore.SelectedSerial;
+        if (app is null || serial is null) { Status = "请先选中应用"; return; }
+        if (IsBusy) return;
+        IsBusy = true;
+        try
+        {
+            Status = $"正在查询 {app.Package} 的 APK 路径...";
+            var paths = await AppSession.Adb.GetApkPathsAsync(serial, app.Package);
+            if (paths.Count == 0)
+            {
+                Status = $"未获取到 {app.Package} 的 APK 路径";
+                return;
+            }
+
+            var folder = Dialogs.PickFolder(
+                "选择 APK 保存位置（进入目标文件夹后点“打开”）",
+                string.IsNullOrEmpty(AppSession.Settings.LastExtractDir) ? null : AppSession.Settings.LastExtractDir);
+            if (folder is null) { Status = "已取消"; return; }
+            AppSession.Settings.LastExtractDir = folder;
+            AppSession.Settings.Save();
+
+            // 命名：应用名_版本（应用名取缓存，取不到用包名）
+            var dump = await AppSession.Adb.RunShellAsync($"dumpsys package {app.Package}", serial);
+            var verName = VersionNameRegex().Match(dump.StdOut) is { Success: true } m
+                ? m.Groups[1].Value : "";
+            var label = AppMetaCache.Get(app.Package)?.Label ?? app.Package;
+            var baseName = string.Join("", $"{label}_{verName}".Split(Path.GetInvalidFileNameChars()));
+            if (string.IsNullOrWhiteSpace(baseName)) baseName = app.Package;
+
+            var saved = 0;
+            for (var i = 0; i < paths.Count; i++)
+            {
+                Status = $"正在提取 ({i + 1}/{paths.Count}) {Path.GetFileName(paths[i])} ...";
+                var fileName = paths.Count == 1
+                    ? $"{baseName}.apk"
+                    : i == 0 ? $"{baseName}_base.apk"
+                    : $"{baseName}_{Path.GetFileName(paths[i])}";
+                var r = await AppSession.Adb.PullAsync(serial, paths[i], Path.Combine(folder, fileName));
+                if (r.Success) saved++;
+            }
+
+            Status = saved == paths.Count
+                ? $"已提取 {saved} 个 APK 到 {folder}"
+                : $"提取完成 {saved}/{paths.Count}（目标 {folder}）";
+        }
+        catch (Exception ex)
+        {
+            Status = "错误：" + ex.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
     // ---------- 详情 / 复制 / 跳转（右键菜单） ----------
 
     private static string Quote(string path) =>

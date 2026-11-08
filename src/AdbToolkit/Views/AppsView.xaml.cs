@@ -44,6 +44,11 @@ public partial class AppsView : UserControl
         if (Vm != null) await Vm.GetLabelForSelectedAsync();
     }
 
+    private async void ExtractApk_Click(object sender, RoutedEventArgs e)
+    {
+        if (Vm != null) await Vm.ExtractApkAsync();
+    }
+
     private void CopyLabel_Click(object sender, RoutedEventArgs e)
         => Vm?.CopyAppInfo(copyPath: false, copyLabel: true);
 

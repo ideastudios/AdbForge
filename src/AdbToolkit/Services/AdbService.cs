@@ -398,6 +398,18 @@ public partial class AdbService
     public Task<AdbResult> UninstallAsync(string serial, string package, bool keepData = false, CancellationToken ct = default)
         => RunAsync($"uninstall{(keepData ? " -k" : "")} {package}", serial, ct);
 
+    /// <summary>查询应用的全部 APK 路径（App Bundle 安装的应用会有 base + 多个 split）。</summary>
+    public async Task<List<string>> GetApkPathsAsync(string serial, string package, CancellationToken ct = default)
+    {
+        var r = await RunShellAsync($"pm path {package}", serial, ct);
+        return r.StdOut.Split('\n')
+            .Select(l => l.Trim())
+            .Where(l => l.StartsWith("package:"))
+            .Select(l => l["package:".Length..])
+            .Where(p => p.Length > 0)
+            .ToList();
+    }
+
     // ==================== 属性 / 设置 ====================
 
     /// <summary>getprop 全量属性（[key]: [value] 解析）。</summary>

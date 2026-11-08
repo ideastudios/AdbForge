@@ -49,6 +49,7 @@
                         <MenuItem Header="复制应用名" Click="CopyLabel_Click"/>
                         <MenuItem Header="复制包名" Click="CopyPkg_Click"/>
                         <MenuItem Header="复制 APK 路径" Click="CopyPath_Click"/>
+                        <MenuItem Header="提取 APK 到本地..." Click="ExtractApk_Click"/>
                         <Separator/>
                         <MenuItem Header="打开系统详情页" Click="OpenSystemDetail_Click"/>
                         <MenuItem Header="卸载" Click="Uninstall_Click"/>
