@@ -2,6 +2,10 @@
   <img src="docs/images/banner.png" alt="卓匠 AdbForge"/>
 </p>
 
+<p align="center">
+  简体中文 | <a href="README_EN.md">🌐 English</a>
+</p>
+
 <div align="center">
 
 # 卓匠 AdbForge
