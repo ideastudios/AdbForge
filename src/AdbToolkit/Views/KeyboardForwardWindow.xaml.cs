@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using AdbToolkit.Models;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 
 namespace AdbToolkit.Views;
@@ -88,7 +89,7 @@ public partial class KeyboardForwardWindow : Window
 
         if (Serial is null)
         {
-            SetStatus("请先在主窗口顶部选择设备");
+            SetStatus(Strings.Kb_SelectDeviceInMain);
             e.Handled = true;
             return;
         }
@@ -122,7 +123,7 @@ public partial class KeyboardForwardWindow : Window
         e.Handled = true;
         if (Serial is null)
         {
-            SetStatus("请先在主窗口顶部选择设备");
+            SetStatus(Strings.Kb_SelectDeviceInMain);
             return;
         }
         foreach (var c in e.Text)
@@ -134,7 +135,7 @@ public partial class KeyboardForwardWindow : Window
             }
             else if (c > (char)0x7E)
             {
-                SetStatus("提示：中文等非 ASCII 字符无法通过 input text 输入，请使用设备端剪贴板粘贴");
+                SetStatus(Strings.Kb_NonAsciiHint);
             }
         }
     }
@@ -192,12 +193,12 @@ public partial class KeyboardForwardWindow : Window
             LogList.Items.Insert(0, $"[{_sentCount}] {shellCmd}");
             if (LogList.Items.Count > 100) LogList.Items.RemoveAt(LogList.Items.Count - 1);
             StatusText.Text = r.Success
-                ? $"已发送 {_sentCount} 项 · 设备 {serial}"
-                : $"失败：{r.Combined.Trim()}";
+                ? string.Format(Strings.Kb_SentFormat, _sentCount, serial)
+                : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
         }
         catch (Exception ex)
         {
-            StatusText.Text = "发送失败：" + ex.Message;
+            StatusText.Text = string.Format(Strings.Kb_SendFailedFormat, ex.Message);
         }
     }
 

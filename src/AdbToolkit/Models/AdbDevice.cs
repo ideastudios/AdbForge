@@ -1,3 +1,5 @@
+using AdbToolkit.Resources;
+
 namespace AdbToolkit.Models;
 
 public enum AdbDeviceState
@@ -27,12 +29,12 @@ public class AdbDevice
 
     public string StateText => State switch
     {
-        AdbDeviceState.Device => "已连接",
-        AdbDeviceState.Offline => "离线",
-        AdbDeviceState.Unauthorized => "未授权",
+        AdbDeviceState.Device => Strings.DevMgr_StateConnected,
+        AdbDeviceState.Offline => Strings.DevMgr_StateOffline,
+        AdbDeviceState.Unauthorized => Strings.DevMgr_StateUnauthorized,
         AdbDeviceState.Recovery => "Recovery",
         AdbDeviceState.Bootloader => "Bootloader",
         AdbDeviceState.Sideload => "Sideload",
-        _ => "未知",
+        _ => Strings.DevMgr_StateUnknown,
     };
 }

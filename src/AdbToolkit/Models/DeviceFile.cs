@@ -1,3 +1,5 @@
+using AdbToolkit.Resources;
+
 namespace AdbToolkit.Models;
 
 /// <summary>设备端文件（ls -la 解析结果）。</summary>
@@ -10,7 +12,7 @@ public class DeviceFile
     public string Date { get; set; } = "";
     public string Perms { get; set; } = "";
 
-    public string DisplayName => IsDir ? $"[目录] {Name}" : Name;
+    public string DisplayName => IsDir ? $"{Strings.Files_DirPrefix} {Name}" : Name;
 
     public string SizeText => IsDir ? "-" : FormatSize(Size);
 

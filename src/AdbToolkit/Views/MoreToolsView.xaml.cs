@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using AdbToolkit.Resources;
 using AdbToolkit.ViewModels;
 
 namespace AdbToolkit.Views;
@@ -19,8 +20,8 @@ public partial class MoreToolsView : UserControl
     {
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            Title = "选择 OTA zip 包",
-            Filter = "OTA 包 (*.zip)|*.zip|所有文件 (*.*)|*.*",
+            Title = Strings.More_PickOtaTitle,
+            Filter = Strings.More_OtaFilter,
         };
         if (dialog.ShowDialog() == true && DataContext is MoreToolsViewModel vm)
             vm.SideloadZip = dialog.FileName;

@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
 using AdbToolkit.Models;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 
 namespace AdbToolkit.ViewModels;
@@ -148,7 +149,7 @@ public partial class PerfViewModel : ObservableObject
 
     private bool _busy;
     public bool IsBusy { get => _busy; private set => SetProperty(ref _busy, value); }
-    private string _status = "就绪";
+    private string _status = Strings.More_Ready;
     public string Status { get => _status; private set => SetProperty(ref _status, value); }
 
     public RelayCommand LoadDeviceInfoCommand { get; }
@@ -171,13 +172,13 @@ public partial class PerfViewModel : ObservableObject
         if (IsBusy) return;
         IsBusy = true;
         try { await work(); }
-        catch (Exception ex) { Status = "错误：" + ex.Message; }
+        catch (Exception ex) { Status = string.Format(Strings.Common_ErrorFormat, ex.Message); }
         finally { IsBusy = false; }
     }
 
     private async Task<AdbResult> RunShell(string cmd)
     {
-        var serial = DeviceStore.SelectedSerial ?? throw new InvalidOperationException("请先在顶部选择设备");
+        var serial = DeviceStore.SelectedSerial ?? throw new InvalidOperationException(Strings.Common_SelectDeviceFirst);
         return await AppSession.Adb.RunShellAsync(cmd, serial);
     }
 
@@ -235,27 +236,27 @@ public partial class PerfViewModel : ObservableObject
             .ToList();
 
         var sb = new StringBuilder();
-        sb.AppendLine($"机型：        {Get("ro.product.model")}（{Get("ro.product.brand")} / {Get("ro.product.manufacturer")}）");
-        sb.AppendLine($"设备代号：    {Get("ro.product.device")}（{Get("ro.product.name")}）");
-        sb.AppendLine($"Android 版本：{Get("ro.build.version.release")}（SDK {Get("ro.build.version.sdk")}）");
-        sb.AppendLine($"系统版本号：  {Get("ro.build.display.id")}");
-        sb.AppendLine($"构建：        {Get("ro.build.id")} · {Get("ro.build.version.incremental")}");
-        sb.AppendLine($"序列号：      {Get("ro.serialno")}");
-        sb.AppendLine($"引导程序：    {Get("ro.bootloader")}");
-        sb.AppendLine($"SoC：         {Get("ro.board.platform")} / {Get("ro.hardware")}");
-        sb.AppendLine($"ABI 列表：    {Get("ro.product.cpu.abilist")}");
-        sb.AppendLine($"内核：        {kernelLine}");
-        sb.AppendLine($"安全补丁：    {Get("ro.build.version.security_patch")}");
-        sb.AppendLine(size.StdOut.Trim().Replace("Physical size:", "屏幕分辨率："));
+        sb.AppendLine(string.Format(Strings.Perf_DevModelFormat, Get("ro.product.model"), Get("ro.product.brand"), Get("ro.product.manufacturer")));
+        sb.AppendLine(string.Format(Strings.Perf_DevCodenameFormat, Get("ro.product.device"), Get("ro.product.name")));
+        sb.AppendLine(string.Format(Strings.Perf_DevAndroidFormat, Get("ro.build.version.release"), Get("ro.build.version.sdk")));
+        sb.AppendLine(string.Format(Strings.Perf_DevBuildIdFormat, Get("ro.build.display.id")));
+        sb.AppendLine(string.Format(Strings.Perf_DevBuildFormat, Get("ro.build.id"), Get("ro.build.version.incremental")));
+        sb.AppendLine(string.Format(Strings.Perf_DevSerialFormat, Get("ro.serialno")));
+        sb.AppendLine(string.Format(Strings.Perf_DevBootloaderFormat, Get("ro.bootloader")));
+        sb.AppendLine(string.Format(Strings.Perf_DevSocFormat, Get("ro.board.platform"), Get("ro.hardware")));
+        sb.AppendLine(string.Format(Strings.Perf_DevAbiFormat, Get("ro.product.cpu.abilist")));
+        sb.AppendLine(string.Format(Strings.Perf_DevKernelFormat, kernelLine));
+        sb.AppendLine(string.Format(Strings.Perf_DevPatchFormat, Get("ro.build.version.security_patch")));
+        sb.AppendLine(size.StdOut.Trim().Replace("Physical size:", Strings.Perf_ResolutionLabel + ": "));
         sb.AppendLine(BuildDensityText(density.StdOut, Get("ro.sf.lcd_density")));
-        sb.AppendLine($"IP 地址：     {(ip.Length > 0 ? ip : "—")}");
-        sb.AppendLine($"内存总量：    {memText}");
-        sb.AppendLine($"电池电量：    {(batt.Success ? batt.Groups[1].Value + "%" : "—")}");
-        sb.AppendLine($"低内存设备：  {Get("ro.config.low_ram")}");
-        sb.AppendLine($"Java 堆：     增长上限 {Get("dalvik.vm.heapgrowthlimit")} / 最大 {Get("dalvik.vm.heapsize")}");
-        foreach (var l in dfLines) sb.AppendLine($"存储：        {l}");
+        sb.AppendLine(string.Format(Strings.Perf_DevIpFormat, ip.Length > 0 ? ip : "—"));
+        sb.AppendLine(string.Format(Strings.Perf_DevMemFormat, memText));
+        sb.AppendLine(string.Format(Strings.Perf_DevBatteryFormat, batt.Success ? batt.Groups[1].Value + "%" : "—"));
+        sb.AppendLine(string.Format(Strings.Perf_DevLowRamFormat, Get("ro.config.low_ram")));
+        sb.AppendLine(string.Format(Strings.Perf_DevHeapFormat, Get("dalvik.vm.heapgrowthlimit"), Get("dalvik.vm.heapsize")));
+        foreach (var l in dfLines) sb.AppendLine(string.Format(Strings.Perf_DevStorageFormat, l));
         DeviceInfo = sb.ToString();
-        Status = "设备信息已加载";
+        Status = Strings.Perf_DeviceInfoLoaded;
     }
 
     // ---------- 应用详情 ----------
@@ -269,14 +270,14 @@ public partial class PerfViewModel : ObservableObject
     private async Task LoadAppDetailAsync()
     {
         var pkg = DetailPackage.Trim();
-        if (pkg.Length == 0) { Status = "请填写要查询的包名"; return; }
+        if (pkg.Length == 0) { Status = Strings.Perf_EnterPackage; return; }
 
-        Status = $"正在查询 {pkg} ...";
+        Status = string.Format(Strings.Perf_QueryingFormat, pkg);
         var r = await RunShell($"dumpsys package {pkg}");
         if (r.StdOut.Contains("Unable to find package") || !VersionNameRegex().IsMatch(r.StdOut))
         {
-            AppDetailText = $"未找到应用 {pkg}（请检查包名，或应用未安装）";
-            Status = "查询失败：应用不存在";
+            AppDetailText = string.Format(Strings.Perf_AppNotFoundFormat, pkg);
+            Status = Strings.Perf_QueryFailedNotFound;
             return;
         }
 
@@ -303,28 +304,30 @@ public partial class PerfViewModel : ObservableObject
                 .Where(f => f is "DEBUGGABLE" or "SYSTEM" or "PERSISTENT" or "STOPPED" or "INSTALLED"));
 
         var sb = new StringBuilder();
-        sb.AppendLine($"包名：        {pkg}");
-        sb.AppendLine($"版本：        {G(VersionNameRegex())}（versionCode {G(VersionCodeRegex())}）");
-        sb.AppendLine($"SDK：         minSdk {G(MinSdkRegex())} / targetSdk {G(TargetSdkRegex())}");
-        sb.AppendLine($"APK 路径：    {G(CodePathRegex())}");
-        sb.AppendLine($"首次安装：    {G(FirstInstallRegex()).Trim()}");
-        sb.AppendLine($"最近更新：    {G(LastUpdateRegex()).Trim()}");
-        sb.AppendLine($"安装来源：    {G(InstallerRegex())}");
-        sb.AppendLine($"标志：        {flagsText}");
-        sb.AppendLine($"权限（{perms.Count}）：");
+        sb.AppendLine(string.Format(Strings.Apps_DtlPkgFormat, pkg));
+        sb.AppendLine(string.Format(Strings.Apps_DtlVersionFormat, G(VersionNameRegex()), G(VersionCodeRegex())));
+        sb.AppendLine(string.Format(Strings.Apps_DtlSdkFormat, G(MinSdkRegex()), G(TargetSdkRegex())));
+        sb.AppendLine(string.Format(Strings.Apps_DtlApkPathFormat, G(CodePathRegex())));
+        sb.AppendLine(string.Format(Strings.Apps_DtlFirstInstallFormat, G(FirstInstallRegex()).Trim()));
+        sb.AppendLine(string.Format(Strings.Apps_DtlLastUpdateFormat, G(LastUpdateRegex()).Trim()));
+        sb.AppendLine(string.Format(Strings.Apps_DtlInstallerFormat, G(InstallerRegex())));
+        sb.AppendLine(string.Format(Strings.Apps_DtlFlagsFormat, flagsText));
+        sb.AppendLine(string.Format(Strings.Perf_PermsHeaderFormat, perms.Count));
         foreach (var p in perms.Take(40)) sb.AppendLine($"  {p}");
-        if (perms.Count > 40) sb.AppendLine($"  …（其余 {perms.Count - 40} 项省略）");
+        if (perms.Count > 40) sb.AppendLine(string.Format(Strings.Apps_SectionTruncatedFormat, perms.Count - 40));
         AppDetailText = sb.ToString();
-        Status = $"{pkg} 详情已加载";
+        Status = string.Format(Strings.Perf_DetailLoadedFormat, pkg);
     }
 
     private async Task OpenDetailSettingsAsync()
     {
         var pkg = DetailPackage.Trim();
-        if (pkg.Length == 0) { Status = "请填写包名"; return; }
+        if (pkg.Length == 0) { Status = Strings.Perf_EnterPackage; return; }
         var r = await RunShell(
             $"am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d \"package:{pkg}\"");
-        Status = r.Success ? $"已打开 {pkg} 的系统详情页" : $"打开失败：{r.Combined.Trim()}";
+        Status = r.Success
+            ? string.Format(Strings.Apps_SystemDetailOpenedFormat, pkg)
+            : string.Format(Strings.Common_OpenFailedFormat, r.Combined.Trim());
     }
 
     /// <summary>密度数值归入资源档位（Android 按最近标准桶匹配）：ldpi 120 / mdpi 160 / hdpi 240 / xhdpi 320 / xxhdpi 480 / xxxhdpi 640。</summary>
@@ -351,10 +354,11 @@ public partial class PerfViewModel : ObservableObject
         if (mO.Success) active = int.Parse(mO.Groups[1].Value);
         active ??= physical;
         if (active == null && int.TryParse(lcdProp, out var propDpi)) active = propDpi;
-        if (active == null) return "屏幕密度：    —";
+        if (active == null) return Strings.Perf_DensityNone;
 
-        var text = $"屏幕密度：    {active} dpi（{DensityBucket(active.Value)} 档）";
-        if (physical != null && active != physical) text += $"，已由开发者选项覆盖（物理 {physical}）";
+        var text = string.Format(Strings.Perf_DensityFormat, active, DensityBucket(active.Value));
+        if (physical != null && active != physical)
+            text += string.Format(Strings.Perf_DensityOverriddenFormat, physical);
         return text;
     }
 
@@ -372,15 +376,37 @@ public partial class PerfViewModel : ObservableObject
         if (dict.Count == 0) { BatteryText = r.Combined.Trim(); return; }
 
         string Get(string k) => dict.TryGetValue(k, out var v) ? v : "—";
-        var status = Get("status") switch { "2" => "充电中", "3" => "放电中", "4" => "未充电", "5" => "已充满", _ => Get("status") };
-        var health = Get("health") switch { "2" => "良好", "3" => "过热", "4" => "已损坏", "5" => "过压", "7" => "过冷", _ => Get("health") };
-        var plugged = Get("plugged") switch { "0" => "未插入", "1" => "AC", "2" => "USB", "4" => "无线", _ => Get("plugged") };
+        var status = Get("status") switch
+        {
+            "2" => Strings.Perf_BattCharging,
+            "3" => Strings.Perf_BattDischarging,
+            "4" => Strings.Perf_BattNotCharging,
+            "5" => Strings.Perf_BattFull,
+            _ => Get("status"),
+        };
+        var health = Get("health") switch
+        {
+            "2" => Strings.Perf_BattGood,
+            "3" => Strings.Perf_BattOverheat,
+            "4" => Strings.Perf_BattDead,
+            "5" => Strings.Perf_BattOverVoltage,
+            "7" => Strings.Perf_BattCold,
+            _ => Get("health"),
+        };
+        var plugged = Get("plugged") switch
+        {
+            "0" => Strings.Perf_BattNotPlugged,
+            "1" => "AC",
+            "2" => "USB",
+            "4" => Strings.Perf_BattWireless,
+            _ => Get("plugged"),
+        };
         if (int.TryParse(Get("temperature"), out var t)) dict["temperature"] = $"{t / 10.0:F1} °C";
 
         BatteryText =
-            $"电量：{Get("level")}%   状态：{status}   插入方式：{plugged}\n" +
-            $"健康度：{health}   温度：{dict.GetValueOrDefault("temperature", "—")}   电压：{Get("voltage")} mV\n" +
-            $"电池技术：{Get("technology")}   Charge counter：{Get("charge counter")}";
+            string.Format(Strings.Perf_BattLine1Format, Get("level"), status, plugged) + "\n" +
+            string.Format(Strings.Perf_BattLine2Format, health, dict.GetValueOrDefault("temperature", "—"), Get("voltage")) + "\n" +
+            string.Format(Strings.Perf_BattLine3Format, Get("technology"), Get("charge counter"));
     }
 
     private async Task SetBatteryLevelAsync()
@@ -388,29 +414,31 @@ public partial class PerfViewModel : ObservableObject
         if (!int.TryParse(VirtualLevel, out var level)) return;
         await RunShell($"dumpsys battery set level {Math.Clamp(level, 1, 100)}");
         await RefreshBatteryAsync();
-        Status = $"已模拟电量 {level}%（dumpsys battery reset 恢复）";
+        Status = string.Format(Strings.Perf_BattSimulatedFormat, level);
     }
 
     private async Task BatteryResetAsync()
     {
         await RunShell("dumpsys battery reset");
         await RefreshBatteryAsync();
-        Status = "电量模拟已重置";
+        Status = Strings.Perf_BattReset;
     }
 
     private async Task LoadMemInfoAsync()
     {
         var pkg = MemPackage.Trim();
-        if (pkg.Length == 0) { Status = "请填写包名"; return; }
+        if (pkg.Length == 0) { Status = Strings.Perf_EnterPackage; return; }
         var r = await RunShell($"dumpsys meminfo {pkg}");
         MemInfoText = r.StdOut.Trim();
-        Status = r.Success ? $"已获取 {pkg} 内存信息" : $"失败：{r.Combined.Trim()}";
+        Status = r.Success
+            ? string.Format(Strings.Perf_MemLoadedFormat, pkg)
+            : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
     }
 
     private async Task StartupTestAsync()
     {
         var comp = StartupComponent.Trim();
-        if (comp.Length == 0) { Status = "请填写组件，例如 com.android.settings/.Settings"; return; }
+        if (comp.Length == 0) { Status = Strings.Perf_EnterComponent; return; }
         if (!int.TryParse(StartupCount, out var n)) n = 5;
 
         var times = new List<int>();
@@ -423,31 +451,32 @@ public partial class PerfViewModel : ObservableObject
             {
                 var t = int.Parse(m.Groups[1].Value);
                 times.Add(t);
-                lines.AppendLine($"第 {i + 1} 次：{t} ms");
+                lines.AppendLine(string.Format(Strings.Perf_TryFormat, i + 1, t));
             }
             else
             {
-                lines.AppendLine($"第 {i + 1} 次：失败（{r.Combined.Split('\n').FirstOrDefault()?.Trim()}）");
+                lines.AppendLine(string.Format(Strings.Perf_TryFailedFormat, i + 1,
+                    r.Combined.Split('\n').FirstOrDefault()?.Trim()));
             }
             await Task.Delay(800);
         }
         if (times.Count > 0)
-            lines.AppendLine($"—— 平均 {times.Average():F0} ms / 最快 {times.Min()} ms / 最慢 {times.Max()} ms ——");
+            lines.AppendLine(string.Format(Strings.Perf_TrySummaryFormat, times.Average(), times.Min(), times.Max()));
         StartupResult = lines.ToString();
-        Status = "启动时间测试完成";
+        Status = Strings.Perf_StartupDone;
     }
 
     private async Task LoadGfxInfoAsync()
     {
         var pkg = GfxPackage.Trim();
-        if (pkg.Length == 0) { Status = "请填写包名"; return; }
+        if (pkg.Length == 0) { Status = Strings.Perf_EnterPackage; return; }
         var r = await RunShell($"dumpsys gfxinfo {pkg}");
         var total = GfxTotalRegex().Match(r.StdOut);
         var janky = GfxJankyRegex().Match(r.StdOut);
         GfxResult = total.Success
-            ? $"总帧数：{total.Groups[1].Value}\n卡顿帧：{janky.Groups[1].Value}（{janky.Groups[2].Value}%）"
+            ? string.Format(Strings.Perf_GfxResultFormat, total.Groups[1].Value, janky.Groups[1].Value, janky.Groups[2].Value)
             : r.Combined.Trim();
-        Status = "帧率数据已获取（建议先操作目标应用产生帧数据）";
+        Status = Strings.Perf_GfxLoaded;
     }
 
     private async Task RefreshBatteryAndHardwareAsync()
@@ -471,7 +500,8 @@ public partial class PerfViewModel : ObservableObject
         for (var i = 0; i < curList.Count; i++)
         {
             var name = i < policies.Count ? policies[i] : $"policy{i}";
-            CpuFreqs.Add($"{name}：当前 {FmtFreq(curList[i])} / 上限 {FmtFreq(maxList.Count > i ? maxList[i] : "")}");
+            CpuFreqs.Add(string.Format(Strings.Perf_CpuFreqFormat, name, FmtFreq(curList[i]),
+                FmtFreq(maxList.Count > i ? maxList[i] : "")));
         }
 
         // GPU（devfreq 节点，路径因平台而异）
@@ -512,15 +542,15 @@ public partial class PerfViewModel : ObservableObject
         var entries = await AppSession.Adb.ListDropBoxAsync(DeviceStore.SelectedSerial!);
         DropBoxEntries.Clear();
         foreach (var e in entries.TakeLast(200)) DropBoxEntries.Add(e);
-        Status = $"DropBox 共 {entries.Count} 条，显示最近 {Math.Min(200, entries.Count)} 条";
+        Status = string.Format(Strings.Perf_DropBoxCountFormat, entries.Count, Math.Min(200, entries.Count));
     }
 
     private async Task ViewSelectedDropBoxAsync()
     {
-        if (SelectedDropBox is null) { Status = "请先选中一条记录"; return; }
+        if (SelectedDropBox is null) { Status = Strings.Perf_SelectDropBoxFirst; return; }
         var r = await RunShell($"dumpsys dropbox --print {SelectedDropBox.Tag}");
         var text = r.StdOut.Trim();
-        DropBoxText = text.Length > 20000 ? text[..20000] + "\n...(已截断)" : text;
-        Status = $"已加载 {SelectedDropBox.Tag} 最新一条（时间戳可能多于所选）";
+        DropBoxText = text.Length > 20000 ? text[..20000] + Strings.More_TruncatedSuffix : text;
+        Status = string.Format(Strings.Perf_DropBoxLoadedFormat, SelectedDropBox.Tag);
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 
 namespace AdbToolkit.ViewModels;
@@ -16,32 +17,38 @@ public class MoreToolsViewModel : ObservableObject
         {
             if (SelectedIme is null) return;
             var r = await RunShell($"ime set {SelectedIme}");
-            Status = r.Success ? $"输入法已切换：{SelectedIme}" : $"失败：{r.Combined.Trim()}";
+            Status = r.Success
+                ? string.Format(Strings.More_ImeSwitchedFormat, SelectedIme)
+                : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
         }));
 
         NotifyPostCommand = new RelayCommand(async () => await RunBusyAsync(async () =>
         {
             var r = await RunShell(
                 $"cmd notification post -S bigtext -t {Quote(NotifyTitle.Trim())} {Quote(NotifyTag.Trim())} {Quote(NotifyContent.Trim())}");
-            Status = r.Success ? "测试通知已发送" : $"失败（需 Android 10+）：{r.Combined.Trim()}";
+            Status = r.Success
+                ? Strings.More_NotifySent
+                : string.Format(Strings.More_NotifyFailedFormat, r.Combined.Trim());
         }));
         NotifyViewCommand = new RelayCommand(async () => await RunBusyAsync(async () =>
         {
             var r = await RunShell("dumpsys notification --noredact");
-            NotifyOutput = r.Combined.Length > 8000 ? r.Combined[..8000] + "\n...(已截断)" : r.Combined;
+            NotifyOutput = r.Combined.Length > 8000 ? r.Combined[..8000] + Strings.More_TruncatedSuffix : r.Combined;
         }));
 
         ProxySetCommand = new RelayCommand(async () => await RunBusyAsync(async () =>
         {
             var r = await RunShell($"settings put global http_proxy {ProxyTarget.Trim()}");
             await LoadProxyAsync();
-            Status = r.Success ? $"代理已设置：{ProxyTarget}" : $"失败：{r.Combined.Trim()}";
+            Status = r.Success
+                ? string.Format(Strings.More_ProxySetFormat, ProxyTarget)
+                : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
         }));
         ProxyClearCommand = new RelayCommand(async () => await RunBusyAsync(async () =>
         {
             await RunShell("settings delete global http_proxy");
             await LoadProxyAsync();
-            Status = "代理已清除";
+            Status = Strings.More_ProxyCleared;
         }));
 
         UserRefreshCommand = new RelayCommand(async () => await RunBusyAsync(LoadUsersAsync));
@@ -49,7 +56,7 @@ public class MoreToolsViewModel : ObservableObject
         {
             if (NewUserName.Trim().Length == 0) return;
             var r = await RunShell($"pm create-user {Quote(NewUserName.Trim())}");
-            Status = r.Success ? r.Combined.Trim() : $"失败：{r.Combined.Trim()}";
+            Status = r.Success ? r.Combined.Trim() : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
             await LoadUsersAsync();
         }));
         UserRemoveCommand = new RelayCommand(async () => await RunBusyAsync(async () =>
@@ -58,7 +65,9 @@ public class MoreToolsViewModel : ObservableObject
             var id = ExtractUserId(SelectedUserText);
             if (id is null) return;
             var r = await RunShell($"pm remove-user {id}");
-            Status = r.Success ? $"已删除用户 {id}" : $"失败：{r.Combined.Trim()}";
+            Status = r.Success
+                ? string.Format(Strings.More_UserRemovedFormat, id)
+                : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
             await LoadUsersAsync();
         }));
 
@@ -69,8 +78,9 @@ public class MoreToolsViewModel : ObservableObject
             {
                 var r = await RunShell($"pm {(grant ? "grant" : "revoke")} {PermPackage.Trim()} {PermName.Trim()}");
                 Status = r.Success
-                    ? $"已{(grant ? "授予" : "撤销")} {PermName} → {PermPackage}"
-                    : $"失败：{r.Combined.Trim()}";
+                    ? string.Format(grant ? Strings.More_PermGrantedFormat : Strings.More_PermRevokedFormat,
+                        PermName, PermPackage)
+                    : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
             });
         });
 
@@ -79,12 +89,12 @@ public class MoreToolsViewModel : ObservableObject
         ServerKillCommand = new RelayCommand(async () => await RunBusyAsync(async () =>
         {
             await AppSession.Adb.RunAsync("kill-server");
-            Status = "adb server 已停止";
+            Status = Strings.More_ServerKilled;
         }));
         ServerStartCommand = new RelayCommand(async () => await RunBusyAsync(async () =>
         {
             await AppSession.Adb.RunAsync("start-server");
-            Status = "adb server 已启动";
+            Status = Strings.More_ServerStarted;
         }));
 
         SideloadCommand = new RelayCommand(async () => await RunBusyAsync(SideloadAsync));
@@ -100,9 +110,9 @@ public class MoreToolsViewModel : ObservableObject
     public string? SelectedIme { get => _selectedIme; set => SetProperty(ref _selectedIme, value); }
 
     // ---------- 通知 ----------
-    private string _notifyTitle = "测试通知";
+    private string _notifyTitle = Strings.More_NotifyDefaultTitle;
     public string NotifyTitle { get => _notifyTitle; set => SetProperty(ref _notifyTitle, value); }
-    private string _notifyContent = "来自 AdbToolkit 的测试通知";
+    private string _notifyContent = Strings.More_NotifyDefaultContent;
     public string NotifyContent { get => _notifyContent; set => SetProperty(ref _notifyContent, value); }
     private string _notifyTag = "adbtoolkit";
     public string NotifyTag { get => _notifyTag; set => SetProperty(ref _notifyTag, value); }
@@ -114,6 +124,9 @@ public class MoreToolsViewModel : ObservableObject
     public string ProxyTarget { get => _proxyTarget; set => SetProperty(ref _proxyTarget, value); }
     private string _proxyCurrent = "";
     public string ProxyCurrent { get => _proxyCurrent; private set => SetProperty(ref _proxyCurrent, value); }
+
+    /// <summary>带"当前："前缀的显示文本（语言相关，不走 StringFormat）。</summary>
+    public string ProxyCurrentDisplay => string.Format(Strings.More_ProxyCurrentFormat, ProxyCurrent);
 
     // ---------- 多用户 ----------
     public ObservableCollection<string> Users { get; } = new();
@@ -149,7 +162,7 @@ public class MoreToolsViewModel : ObservableObject
 
     private bool _busy;
     public bool IsBusy { get => _busy; private set => SetProperty(ref _busy, value); }
-    private string _status = "就绪";
+    private string _status = Strings.More_Ready;
     public string Status { get => _status; private set => SetProperty(ref _status, value); }
 
     public RelayCommand ImeRefreshCommand { get; }
@@ -176,13 +189,13 @@ public class MoreToolsViewModel : ObservableObject
         if (IsBusy) return;
         IsBusy = true;
         try { await work(); }
-        catch (Exception ex) { Status = "错误：" + ex.Message; }
+        catch (Exception ex) { Status = string.Format(Strings.Common_ErrorFormat, ex.Message); }
         finally { IsBusy = false; }
     }
 
     private async Task<AdbResult> RunShell(string cmd)
     {
-        var serial = DeviceStore.SelectedSerial ?? throw new InvalidOperationException("请先在顶部选择设备");
+        var serial = DeviceStore.SelectedSerial ?? throw new InvalidOperationException(Strings.Common_SelectDeviceFirst);
         return await AppSession.Adb.RunShellAsync(cmd, serial);
     }
 
@@ -208,7 +221,7 @@ public class MoreToolsViewModel : ObservableObject
         Imes.Clear();
         foreach (var line in r.StdOut.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             Imes.Add(line.Trim());
-        Status = $"共 {Imes.Count} 个输入法";
+        Status = string.Format(Strings.More_ImeCountFormat, Imes.Count);
     }
 
     // ---------- 代理 ----------
@@ -216,7 +229,9 @@ public class MoreToolsViewModel : ObservableObject
     private async Task LoadProxyAsync()
     {
         var r = await RunShell("settings get global http_proxy");
-        ProxyCurrent = r.StdOut.Trim().Length == 0 || r.StdOut.Trim() == ":0" ? "（未设置）" : r.StdOut.Trim();
+        ProxyCurrent = r.StdOut.Trim().Length == 0 || r.StdOut.Trim() == ":0"
+            ? Strings.More_ProxyNotSet
+            : r.StdOut.Trim();
     }
 
     // ---------- 多用户 ----------
@@ -230,9 +245,9 @@ public class MoreToolsViewModel : ObservableObject
         {
             var line = raw.Trim();
             if (!line.StartsWith("UserInfo{")) continue;
-            Users.Add(line + (line.Contains($":{current.StdOut.Trim()}:") ? "  ← 当前" : ""));
+            Users.Add(line + (line.Contains($":{current.StdOut.Trim()}:") ? Strings.More_UserCurrentSuffix : ""));
         }
-        if (Users.Count == 0) Users.Add("（未能解析用户列表）");
+        if (Users.Count == 0) Users.Add(Strings.More_UsersParseFailed);
     }
 
     private static int? ExtractUserId(string userInfo)
@@ -251,10 +266,12 @@ public class MoreToolsViewModel : ObservableObject
         Directory.CreateDirectory(dir);
         var zip = Path.Combine(dir, $"bugreport_{DateTime.Now:yyyyMMdd_HHmmss}.zip");
 
-        Status = "正在采集 Bugreport（约 1-3 分钟，请保持连接）...";
+        Status = Strings.More_BugreportRunning;
         var r = await AppSession.Adb.RunAsync($"bugreport \"{zip}\"", serial);
         BugreportPath = zip;
-        Status = r.Success ? $"Bugreport 已保存：{zip}" : $"采集失败：{r.Combined.Trim()}";
+        Status = r.Success
+            ? string.Format(Strings.More_BugreportSavedFormat, zip)
+            : string.Format(Strings.More_BugreportFailedFormat, r.Combined.Trim());
     }
 
     private void OpenBugreportFolder()
@@ -270,21 +287,27 @@ public class MoreToolsViewModel : ObservableObject
     {
         var serial = DeviceStore.SelectedSerial;
         var zip = SideloadZip.Trim().Trim('"');
-        if (serial is null) { Status = "请先在顶部选择设备"; return; }
-        if (zip.Length == 0 || !File.Exists(zip)) { Status = "请选择有效的 OTA zip 包"; return; }
+        if (serial is null) { Status = Strings.Common_SelectDeviceFirst; return; }
+        if (zip.Length == 0 || !File.Exists(zip)) { Status = Strings.More_PickValidOta; return; }
 
-        if (MessageBox.Show("将重启设备到 Sideload 模式并推送 OTA 包。确认继续？",
+        if (MessageBox.Show(Strings.More_SideloadConfirm,
                 "Sideload", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
             return;
 
         var rb = await AppSession.Adb.RunAsync("reboot sideload", serial);
-        if (!rb.Success) { Status = $"重启失败：{rb.Combined.Trim()}"; return; }
+        if (!rb.Success)
+        {
+            Status = string.Format(Strings.More_RebootFailedFormat, rb.Combined.Trim());
+            return;
+        }
 
-        Status = "等待设备进入 Sideload 模式...";
+        Status = Strings.More_WaitingSideload;
         await AppSession.Adb.RunAsync("wait-for-sideload", serial);
-        Status = "正在推送 OTA 包（进度请看设备屏幕）...";
+        Status = Strings.More_SideloadPushing;
         var r = await AppSession.Adb.RunAsync($"sideload \"{zip}\"", serial);
-        Status = r.Success ? "OTA 推送完成" : $"Sideload 失败：{r.Combined.Trim()}";
+        Status = r.Success
+            ? Strings.More_SideloadDone
+            : string.Format(Strings.More_SideloadFailedFormat, r.Combined.Trim());
     }
 
     // ---------- 设备端后台日志 ----------
@@ -292,13 +315,13 @@ public class MoreToolsViewModel : ObservableObject
     private async Task DeviceLogStartAsync()
     {
         var serial = DeviceStore.SelectedSerial;
-        if (serial is null) { Status = "请先在顶部选择设备"; return; }
+        if (serial is null) { Status = Strings.Common_SelectDeviceFirst; return; }
 
         var buf = SelectedLogBuffer == "all" ? "-b all" : $"-b {SelectedLogBuffer}";
         await AppSession.Adb.RunShellAsync(
             $"sh -c \"nohup logcat -v time {buf} > /sdcard/adbtoolkit_logcat.txt 2>&1 &\"", serial);
         IsDeviceLogRunning = true;
-        Status = "设备端后台日志已启动（拔线也能继续采集）";
+        Status = Strings.More_DeviceLogStarted;
     }
 
     private async Task DeviceLogStopAsync()
@@ -306,7 +329,7 @@ public class MoreToolsViewModel : ObservableObject
         var serial = DeviceStore.SelectedSerial!;
         await AppSession.Adb.RunShellAsync("kill $(pidof logcat) 2>/dev/null", serial);
         IsDeviceLogRunning = false;
-        Status = "设备端后台日志已停止，可点击「拉取日志」";
+        Status = Strings.More_DeviceLogStopped;
     }
 
     private async Task DeviceLogPullAsync()
@@ -316,6 +339,8 @@ public class MoreToolsViewModel : ObservableObject
         Directory.CreateDirectory(dir);
         var local = Path.Combine(dir, $"device_log_{DateTime.Now:yyyyMMdd_HHmmss}.txt");
         var r = await AppSession.Adb.PullAsync(serial, "/sdcard/adbtoolkit_logcat.txt", local);
-        Status = r.Success ? $"日志已拉取：{local}" : $"拉取失败：{r.Combined.Trim()}";
+        Status = r.Success
+            ? string.Format(Strings.More_DeviceLogPulledFormat, local)
+            : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
     }
 }

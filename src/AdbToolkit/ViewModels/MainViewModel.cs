@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 using AdbToolkit.Models;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 using AdbToolkit.Views;
 
@@ -49,7 +50,7 @@ public class MainViewModel : ObservableObject
             try
             {
                 Clipboard.SetText(s);
-                StatusText = $"已复制：{s}";
+                StatusText = string.Format(Strings.Common_CopiedFormat, s);
             }
             catch { /* 剪贴板被占用等极端情况 */ }
         });
@@ -61,15 +62,15 @@ public class MainViewModel : ObservableObject
 
     public ObservableCollection<NavItem> NavItems { get; } = new()
     {
-        new NavItem { Title = "设备管理",   Glyph = "\uE772", PageType = typeof(DeviceManagerView) },
-        new NavItem { Title = "日志 Logcat", Glyph = "\uE7C3", PageType = typeof(LogcatView) },
-        new NavItem { Title = "应用管理",   Glyph = "\uE71D", PageType = typeof(AppsView) },
-        new NavItem { Title = "文件传输",   Glyph = "\uE8B7", PageType = typeof(FilesView) },
-        new NavItem { Title = "屏幕与输入", Glyph = "\uE7F4", PageType = typeof(ScreenInputView) },
-        new NavItem { Title = "性能诊断",   Glyph = "\uE9D2", PageType = typeof(PerfView) },
-        new NavItem { Title = "系统调试",   Glyph = "\uE756", PageType = typeof(SysDebugView) },
-        new NavItem { Title = "更多工具",   Glyph = "\uE710", PageType = typeof(MoreToolsView) },
-        new NavItem { Title = "设置",       Glyph = "\uE713", PageType = typeof(SettingsView) },
+        new NavItem { Title = Strings.Nav_Devices,     Glyph = "\uE772", PageType = typeof(DeviceManagerView) },
+        new NavItem { Title = Strings.Nav_Logcat,      Glyph = "\uE7C3", PageType = typeof(LogcatView) },
+        new NavItem { Title = Strings.Nav_Apps,        Glyph = "\uE71D", PageType = typeof(AppsView) },
+        new NavItem { Title = Strings.Nav_Files,       Glyph = "\uE8B7", PageType = typeof(FilesView) },
+        new NavItem { Title = Strings.Nav_ScreenInput, Glyph = "\uE7F4", PageType = typeof(ScreenInputView) },
+        new NavItem { Title = Strings.Nav_Perf,        Glyph = "\uE9D2", PageType = typeof(PerfView) },
+        new NavItem { Title = Strings.Nav_SysDebug,    Glyph = "\uE756", PageType = typeof(SysDebugView) },
+        new NavItem { Title = Strings.Nav_More,        Glyph = "\uE710", PageType = typeof(MoreToolsView) },
+        new NavItem { Title = Strings.Nav_Settings,    Glyph = "\uE713", PageType = typeof(SettingsView) },
     };
 
     private NavItem? _selectedNav;
@@ -114,7 +115,7 @@ public class MainViewModel : ObservableObject
         private set => SetProperty(ref _adbStatusBrush, value);
     }
 
-    private string _statusText = "正在检测 adb...";
+    private string _statusText = Strings.Main_DetectingAdb;
     public string StatusText
     {
         get => _statusText;
@@ -182,7 +183,7 @@ public class MainViewModel : ObservableObject
         try
         {
             Clipboard.SetText(text);
-            StatusText = $"已复制前台组件：{text}";
+            StatusText = string.Format(Strings.Main_CopiedForegroundFormat, text);
         }
         catch { /* 剪贴板被占用等极端情况 */ }
     }
@@ -196,12 +197,14 @@ public class MainViewModel : ObservableObject
         var pkg = Foreground?.Package;
         if (serial is null || string.IsNullOrEmpty(pkg) || Foreground == null)
         {
-            StatusText = "当前没有前台应用信息";
+            StatusText = Strings.Main_NoForegroundInfo;
             return;
         }
         var r = await AppSession.Adb.RunShellAsync(
             $"am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d \"package:{pkg}\"", serial);
-        StatusText = r.Success ? $"已打开 {pkg} 的应用详情" : $"打开失败：{r.Combined.Trim()}";
+        StatusText = r.Success
+            ? string.Format(Strings.Main_OpenedAppDetailsFormat, pkg)
+            : string.Format(Strings.Common_OpenFailedFormat, r.Combined.Trim());
     }
 
     /// <summary>通用复制命令：CommandParameter 传要复制的文本。</summary>
@@ -292,19 +295,20 @@ public class MainViewModel : ObservableObject
         if (Devices.Count == 0)
         {
             AdbStatusBrush = FindBrush("Status.Error");
-            StatusText = $"未连接设备　·　adb: {AppSession.Adb.AdbPath}";
+            StatusText = string.Format(Strings.Main_StatusNoDeviceFormat, AppSession.Adb.AdbPath);
             return;
         }
 
         if (Devices.Any(d => d.State == AdbDeviceState.Device))
         {
             AdbStatusBrush = FindBrush("Status.OK");
-            StatusText = $"已连接 {Devices.Count(d => d.State == AdbDeviceState.Device)} 台设备　·　adb: {AppSession.Adb.AdbPath}";
+            StatusText = string.Format(Strings.Main_StatusConnectedFormat,
+                Devices.Count(d => d.State == AdbDeviceState.Device), AppSession.Adb.AdbPath);
             return;
         }
 
         AdbStatusBrush = FindBrush("Status.Warn");
-        StatusText = $"有 {Devices.Count} 台设备但均不可用（未授权/离线）　·　adb: {AppSession.Adb.AdbPath}";
+        StatusText = string.Format(Strings.Main_StatusUnavailableFormat, Devices.Count, AppSession.Adb.AdbPath);
     }
 
     private static Brush FindBrush(string key) =>

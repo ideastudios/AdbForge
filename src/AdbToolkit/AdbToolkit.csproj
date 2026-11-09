@@ -6,8 +6,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <!-- 托盘图标使用 WinForms NotifyIcon（WindowsDesktop 共享框架自带，无新增依赖） -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- 默认语言：简体中文（英文资源在 Strings.en.resx，启动时按设置切换 CurrentUICulture） -->
+    <NeutralLanguage>zh-CN</NeutralLanguage>
     <LangVersion>latest</LangVersion>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Product>卓匠 AdbForge - ADB 开发者工具箱</Product>
     <AssemblyTitle>卓匠 · ADB 工具箱</AssemblyTitle>
     <AssemblyName>AdbForge</AssemblyName>
@@ -21,6 +25,20 @@
   <ItemGroup>
     <Resource Include="assets\app.ico"/>
     <Resource Include="assets\logo.png"/>
+  </ItemGroup>
+
+  <!-- 只用 WinForms 的 NotifyIcon：移除 SDK 隐式注入的 WinForms 全局 using，避免与 WPF 同名类型冲突 -->
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms"/>
+    <Using Remove="System.Drawing"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings.en.resx"/>
   </ItemGroup>
 
 </Project>

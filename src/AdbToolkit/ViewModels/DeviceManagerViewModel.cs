@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using AdbToolkit.Models;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 
 namespace AdbToolkit.ViewModels;
@@ -75,7 +76,7 @@ public class DeviceManagerViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            ResultText = "错误：" + ex.Message;
+            ResultText = string.Format(Strings.Common_ErrorFormat, ex.Message);
         }
         finally
         {
@@ -88,7 +89,7 @@ public class DeviceManagerViewModel : ObservableObject
         var target = ConnectTarget.Trim();
         if (target.Length == 0)
         {
-            ResultText = "请输入设备地址，例如 192.168.11.148:5555";
+            ResultText = Strings.DevMgr_EnterAddr;
             return;
         }
 
@@ -98,11 +99,12 @@ public class DeviceManagerViewModel : ObservableObject
             // 注意：Android 11+ 无线调试的配对端口与连接端口不同，
             // 需在手机「开发者选项 → 无线调试 → 使用配对码配对设备」中查看实际端口后填入目标框
             var pair = await AppSession.Adb.RunAsync($"pair {target} {PairCode.Trim()}");
-            ResultText += $"配对：{pair.Combined.Trim()}{Environment.NewLine}";
+            ResultText += string.Format(Strings.DevMgr_PairResultFormat, pair.Combined.Trim())
+                          + Environment.NewLine;
         }
 
         var r = await AppSession.Adb.RunAsync($"connect {target}");
-        ResultText += $"连接：{r.Combined.Trim()}";
+        ResultText += string.Format(Strings.DevMgr_ConnectResultFormat, r.Combined.Trim());
     }
 
     private async Task DisconnectAsync()
@@ -111,7 +113,7 @@ public class DeviceManagerViewModel : ObservableObject
         var r = target.Length == 0
             ? await AppSession.Adb.RunAsync("disconnect")
             : await AppSession.Adb.RunAsync($"disconnect {target}");
-        ResultText = $"断开：{r.Combined.Trim()}";
+        ResultText = string.Format(Strings.DevMgr_DisconnectResultFormat, r.Combined.Trim());
     }
 
     private async Task RebootAsync(string mode)
@@ -119,14 +121,14 @@ public class DeviceManagerViewModel : ObservableObject
         var serial = DeviceStore.SelectedSerial;
         if (serial is null)
         {
-            ResultText = "请先在顶部选择设备";
+            ResultText = Strings.Common_SelectDeviceFirst;
             return;
         }
 
-        var label = mode.Length == 0 ? "系统" : mode;
+        var label = mode.Length == 0 ? Strings.DevMgr_RebootModeSystem : mode;
         var r = await AppSession.Adb.RunAsync($"reboot {mode}".Trim(), serial);
         ResultText = r.Success
-            ? $"已发送重启指令（{label}），设备将重新启动"
+            ? string.Format(Strings.DevMgr_RebootSentFormat, label)
             : r.Combined.Trim();
     }
 }

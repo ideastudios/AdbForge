@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Data;
 using AdbToolkit.Models;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 using AdbToolkit.Views;
 
@@ -117,7 +118,7 @@ public partial class AppsViewModel : ObservableObject
         private set => SetProperty(ref _busy, value);
     }
 
-    private string _status = "点击「刷新」加载应用列表";
+    private string _status = Strings.Apps_ClickRefreshHint;
     public string Status
     {
         get => _status;
@@ -142,7 +143,7 @@ public partial class AppsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Status = "错误：" + ex.Message;
+            Status = string.Format(Strings.Common_ErrorFormat, ex.Message);
         }
         finally
         {
@@ -155,11 +156,11 @@ public partial class AppsViewModel : ObservableObject
         var serial = DeviceStore.SelectedSerial;
         if (serial is null)
         {
-            Status = "请先在顶部选择设备";
+            Status = Strings.Common_SelectDeviceFirst;
             return;
         }
 
-        Status = $"正在加载{(ShowSystem ? "系统" : "第三方")}应用列表...";
+        Status = ShowSystem ? Strings.Apps_LoadingSystemList : Strings.Apps_LoadingThirdPartyList;
         var apps = await AppSession.Adb.ListPackagesAsync(serial, ShowSystem);
         Apps.Clear();
         foreach (var app in apps)
@@ -169,7 +170,7 @@ public partial class AppsViewModel : ObservableObject
             if (cached?.Label != null) app.Label = cached.Label;
             Apps.Add(app);
         }
-        Status = $"共 {apps.Count:N0} 个应用（应用名：右键「获取应用名」或「应用详情」后显示）";
+        Status = string.Format(Strings.Apps_LoadedCountFormat, apps.Count);
     }
 
     /// <summary>
@@ -185,11 +186,11 @@ public partial class AppsViewModel : ObservableObject
         long size = long.TryParse(wc.StdOut.Trim(), out var s) ? s : 0;
         if (size > MaxApkBytes)
         {
-            Status = $"{app.Package} 的 APK 超过 150MB，跳过解析";
+            Status = string.Format(Strings.Apps_ApkTooLargeFormat, app.Package);
             return new CachedAppMeta();
         }
 
-        Status = $"正在拉取并解析 {app.Package} 的 APK（{DeviceFile.FormatSize(size)}）...";
+        Status = string.Format(Strings.Apps_PullingApkFormat, app.Package, DeviceFile.FormatSize(size));
         var tmp = Path.Combine(AppMetaCache.TempApkDir, $"apk_{Guid.NewGuid():N}.apk");
         Directory.CreateDirectory(Path.GetDirectoryName(tmp)!);
         try
@@ -197,7 +198,7 @@ public partial class AppsViewModel : ObservableObject
             var pull = await AppSession.Adb.PullAsync(serial, app.ApkPath, tmp);
             if (!pull.Success)
             {
-                Status = $"拉取失败：{pull.Combined.Trim()}";
+                Status = string.Format(Strings.Common_FailedFormat, pull.Combined.Trim());
                 return new CachedAppMeta();
             }
 
@@ -231,20 +232,20 @@ public partial class AppsViewModel : ObservableObject
     {
         var app = SelectedApp;
         var serial = DeviceStore.SelectedSerial;
-        if (app is null || serial is null) { Status = "请先选中应用"; return; }
+        if (app is null || serial is null) { Status = Strings.Apps_SelectAppFirst; return; }
         if (IsBusy) return;
         IsBusy = true;
         try
         {
             var meta = await EnsureMetaAsync(app, serial);
             if (meta.Label != null)
-                Status = $"应用名：{meta.Label}（{app.Package}）";
+                Status = string.Format(Strings.Apps_LabelResultFormat, meta.Label, app.Package);
             else
-                Status = $"未能解析出应用名（{app.Package}），已显示包名";
+                Status = string.Format(Strings.Apps_LabelParseFailedFormat, app.Package);
         }
         catch (Exception ex)
         {
-            Status = "错误：" + ex.Message;
+            Status = string.Format(Strings.Common_ErrorFormat, ex.Message);
         }
         finally
         {
@@ -257,23 +258,23 @@ public partial class AppsViewModel : ObservableObject
     {
         var app = SelectedApp;
         var serial = DeviceStore.SelectedSerial;
-        if (app is null || serial is null) { Status = "请先选中应用"; return; }
+        if (app is null || serial is null) { Status = Strings.Apps_SelectAppFirst; return; }
         if (IsBusy) return;
         IsBusy = true;
         try
         {
-            Status = $"正在查询 {app.Package} 的 APK 路径...";
+            Status = string.Format(Strings.Apps_QueryApkPathsFormat, app.Package);
             var paths = await AppSession.Adb.GetApkPathsAsync(serial, app.Package);
             if (paths.Count == 0)
             {
-                Status = $"未获取到 {app.Package} 的 APK 路径";
+                Status = string.Format(Strings.Apps_NoApkPathsFormat, app.Package);
                 return;
             }
 
             var folder = Dialogs.PickFolder(
-                "选择 APK 保存位置（进入目标文件夹后点“打开”）",
+                Strings.Apps_PickExtractFolder,
                 string.IsNullOrEmpty(AppSession.Settings.LastExtractDir) ? null : AppSession.Settings.LastExtractDir);
-            if (folder is null) { Status = "已取消"; return; }
+            if (folder is null) { Status = Strings.Common_Cancelled; return; }
             AppSession.Settings.LastExtractDir = folder;
             AppSession.Settings.Save();
 
@@ -288,7 +289,8 @@ public partial class AppsViewModel : ObservableObject
             var saved = 0;
             for (var i = 0; i < paths.Count; i++)
             {
-                Status = $"正在提取 ({i + 1}/{paths.Count}) {Path.GetFileName(paths[i])} ...";
+                Status = string.Format(Strings.Apps_ExtractingFormat, i + 1, paths.Count,
+                    Path.GetFileName(paths[i]));
                 var fileName = paths.Count == 1
                     ? $"{baseName}.apk"
                     : i == 0 ? $"{baseName}_base.apk"
@@ -298,12 +300,12 @@ public partial class AppsViewModel : ObservableObject
             }
 
             Status = saved == paths.Count
-                ? $"已提取 {saved} 个 APK 到 {folder}"
-                : $"提取完成 {saved}/{paths.Count}（目标 {folder}）";
+                ? string.Format(Strings.Apps_ExtractedFormat, saved, folder)
+                : string.Format(Strings.Apps_ExtractDoneFormat, saved, paths.Count, folder);
         }
         catch (Exception ex)
         {
-            Status = "错误：" + ex.Message;
+            Status = string.Format(Strings.Common_ErrorFormat, ex.Message);
         }
         finally
         {
@@ -320,14 +322,14 @@ public partial class AppsViewModel : ObservableObject
     public void CopyAppInfo(bool copyPath = false, bool copyLabel = false)
     {
         var app = SelectedApp;
-        if (app is null) { Status = "请先选中应用"; return; }
+        if (app is null) { Status = Strings.Apps_SelectAppFirst; return; }
         var text = copyPath ? app.ApkPath
             : copyLabel ? (string.IsNullOrWhiteSpace(app.Label) ? app.Package : app.Label)
             : app.Package;
         try
         {
             Clipboard.SetText(text);
-            Status = $"已复制：{text}";
+            Status = string.Format(Strings.Common_CopiedFormat, text);
         }
         catch { /* 剪贴板被占用等极端情况 */ }
     }
@@ -337,25 +339,27 @@ public partial class AppsViewModel : ObservableObject
     {
         var app = SelectedApp;
         var serial = DeviceStore.SelectedSerial;
-        if (app is null || serial is null) { Status = "请先选中应用"; return; }
+        if (app is null || serial is null) { Status = Strings.Apps_SelectAppFirst; return; }
         var r = await AppSession.Adb.RunShellAsync(
             $"am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d \"package:{app.Package}\"", serial);
-        Status = r.Success ? $"已打开 {app.Package} 的系统详情页" : $"打开失败：{r.Combined.Trim()}";
+        Status = r.Success
+            ? string.Format(Strings.Apps_SystemDetailOpenedFormat, app.Package)
+            : string.Format(Strings.Common_OpenFailedFormat, r.Combined.Trim());
     }
 
     /// <summary>弹出应用详情窗口（应用名/版本/时间/权限/页面/服务/广播）。</summary>
     public async Task ShowAppDetailAsync()
     {
         var app = SelectedApp;
-        if (app is null) { Status = "请先选中应用"; return; }
+        if (app is null) { Status = Strings.Apps_SelectAppFirst; return; }
         if (IsBusy) return;
         IsBusy = true;
         try
         {
             var serial = DeviceStore.SelectedSerial;
-            if (serial is null) { Status = "请先在顶部选择设备"; return; }
+            if (serial is null) { Status = Strings.Common_SelectDeviceFirst; return; }
 
-            Status = $"正在获取 {app.Package} 详情...";
+            Status = string.Format(Strings.Apps_FetchingDetailFormat, app.Package);
 
             // manifest 解析结果：优先缓存，未缓存现场拉取解析
             var meta = await EnsureMetaAsync(app, serial);
@@ -395,34 +399,34 @@ public partial class AppsViewModel : ObservableObject
                     .Where(f => f is "DEBUGGABLE" or "SYSTEM" or "PERSISTENT" or "STOPPED" or "INSTALLED"));
 
             var sb = new StringBuilder();
-            sb.AppendLine($"应用名：      {(meta.Label ?? app.Label)}");
-            sb.AppendLine($"包名：        {app.Package}");
-            sb.AppendLine($"版本：        {G(VersionNameRegex())}（versionCode {G(VersionCodeRegex())}）");
-            sb.AppendLine($"SDK：         minSdk {G(MinSdkRegex())} / targetSdk {G(TargetSdkRegex())}");
-            sb.AppendLine($"APK 路径：    {app.ApkPath}");
-            sb.AppendLine($"APK 大小：    {sizeText}");
-            sb.AppendLine($"首次安装：    {G(FirstInstallRegex()).Trim()}");
-            sb.AppendLine($"最近更新：    {G(LastUpdateRegex()).Trim()}");
-            sb.AppendLine($"安装来源：    {G(InstallerRegex())}");
-            sb.AppendLine($"标志：        {flagsText}");
+            sb.AppendLine(string.Format(Strings.Apps_DtlNameFormat, meta.Label ?? app.Label));
+            sb.AppendLine(string.Format(Strings.Apps_DtlPkgFormat, app.Package));
+            sb.AppendLine(string.Format(Strings.Apps_DtlVersionFormat, G(VersionNameRegex()), G(VersionCodeRegex())));
+            sb.AppendLine(string.Format(Strings.Apps_DtlSdkFormat, G(MinSdkRegex()), G(TargetSdkRegex())));
+            sb.AppendLine(string.Format(Strings.Apps_DtlApkPathFormat, app.ApkPath));
+            sb.AppendLine(string.Format(Strings.Apps_DtlApkSizeFormat, sizeText));
+            sb.AppendLine(string.Format(Strings.Apps_DtlFirstInstallFormat, G(FirstInstallRegex()).Trim()));
+            sb.AppendLine(string.Format(Strings.Apps_DtlLastUpdateFormat, G(LastUpdateRegex()).Trim()));
+            sb.AppendLine(string.Format(Strings.Apps_DtlInstallerFormat, G(InstallerRegex())));
+            sb.AppendLine(string.Format(Strings.Apps_DtlFlagsFormat, flagsText));
 
-            AppendSection(sb, $"申请的权限（{allPerms.Count}）", allPerms);
-            AppendSection(sb, $"页面 Activities（{meta.Activities.Count}）", meta.Activities);
-            AppendSection(sb, $"服务 Services（{meta.Services.Count}）", meta.Services);
-            AppendSection(sb, $"广播接收器 Receivers（{meta.Receivers.Count}）", meta.Receivers);
-            AppendSection(sb, $"内容提供器 Providers（{meta.Providers.Count}）", meta.Providers);
+            AppendSection(sb, string.Format(Strings.Apps_SecPermsFormat, allPerms.Count), allPerms);
+            AppendSection(sb, string.Format(Strings.Apps_SecActivitiesFormat, meta.Activities.Count), meta.Activities);
+            AppendSection(sb, string.Format(Strings.Apps_SecServicesFormat, meta.Services.Count), meta.Services);
+            AppendSection(sb, string.Format(Strings.Apps_SecReceiversFormat, meta.Receivers.Count), meta.Receivers);
+            AppendSection(sb, string.Format(Strings.Apps_SecProvidersFormat, meta.Providers.Count), meta.Providers);
 
             new AppDetailWindow(
-                $"{(meta.Label ?? app.Package)} 详情",
+                string.Format(Strings.Apps_DtlWindowTitleFormat, meta.Label ?? app.Package),
                 sb.ToString())
             { Owner = Application.Current.MainWindow }
             .ShowDialog();
 
-            Status = $"{app.Package} 详情已打开";
+            Status = string.Format(Strings.Apps_DtlOpenedFormat, app.Package);
         }
         catch (Exception ex)
         {
-            Status = "错误：" + ex.Message;
+            Status = string.Format(Strings.Common_ErrorFormat, ex.Message);
         }
         finally
         {
@@ -433,14 +437,14 @@ public partial class AppsViewModel : ObservableObject
     private static void AppendSection(StringBuilder sb, string title, List<string> items)
     {
         sb.AppendLine();
-        sb.AppendLine($"{title}：");
+        sb.AppendLine(string.Format(Strings.Apps_SectionHeaderFormat, title));
         if (items.Count == 0)
         {
-            sb.AppendLine("  （无）");
+            sb.AppendLine(Strings.Apps_SectionEmpty);
             return;
         }
         foreach (var item in items.Take(80)) sb.AppendLine($"  {item}");
-        if (items.Count > 80) sb.AppendLine($"  …（其余 {items.Count - 80} 项省略）");
+        if (items.Count > 80) sb.AppendLine(string.Format(Strings.Apps_SectionTruncatedFormat, items.Count - 80));
     }
 
     private async Task InstallAsync()
@@ -448,14 +452,14 @@ public partial class AppsViewModel : ObservableObject
         var serial = DeviceStore.SelectedSerial;
         if (serial is null)
         {
-            Status = "请先在顶部选择设备";
+            Status = Strings.Common_SelectDeviceFirst;
             return;
         }
 
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            Title = "选择要安装的 APK（可按住 Ctrl / Shift 多选）",
-            Filter = "APK 文件 (*.apk)|*.apk|所有文件 (*.*)|*.*",
+            Title = Strings.Apps_PickApkTitle,
+            Filter = Strings.Apps_ApkFilter,
             Multiselect = true,
         };
         if (dialog.ShowDialog() != true) return;
@@ -473,7 +477,7 @@ public partial class AppsViewModel : ObservableObject
     {
         if (serial is null)
         {
-            Status = "请先在顶部选择设备";
+            Status = Strings.Common_SelectDeviceFirst;
             return;
         }
         if (apkFiles.Count == 0) return;
@@ -484,17 +488,19 @@ public partial class AppsViewModel : ObservableObject
         for (var i = 0; i < apkFiles.Count; i++)
         {
             var name = Path.GetFileName(apkFiles[i]);
-            Status = $"正在安装 ({i + 1}/{apkFiles.Count}) {name} ...";
+            Status = string.Format(Strings.Apps_InstallingFormat, i + 1, apkFiles.Count, name);
             var result = await AppSession.Adb.InstallAsync(
                 serial, apkFiles[i], replace: true, grantPermissions: GrantPermissions);
 
             if (result.Success) ok.Add(name);
-            else failed.Add($"{name}（{TranslateInstallError(result.Combined)}）");
+            else failed.Add(string.Format(Strings.Apps_InstallFailedItemFormat, name,
+                TranslateInstallError(result.Combined)));
         }
 
         Status = failed.Count == 0
-            ? $"批量安装完成：成功 {ok.Count}/{apkFiles.Count}"
-            : $"批量安装完成：成功 {ok.Count}/{apkFiles.Count}，失败 {failed.Count} —— {string.Join("；", failed)}";
+            ? string.Format(Strings.Apps_BatchInstallOkFormat, ok.Count, apkFiles.Count)
+            : string.Format(Strings.Apps_BatchInstallFailFormat, ok.Count, apkFiles.Count, failed.Count,
+                string.Join(Strings.Apps_BatchFailSeparator, failed));
     }
 
     private async Task UninstallAsync(AppInfo app)
@@ -503,34 +509,35 @@ public partial class AppsViewModel : ObservableObject
         if (serial is null) return;
 
         var confirm = MessageBox.Show(
-            $"确定要卸载 {app.Package} 吗？{(KeepData ? "（保留数据）" : "")}",
-            "卸载确认", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            string.Format(Strings.Apps_UninstallConfirmFormat, app.Package,
+                KeepData ? Strings.Apps_KeepDataSuffix : ""),
+            Strings.Apps_UninstallConfirmCaption, MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (confirm != MessageBoxResult.Yes) return;
 
-        Status = $"正在卸载 {app.Package} ...";
+        Status = string.Format(Strings.Apps_UninstallingFormat, app.Package);
         var result = await AppSession.Adb.UninstallAsync(serial, app.Package, KeepData);
 
         if (result.Success)
         {
-            Status = $"已卸载 {app.Package}";
+            Status = string.Format(Strings.Apps_UninstalledFormat, app.Package);
             Apps.Remove(app);
         }
         else
         {
-            Status = $"卸载失败：{result.Combined.Trim()}";
+            Status = string.Format(Strings.Apps_UninstallFailedFormat, result.Combined.Trim());
         }
     }
 
     /// <summary>把 adb 安装错误码翻译成人话。</summary>
     internal static string TranslateInstallError(string output)
     {
-        if (output.Contains("INSTALL_FAILED_ALREADY_EXISTS")) return "应用已存在（替换安装可解决）";
-        if (output.Contains("INSTALL_FAILED_INVALID_APK")) return "APK 文件无效";
-        if (output.Contains("INSTALL_FAILED_INSUFFICIENT_STORAGE")) return "设备存储空间不足";
-        if (output.Contains("INSTALL_FAILED_VERSION_DOWNGRADE")) return "设备上已是更高版本，无法降级安装";
-        if (output.Contains("INSTALL_PARSE_FAILED_NO_CERTIFICATES")) return "APK 未签名或签名无效";
-        if (output.Contains("INSTALL_FAILED_UPDATE_INCOMPATIBLE")) return "签名与已装应用不一致，需先卸载";
-        if (output.Contains("INCOMPATIBLE")) return "ABI / 平台不兼容";
+        if (output.Contains("INSTALL_FAILED_ALREADY_EXISTS")) return Strings.Apps_ErrAlreadyExists;
+        if (output.Contains("INSTALL_FAILED_INVALID_APK")) return Strings.Apps_ErrInvalidApk;
+        if (output.Contains("INSTALL_FAILED_INSUFFICIENT_STORAGE")) return Strings.Apps_ErrStorage;
+        if (output.Contains("INSTALL_FAILED_VERSION_DOWNGRADE")) return Strings.Apps_ErrDowngrade;
+        if (output.Contains("INSTALL_PARSE_FAILED_NO_CERTIFICATES")) return Strings.Apps_ErrNoCert;
+        if (output.Contains("INSTALL_FAILED_UPDATE_INCOMPATIBLE")) return Strings.Apps_ErrUpdateIncompatible;
+        if (output.Contains("INCOMPATIBLE")) return Strings.Apps_ErrIncompatible;
         return output.Trim();
     }
 }

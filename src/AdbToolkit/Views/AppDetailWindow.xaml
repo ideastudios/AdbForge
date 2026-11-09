@@ -1,13 +1,14 @@
 <Window x:Class="AdbToolkit.Views.AppDetailWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:AdbToolkit.Resources"
         Title="{Binding DetailTitle}"
         Width="780" Height="620"
         MinWidth="560" MinHeight="420"
         WindowStartupLocation="CenterOwner"
         Background="{StaticResource Bg.Window}">
     <DockPanel Margin="10">
-        <TextBlock DockPanel.Dock="Top" Text="提示：全选（Ctrl+A）后 Ctrl+C 即可复制全部内容；文本框内右键也可复制选中文本"
+        <TextBlock DockPanel.Dock="Top" Text="{x:Static res:Strings.AppDetail_CopyHint}"
                    FontSize="11" Foreground="{StaticResource Text.Secondary}" Margin="2,0,0,6"/>
         <TextBox Text="{Binding Text, Mode=OneWay}"
                  IsReadOnly="True"

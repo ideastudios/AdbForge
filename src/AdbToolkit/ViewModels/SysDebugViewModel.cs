@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using AdbToolkit.Models;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 
 namespace AdbToolkit.ViewModels;
@@ -21,12 +22,16 @@ public class SysDebugViewModel : ObservableObject
         PutSettingCommand = new RelayCommand(async () => await RunBusyAsync(async () =>
         {
             var r = await RunShell($"settings put {SelectedNamespace} {SettingKey.Trim()} {Quote(SettingValue.Trim())}");
-            Status = r.Success ? $"已写入 {SettingKey} = {SettingValue}" : $"失败：{r.Combined.Trim()}";
+            Status = r.Success
+                ? string.Format(Strings.SysDbg_SettingWrittenFormat, SettingKey, SettingValue)
+                : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
         }));
         DeleteSettingCommand = new RelayCommand(async () => await RunBusyAsync(async () =>
         {
             var r = await RunShell($"settings delete {SelectedNamespace} {SettingKey.Trim()}");
-            Status = r.Success ? $"已删除 {SettingKey}" : $"失败：{r.Combined.Trim()}";
+            Status = r.Success
+                ? string.Format(Strings.SysDbg_SettingDeletedFormat, SettingKey)
+                : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
         }));
 
         RefreshPropsCommand = new RelayCommand(async () => await RunBusyAsync(LoadPropsAsync));
@@ -39,16 +44,20 @@ public class SysDebugViewModel : ObservableObject
             await RunBusyAsync(async () =>
             {
                 var r = await RunShell($"am start -a {action}");
-                Status = r.Success ? $"已打开：{action}" : $"打开失败：{r.Combined.Trim()}";
+                Status = r.Success
+                    ? string.Format(Strings.SysDbg_OpenedFormat, action)
+                    : string.Format(Strings.Common_OpenFailedFormat, r.Combined.Trim());
             });
         });
         OpenAppDetailsByPackageCommand = new RelayCommand(async () => await RunBusyAsync(async () =>
         {
             var pkg = SettingsPkgInput.Trim();
-            if (pkg.Length == 0) { Status = "请输入包名"; return; }
+            if (pkg.Length == 0) { Status = Strings.SysDbg_EnterPackage; return; }
             var r = await RunShell(
                 $"am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d \"package:{pkg}\"");
-            Status = r.Success ? $"已打开 {pkg} 的应用详情" : $"打开失败：{r.Combined.Trim()}";
+            Status = r.Success
+                ? string.Format(Strings.Main_OpenedAppDetailsFormat, pkg)
+                : string.Format(Strings.Common_OpenFailedFormat, r.Combined.Trim());
         }));
 
         ApplyPresetCommand = new RelayCommand(async p =>
@@ -60,16 +69,18 @@ public class SysDebugViewModel : ObservableObject
         {
             var r = await RunShell("getenforce");
             EnforceState = r.StdOut.Trim();
-            Status = $"SELinux 状态：{EnforceState}";
+            Status = string.Format(Strings.SysDbg_SelinuxStateFormat, EnforceState);
         }));
         SetEnforceCommand = new RelayCommand(async p =>
         {
-            if (MessageBox.Show("修改 SELinux 状态可能带来安全风险，仅建议在调试机上使用。继续？",
-                    "确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
+            if (MessageBox.Show(Strings.SysDbg_SelinuxConfirm,
+                    Strings.SysDbg_ConfirmCaption, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
             var permissive = p as string == "0";
             var r = await RunShell($"setenforce {(permissive ? 0 : 1)}");
-            EnforceState = r.Success ? (permissive ? "Permissive" : "Enforcing") : "未知";
-            Status = r.Success ? $"已切换 SELinux：{EnforceState}" : $"失败（可能需要 root）：{r.Combined.Trim()}";
+            EnforceState = r.Success ? (permissive ? "Permissive" : "Enforcing") : Strings.SysDbg_UnknownState;
+            Status = r.Success
+                ? string.Format(Strings.SysDbg_SelinuxSwitchedFormat, EnforceState)
+                : string.Format(Strings.SysDbg_FailedRootFormat, r.Combined.Trim());
         });
 
         PersistAdbCommand = new RelayCommand(async () => await RunBusyAsync(PersistAdbAsync));
@@ -162,7 +173,7 @@ public class SysDebugViewModel : ObservableObject
         OnPropertyChanged(nameof(PropSearch));
         ApplyPropFilter();
         PropSuggestionsOpen = false;
-        Status = $"已按 {key} 过滤";
+        Status = string.Format(Strings.SysDbg_FilteredByFormat, key);
     }
 
     /// <summary>当前在属性列表中选中的条目（右键修改/复制用）。</summary>
@@ -179,15 +190,15 @@ public class SysDebugViewModel : ObservableObject
         var sel = SelectedProp;
         if (sel is not { } prop || prop.Key.Length == 0)
         {
-            Status = "请先选中一个属性";
+            Status = Strings.SysDbg_SelectPropFirst;
             return;
         }
 
         if (prop.Key.StartsWith("ro.", StringComparison.OrdinalIgnoreCase))
         {
-            MessageBox.Show("ro. 开头的属性是只读的，无法通过 setprop 修改。",
-                "只读属性", MessageBoxButton.OK, MessageBoxImage.Information);
-            Status = $"{prop.Key} 为只读属性（ro. 前缀），无法修改";
+            MessageBox.Show(Strings.SysDbg_ReadOnlyPropText,
+                Strings.SysDbg_ReadOnlyPropCaption, MessageBoxButton.OK, MessageBoxImage.Information);
+            Status = string.Format(Strings.SysDbg_ReadOnlyStatusFormat, prop.Key);
             return;
         }
 
@@ -206,7 +217,7 @@ public class SysDebugViewModel : ObservableObject
         var r = await RunShell($"setprop {prop.Key} {valueArg}");
         if (!r.Success)
         {
-            Status = $"setprop 失败（可能需要 root）：{r.Combined.Trim()}";
+            Status = string.Format(Strings.SysDbg_SetpropFailedFormat, r.Combined.Trim());
             return;
         }
 
@@ -224,8 +235,8 @@ public class SysDebugViewModel : ObservableObject
         ApplyPropFilter();
 
         Status = actual == newVal
-            ? $"已修改 {prop.Key} = {actual}"
-            : $"已执行 setprop，但设备回读为 {prop.Key} = {actual}（可能未生效）";
+            ? string.Format(Strings.SysDbg_PropModifiedFormat, prop.Key, actual)
+            : string.Format(Strings.SysDbg_PropNotAppliedFormat, prop.Key, actual);
     }
 
     /// <summary>右键复制属性名或属性值。</summary>
@@ -234,13 +245,13 @@ public class SysDebugViewModel : ObservableObject
         var sel = SelectedProp;
         if (sel is not { } prop || prop.Key.Length == 0)
         {
-            Status = "请先选中一个属性";
+            Status = Strings.SysDbg_SelectPropFirst;
             return;
         }
         try
         {
             Clipboard.SetText(copyKey ? prop.Key : prop.Value);
-            Status = $"已复制：{(copyKey ? prop.Key : prop.Value)}";
+            Status = string.Format(Strings.Common_CopiedFormat, copyKey ? prop.Key : prop.Value);
         }
         catch { /* 剪贴板被占用等极端情况 */ }
     }
@@ -260,74 +271,74 @@ public class SysDebugViewModel : ObservableObject
     // ---------- 设置页面快捷入口 ----------
     public List<SettingsEntry> SettingsGeneral { get; } = new()
     {
-        new("设置主页",       "android.settings.SETTINGS"),
-        new("系统更新",       "android.settings.SYSTEM_UPDATE_SETTINGS"),
-        new("关于手机",       "android.settings.DEVICE_INFO_SETTINGS"),
-        new("设备名称",       "android.settings.DEVICE_NAME"),
-        new("开发者选项",     "android.settings.APPLICATION_DEVELOPMENT_SETTINGS"),
-        new("备份与重置",     "android.settings.PRIVACY_SETTINGS"),
-        new("多用户",         "android.settings.USER_SETTINGS"),
-        new("存储空间",       "android.settings.INTERNAL_STORAGE_SETTINGS"),
-        new("电池",           "android.settings.BATTERY_SAVER_SETTINGS"),
-        new("电池优化",       "android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS"),
+        new(Strings.SysDbg_Set_SettingsHome, "android.settings.SETTINGS"),
+        new(Strings.SysDbg_Set_SystemUpdate, "android.settings.SYSTEM_UPDATE_SETTINGS"),
+        new(Strings.SysDbg_Set_AboutPhone, "android.settings.DEVICE_INFO_SETTINGS"),
+        new(Strings.SysDbg_Set_DeviceName, "android.settings.DEVICE_NAME"),
+        new(Strings.SysDbg_Set_DevOptions, "android.settings.APPLICATION_DEVELOPMENT_SETTINGS"),
+        new(Strings.SysDbg_Set_BackupReset, "android.settings.PRIVACY_SETTINGS"),
+        new(Strings.SysDbg_Set_MultiUser, "android.settings.USER_SETTINGS"),
+        new(Strings.SysDbg_Set_Storage, "android.settings.INTERNAL_STORAGE_SETTINGS"),
+        new(Strings.SysDbg_Set_Battery, "android.settings.BATTERY_SAVER_SETTINGS"),
+        new(Strings.SysDbg_Set_BatteryOpt, "android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS"),
     };
 
     public List<SettingsEntry> SettingsApps { get; } = new()
     {
-        new("应用管理",         "android.settings.APPLICATION_SETTINGS"),
-        new("全部应用（运行中）", "android.settings.MANAGE_ALL_APPLICATIONS_SETTINGS"),
-        new("默认应用",         "android.settings.MANAGE_DEFAULT_APPS_SETTINGS"),
-        new("权限管理器",       "android.settings.MANAGE_PERMISSIONS"),
-        new("特殊应用访问",     "android.settings.SPECIAL_ACCESS_SETTINGS"),
-        new("使用情况访问",     "android.settings.USAGE_ACCESS_SETTINGS"),
-        new("通知使用权",       "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"),
-        new("未知来源安装",     "android.settings.MANAGE_UNKNOWN_APP_SOURCES"),
-        new("WebView 实现",     "android.settings.WEBVIEW_SETTINGS"),
-        new("画中画",           "android.settings.PICTURE_IN_PICTURE_SETTINGS"),
+        new(Strings.SysDbg_Set_AppManager, "android.settings.APPLICATION_SETTINGS"),
+        new(Strings.SysDbg_Set_AllAppsRunning, "android.settings.MANAGE_ALL_APPLICATIONS_SETTINGS"),
+        new(Strings.SysDbg_Set_DefaultApps, "android.settings.MANAGE_DEFAULT_APPS_SETTINGS"),
+        new(Strings.SysDbg_Set_PermissionManager, "android.settings.MANAGE_PERMISSIONS"),
+        new(Strings.SysDbg_Set_SpecialAccess, "android.settings.SPECIAL_ACCESS_SETTINGS"),
+        new(Strings.SysDbg_Set_UsageAccess, "android.settings.USAGE_ACCESS_SETTINGS"),
+        new(Strings.SysDbg_Set_NotificationAccess, "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"),
+        new(Strings.SysDbg_Set_UnknownSources, "android.settings.MANAGE_UNKNOWN_APP_SOURCES"),
+        new(Strings.SysDbg_Set_WebView, "android.settings.WEBVIEW_SETTINGS"),
+        new(Strings.SysDbg_Set_Pip, "android.settings.PICTURE_IN_PICTURE_SETTINGS"),
     };
 
     public List<SettingsEntry> SettingsNetwork { get; } = new()
     {
-        new("WLAN",         "android.settings.WIFI_SETTINGS"),
-        new("WLAN 高级",    "android.settings.WIFI_IP_SETTINGS"),
-        new("蓝牙",         "android.settings.BLUETOOTH_SETTINGS"),
-        new("位置信息",     "android.settings.LOCATION_SOURCE_SETTINGS"),
-        new("飞行模式",     "android.settings.AIRPLANE_MODE_SETTINGS"),
-        new("流量使用",     "android.settings.DATA_USAGE_SETTINGS"),
-        new("移动网络",     "android.settings.NETWORK_OPERATOR_SETTINGS"),
-        new("数据漫游",     "android.settings.ACTION_DATA_ROAMING_SETTINGS"),
-        new("APN 接入点",   "android.settings.APN_SETTINGS"),
-        new("热点与共享",   "android.settings.TETHER_SETTINGS"),
-        new("VPN",          "android.settings.VPN_SETTINGS"),
-        new("NFC",          "android.settings.NFC_SETTINGS"),
-        new("投屏",         "android.settings.CAST_SETTINGS"),
-        new("SIM 卡",       "android.settings.SIM_CARD_SETTINGS"),
+        new("WLAN", "android.settings.WIFI_SETTINGS"),
+        new(Strings.SysDbg_Set_WlanAdvanced, "android.settings.WIFI_IP_SETTINGS"),
+        new(Strings.SysDbg_Set_Bluetooth, "android.settings.BLUETOOTH_SETTINGS"),
+        new(Strings.SysDbg_Set_Location, "android.settings.LOCATION_SOURCE_SETTINGS"),
+        new(Strings.SysDbg_Set_AirplaneMode, "android.settings.AIRPLANE_MODE_SETTINGS"),
+        new(Strings.SysDbg_Set_DataUsage, "android.settings.DATA_USAGE_SETTINGS"),
+        new(Strings.SysDbg_Set_MobileNetwork, "android.settings.NETWORK_OPERATOR_SETTINGS"),
+        new(Strings.SysDbg_Set_DataRoaming, "android.settings.ACTION_DATA_ROAMING_SETTINGS"),
+        new(Strings.SysDbg_Set_Apn, "android.settings.APN_SETTINGS"),
+        new(Strings.SysDbg_Set_Hotspot, "android.settings.TETHER_SETTINGS"),
+        new("VPN", "android.settings.VPN_SETTINGS"),
+        new("NFC", "android.settings.NFC_SETTINGS"),
+        new(Strings.SysDbg_Set_Cast, "android.settings.CAST_SETTINGS"),
+        new(Strings.SysDbg_Set_SimCard, "android.settings.SIM_CARD_SETTINGS"),
     };
 
     public List<SettingsEntry> SettingsDevice { get; } = new()
     {
-        new("显示",           "android.settings.DISPLAY_SETTINGS"),
-        new("夜间模式",       "android.settings.NIGHT_DISPLAY_SETTINGS"),
-        new("声音",           "android.settings.SOUND_SETTINGS"),
-        new("免打扰",         "android.settings.ZEN_MODE_SETTINGS"),
-        new("日期和时间",     "android.settings.DATE_SETTINGS"),
-        new("语言区域",       "android.settings.LOCALE_SETTINGS"),
-        new("语言和输入法",   "android.settings.INPUT_METHOD_SETTINGS"),
-        new("实体键盘",       "android.settings.HARD_KEYBOARD_SETTINGS"),
-        new("用户词典",       "android.settings.USER_DICTIONARY_SETTINGS"),
-        new("语音输入",       "android.settings.VOICE_INPUT_SETTINGS"),
-        new("安全",           "android.settings.SECURITY_SETTINGS"),
-        new("受信任的凭据",   "android.settings.TRUSTED_CREDENTIALS"),
-        new("辅助功能",       "android.settings.ACCESSIBILITY_SETTINGS"),
-        new("字幕",           "android.settings.CAPTIONING_SETTINGS"),
-        new("屏保",           "android.settings.DREAM_SETTINGS"),
-        new("壁纸",           "android.settings.WALLPAPER_SETTINGS"),
-        new("底座",           "android.settings.DOCK_SETTINGS"),
-        new("主屏幕",         "android.settings.HOME_SETTINGS"),
-        new("搜索助手",       "android.settings.SEARCH_SETTINGS"),
-        new("账号与同步",     "android.settings.SYNC_SETTINGS"),
-        new("添加账号",       "android.settings.ADD_ACCOUNT_SETTINGS"),
-        new("恢复出厂",       "android.settings.FACTORY_RESET_SETTINGS"),
+        new(Strings.SysDbg_Set_Display, "android.settings.DISPLAY_SETTINGS"),
+        new(Strings.SysDbg_Set_NightMode, "android.settings.NIGHT_DISPLAY_SETTINGS"),
+        new(Strings.SysDbg_Set_Sound, "android.settings.SOUND_SETTINGS"),
+        new(Strings.SysDbg_Set_DoNotDisturb, "android.settings.ZEN_MODE_SETTINGS"),
+        new(Strings.SysDbg_Set_DateTime, "android.settings.DATE_SETTINGS"),
+        new(Strings.SysDbg_Set_Locale, "android.settings.LOCALE_SETTINGS"),
+        new(Strings.SysDbg_Set_LangInput, "android.settings.INPUT_METHOD_SETTINGS"),
+        new(Strings.SysDbg_Set_PhysicalKeyboard, "android.settings.HARD_KEYBOARD_SETTINGS"),
+        new(Strings.SysDbg_Set_UserDictionary, "android.settings.USER_DICTIONARY_SETTINGS"),
+        new(Strings.SysDbg_Set_VoiceInput, "android.settings.VOICE_INPUT_SETTINGS"),
+        new(Strings.SysDbg_Set_Security, "android.settings.SECURITY_SETTINGS"),
+        new(Strings.SysDbg_Set_TrustedCerts, "android.settings.TRUSTED_CREDENTIALS"),
+        new(Strings.SysDbg_Set_Accessibility, "android.settings.ACCESSIBILITY_SETTINGS"),
+        new(Strings.SysDbg_Set_Captioning, "android.settings.CAPTIONING_SETTINGS"),
+        new(Strings.SysDbg_Set_ScreenSaver, "android.settings.DREAM_SETTINGS"),
+        new(Strings.SysDbg_Set_Wallpaper, "android.settings.WALLPAPER_SETTINGS"),
+        new(Strings.SysDbg_Set_Dock, "android.settings.DOCK_SETTINGS"),
+        new(Strings.SysDbg_Set_Home, "android.settings.HOME_SETTINGS"),
+        new(Strings.SysDbg_Set_SearchAssistant, "android.settings.SEARCH_SETTINGS"),
+        new(Strings.SysDbg_Set_AccountsSync, "android.settings.SYNC_SETTINGS"),
+        new(Strings.SysDbg_Set_AddAccount, "android.settings.ADD_ACCOUNT_SETTINGS"),
+        new(Strings.SysDbg_Set_FactoryReset, "android.settings.FACTORY_RESET_SETTINGS"),
     };
 
     private string _settingsPkgInput = "";
@@ -343,34 +354,34 @@ public class SysDebugViewModel : ObservableObject
     // ---------- 预设 ----------
     public List<PresetItem> Presets { get; } = new()
     {
-        new("动画归零", "关闭三类动画，提速调试", new[]
+        new(Strings.SysDbg_PresetAnimZeroLabel, Strings.SysDbg_PresetAnimZeroDesc, new[]
         {
             "settings put global window_animation_scale 0",
             "settings put global transition_animation_scale 0",
             "settings put global animator_duration_scale 0",
         }),
-        new("动画恢复", "恢复三类动画为 1", new[]
+        new(Strings.SysDbg_PresetAnimRestoreLabel, Strings.SysDbg_PresetAnimRestoreDesc, new[]
         {
             "settings put global window_animation_scale 1",
             "settings put global transition_animation_scale 1",
             "settings put global animator_duration_scale 1",
         }),
-        new("充电保持唤醒", "插电时不锁屏休眠", new[]
+        new(Strings.SysDbg_PresetStayAwakeOnLabel, Strings.SysDbg_PresetStayAwakeOnDesc, new[]
             { "settings put global stay_on_while_plugged_in 7" }),
-        new("取消保持唤醒", "恢复默认休眠策略", new[]
+        new(Strings.SysDbg_PresetStayAwakeOffLabel, Strings.SysDbg_PresetStayAwakeOffDesc, new[]
             { "settings put global stay_on_while_plugged_in 0" }),
-        new("自由窗口", "启用自由窗口多窗口 + 强制 Activity 可调大小", new[]
+        new(Strings.SysDbg_PresetFreeformLabel, Strings.SysDbg_PresetFreeformDesc, new[]
         {
             "settings put global enable_freeform_support 1",
             "settings put global force_resizable_activities 1",
         }),
-        new("NTP 服务器", "切换 NTP 为国内源（例）", new[]
+        new(Strings.SysDbg_PresetNtpLabel, Strings.SysDbg_PresetNtpDesc, new[]
             { "settings put global ntp_server cn.ntp.org.cn" }),
-        new("横屏", "强制横屏（user_rotation=1）", new[]
+        new(Strings.SysDbg_PresetLandscapeLabel, Strings.SysDbg_PresetLandscapeDesc, new[]
             { "content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:1" }),
-        new("竖屏", "强制竖屏（user_rotation=0）", new[]
+        new(Strings.SysDbg_PresetPortraitLabel, Strings.SysDbg_PresetPortraitDesc, new[]
             { "content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:0" }),
-        new("熄屏时钟常亮", "锁屏上显示时钟/通知", new[]
+        new(Strings.SysDbg_PresetDozeClockLabel, Strings.SysDbg_PresetDozeClockDesc, new[]
             { "settings put secure doze_always_on 1" }),
     };
 
@@ -404,7 +415,7 @@ public class SysDebugViewModel : ObservableObject
 
     private bool _busy;
     public bool IsBusy { get => _busy; private set => SetProperty(ref _busy, value); }
-    private string _status = "就绪";
+    private string _status = Strings.More_Ready;
     public string Status { get => _status; private set => SetProperty(ref _status, value); }
 
     public RelayCommand SearchSettingsCommand { get; }
@@ -428,13 +439,13 @@ public class SysDebugViewModel : ObservableObject
         if (IsBusy) return;
         IsBusy = true;
         try { await work(); }
-        catch (Exception ex) { Status = "错误：" + ex.Message; }
+        catch (Exception ex) { Status = string.Format(Strings.Common_ErrorFormat, ex.Message); }
         finally { IsBusy = false; }
     }
 
     private async Task<AdbResult> RunShell(string cmd)
     {
-        var serial = DeviceStore.SelectedSerial ?? throw new InvalidOperationException("请先在顶部选择设备");
+        var serial = DeviceStore.SelectedSerial ?? throw new InvalidOperationException(Strings.Common_SelectDeviceFirst);
         return await AppSession.Adb.RunShellAsync(cmd, serial);
     }
 
@@ -469,7 +480,7 @@ public class SysDebugViewModel : ObservableObject
         var items = await AppSession.Adb.ListSettingsAsync(DeviceStore.SelectedSerial!, SelectedNamespace);
         SettingsItems.Clear();
         foreach (var p in FilterPairs(items, SettingsSearch)) SettingsItems.Add(p);
-        Status = $"{SelectedNamespace} 共 {items.Count} 项，筛选后 {SettingsItems.Count} 项";
+        Status = string.Format(Strings.SysDbg_SettingsCountFormat, SelectedNamespace, items.Count, SettingsItems.Count);
     }
 
     // ---------- getprop ----------
@@ -482,7 +493,7 @@ public class SysDebugViewModel : ObservableObject
         OnPropertyChanged(nameof(PropSearch));
         ApplyPropFilter();
         PropSuggestionsOpen = false;
-        Status = $"getprop 共 {_allProps.Count} 项";
+        Status = string.Format(Strings.SysDbg_PropCountFormat, _allProps.Count);
     }
 
     // ---------- Intent ----------
@@ -518,7 +529,7 @@ public class SysDebugViewModel : ObservableObject
 
         var r = await RunShell(sb.ToString());
         IntentOutput = (r.StdOut + r.StdErr).Trim();
-        Status = r.Success ? "Intent 已发送" : "Intent 发送失败";
+        Status = r.Success ? Strings.SysDbg_IntentSent : Strings.SysDbg_IntentFailed;
     }
 
     // ---------- 预设 ----------
@@ -530,36 +541,36 @@ public class SysDebugViewModel : ObservableObject
         {
             var r = await RunShell(cmd);
             results.AppendLine(r.Success
-                ? $"[OK] {cmd}"
-                : $"[失败] {cmd} → {r.Combined.Trim()}");
+                ? string.Format(Strings.SysDbg_ResultOkFormat, cmd)
+                : string.Format(Strings.SysDbg_ResultFailFormat, cmd, r.Combined.Trim()));
         }
         TerminalOutput = results.ToString();
-        Status = $"预设「{item.Label}」已执行";
+        Status = string.Format(Strings.SysDbg_PresetDoneFormat, item.Label);
     }
 
     // ---------- SELinux / ADB 持久化 / pstore / build.prop ----------
 
     private async Task PersistAdbAsync()
     {
-        if (MessageBox.Show("将以 root 重启 adbd 使 WiFi 调试端口持久化（需要已 root 的调试机）。继续？",
-                "确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
+        if (MessageBox.Show(Strings.SysDbg_PersistAdbConfirm,
+                Strings.SysDbg_ConfirmCaption, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
 
         var port = PersistPort.Trim();
         var r1 = await RunShell($"setprop service.adb.tcp.port {port}");
         var r2 = await RunShell("stop adbd");
         var r3 = await RunShell("start adbd");
         Status = r1.Success && r2.Success && r3.Success
-            ? $"已持久化 TCP {port}（重启设备后仍生效，需重新 adb connect）"
-            : $"执行失败（需要 root）：{(r1.Combined + r2.Combined + r3.Combined).Trim()}";
+            ? string.Format(Strings.SysDbg_PersistAdbDoneFormat, port)
+            : string.Format(Strings.SysDbg_FailedRootFormat, (r1.Combined + r2.Combined + r3.Combined).Trim());
     }
 
     private async Task ListPstoreAsync()
     {
         var r = await RunShell("ls -la /sys/fs/pstore/ 2>/dev/null");
         PstoreList = r.StdOut.Trim().Length == 0
-            ? "（空）没有 pstore 文件，或需要 root 才能查看"
+            ? Strings.SysDbg_PstoreEmpty
             : r.Combined.Trim();
-        Status = "pstore 已刷新";
+        Status = Strings.SysDbg_PstoreRefreshed;
     }
 
     private async Task PullPstoreAsync()
@@ -569,7 +580,7 @@ public class SysDebugViewModel : ObservableObject
         Directory.CreateDirectory(dir);
         var ls = await AppSession.Adb.RunShellAsync("ls /sys/fs/pstore/", serial);
         var names = ls.StdOut.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
-        if (names.Count == 0) { Status = "没有可拉取的 pstore 文件（可能需要 root）"; return; }
+        if (names.Count == 0) { Status = Strings.SysDbg_PstoreNothingToPull; return; }
 
         var ok = 0;
         foreach (var name in names)
@@ -577,8 +588,8 @@ public class SysDebugViewModel : ObservableObject
             var r = await AppSession.Adb.PullAsync(serial, $"/sys/fs/pstore/{name}", dir);
             if (r.Success) ok++;
         }
-        PstoreList += $"\n\n已拉取 {ok}/{names.Count} 个文件到 {dir}";
-        Status = $"内核恐慌日志已拉取到 {dir}";
+        PstoreList += string.Format(Strings.SysDbg_PstorePulledFormat, ok, names.Count, dir);
+        Status = string.Format(Strings.SysDbg_PstoreSavedFormat, dir);
     }
 
     private async Task ReadPropFileAsync()
@@ -586,18 +597,17 @@ public class SysDebugViewModel : ObservableObject
         var r = await RunShell($"cat {PropFilePath.Trim()}");
         if (!r.Success && r.StdOut.Trim().Length == 0)
         {
-            Status = $"读取失败：{r.Combined.Trim()}";
+            Status = string.Format(Strings.SysDbg_ReadFailedFormat, r.Combined.Trim());
             return;
         }
         PropFileContent = r.StdOut;
-        Status = $"已读取 {PropFilePath}（{PropFileContent.Length:N0} 字符）";
+        Status = string.Format(Strings.SysDbg_PropFileReadFormat, PropFilePath, PropFileContent.Length);
     }
 
     private async Task SavePropFileAsync()
     {
-        if (MessageBox.Show("修改 build.prop 可能导致设备无法开机，仅建议在调试机/root 机上操作。\n" +
-                "将执行：adb root → remount → 设备端备份 .bak → push 覆盖。继续？",
-                "高危操作确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+        if (MessageBox.Show(Strings.SysDbg_PropFileConfirm,
+                Strings.SysDbg_HighRiskCaption, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
             return;
 
         var serial = DeviceStore.SelectedSerial!;
@@ -612,8 +622,9 @@ public class SysDebugViewModel : ObservableObject
 
         var push = await AppSession.Adb.PushAsync(serial, tmp, path);
         Status = push.Success
-            ? $"已写入 {path}（设备端备份：{path}.bak {(backup.Success ? "OK" : "失败")}）。建议重启设备验证。"
-            : $"写入失败（需要 root + remount）：{push.Combined.Trim()}";
+            ? string.Format(Strings.SysDbg_PropFileSavedFormat, path,
+                $"{path}.bak", backup.Success ? Strings.SysDbg_BackupOk : Strings.SysDbg_BackupFailed)
+            : string.Format(Strings.SysDbg_PropFileWriteFailedFormat, push.Combined.Trim());
     }
 
     // ---------- 终端 ----------
@@ -626,6 +637,8 @@ public class SysDebugViewModel : ObservableObject
         TerminalOutput = $"$ {cmd}\n{r.Combined.Trim()}\n\n{TerminalOutput}";
         TerminalHistory.Insert(0, cmd);
         while (TerminalHistory.Count > 50) TerminalHistory.RemoveAt(TerminalHistory.Count - 1);
-        Status = r.Success ? "命令执行完成" : $"命令退出码 {r.ExitCode}";
+        Status = r.Success
+            ? Strings.SysDbg_CmdDone
+            : string.Format(Strings.SysDbg_CmdExitFormat, r.ExitCode);
     }
 }

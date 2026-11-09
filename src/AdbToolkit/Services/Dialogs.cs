@@ -1,4 +1,5 @@
 using System.IO;
+using AdbToolkit.Resources;
 
 namespace AdbToolkit.Services;
 
@@ -8,7 +9,7 @@ public static class Dialogs
     /// <summary>选择文件夹：导航进入目标文件夹后点“打开”。</summary>
     public static string? PickFolder(string title, string? initialDir = null)
     {
-        const string marker = "打开此文件夹";
+        var marker = Strings.Files_FolderPickerMarker;
         var dlg = new Microsoft.Win32.OpenFileDialog
         {
             Title = title,

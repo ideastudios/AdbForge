@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
 using AdbToolkit.Models;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 
 namespace AdbToolkit.ViewModels;
@@ -101,7 +102,7 @@ public class LogcatViewModel : ObservableObject
         private set => SetProperty(ref _isCapturing, value);
     }
 
-    private string _status = "未开始抓取";
+    private string _status = Strings.Logcat_NotStarted;
     public string Status
     {
         get => _status;
@@ -120,7 +121,7 @@ public class LogcatViewModel : ObservableObject
         var serial = DeviceStore.SelectedSerial;
         if (serial is null)
         {
-            Status = "请先在顶部选择设备";
+            Status = Strings.Common_SelectDeviceFirst;
             return;
         }
 
@@ -144,7 +145,7 @@ public class LogcatViewModel : ObservableObject
                     {
                         IsCapturing = false;
                         _flushTimer.Stop();
-                        Status = $"logcat 进程已退出（code {code}）";
+                        Status = string.Format(Strings.Logcat_ProcessExitedFormat, code);
                     });
                 });
         }
@@ -156,7 +157,7 @@ public class LogcatViewModel : ObservableObject
 
         IsCapturing = true;
         _flushTimer.Start();
-        Status = $"正在抓取（设备 {serial} · buffer {SelectedBuffer} · *:{SelectedLevel}）";
+        Status = string.Format(Strings.Logcat_CapturingFormat, serial, SelectedBuffer, SelectedLevel);
     }
 
     private void OnLineReceived(string line)
@@ -225,8 +226,8 @@ public class LogcatViewModel : ObservableObject
         }
 
         Status = _droppedDisplay > 0
-            ? $"正在抓取 · 缓冲 {_all.Count:N0} 行（屏显过载丢弃 {_droppedDisplay:N0} 行）"
-            : $"正在抓取 · 缓冲 {_all.Count:N0} 行";
+            ? string.Format(Strings.Logcat_CapturingOverflowFormat, _all.Count, _droppedDisplay)
+            : string.Format(Strings.Logcat_CapturingBufferFormat, _all.Count);
     }
 
     private void StopCapture()
@@ -255,7 +256,7 @@ public class LogcatViewModel : ObservableObject
         await AppSession.Adb.ClearLogcatAsync(serial);
         lock (_sync) _all.Clear();
         Entries.Clear();
-        Status = "已清空设备端日志缓冲区";
+        Status = Strings.Logcat_Cleared;
     }
 
     // ---------- 过滤 ----------
@@ -283,7 +284,7 @@ public class LogcatViewModel : ObservableObject
         var dialog = new Microsoft.Win32.SaveFileDialog
         {
             FileName = $"logcat_{DateTime.Now:yyyyMMdd_HHmmss}.txt",
-            Filter = "文本文件 (*.txt)|*.txt|日志文件 (*.log)|*.log",
+            Filter = Strings.Logcat_SaveFilter,
         };
         if (dialog.ShowDialog() != true) return;
 
@@ -298,7 +299,7 @@ public class LogcatViewModel : ObservableObject
                 : $"{e.Time} {e.Pid,5} {e.Tid,5} {e.Level} {e.Tag}: {e.Message}");
         }
         File.WriteAllText(dialog.FileName, sb.ToString(), Encoding.UTF8);
-        Status = $"已保存 {snapshot.Length:N0} 行到 {dialog.FileName}";
+        Status = string.Format(Strings.Logcat_SavedFormat, snapshot.Length, dialog.FileName);
     }
 
     /// <summary>离开页面时由 View 调用，确保子进程被回收。</summary>

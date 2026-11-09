@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- ============ Common ============ -->
+  <data name="Common_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Common_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Common_Refresh" xml:space="preserve"><value>Refresh</value></data>
+  <data name="Common_Error" xml:space="preserve"><value>Error</value></data>
+  <data name="Common_ErrorFormat" xml:space="preserve"><value>Error: {0}</value></data>
+  <data name="Common_FailedFormat" xml:space="preserve"><value>Failed: {0}</value></data>
+  <data name="Common_SelectDeviceFirst" xml:space="preserve"><value>Please select a device in the top bar first</value></data>
+  <data name="Common_CopiedFormat" xml:space="preserve"><value>Copied: {0}</value></data>
+  <data name="Common_OpenLogsFolder" xml:space="preserve"><value>Open Log Folder</value></data>
+  <data name="Common_CheckUpdate" xml:space="preserve"><value>Check for Updates</value></data>
+  <data name="Common_Copy" xml:space="preserve"><value>Copy</value></data>
+  <data name="Common_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Common_Open" xml:space="preserve"><value>Open</value></data>
+  <!-- ============ App / Main window ============ -->
+  <data name="App_Title" xml:space="preserve"><value>AdbForge · ADB Toolbox</value></data>
+  <data name="App_UnhandledErrorFormat" xml:space="preserve"><value>An unhandled error occurred: {0}
+
+Detailed logs have been saved to:
+{1}</value></data>
+  <data name="Main_ForegroundLabel" xml:space="preserve"><value>Foreground: </value></data>
+  <data name="Main_ForegroundTooltip" xml:space="preserve"><value>Foreground app on the device, refreshed every 2 seconds. Click to copy the component name.</value></data>
+  <data name="Main_SidebarTitle" xml:space="preserve"><value>Developer Tools</value></data>
+  <data name="Main_SidebarSubtitle" xml:space="preserve"><value>Android · AOSP development assistant</value></data>
+  <data name="Main_DetectingAdb" xml:space="preserve"><value>Detecting adb...</value></data>
+  <data name="Common_OpenFailedFormat" xml:space="preserve"><value>Failed to open: {0}</value></data>
+  <data name="Common_Cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="Common_SavedFormat" xml:space="preserve"><value>Saved: {0}</value></data>
+  <data name="Main_CopiedForegroundFormat" xml:space="preserve"><value>Copied foreground component: {0}</value></data>
+  <data name="Main_NoForegroundInfo" xml:space="preserve"><value>No foreground app info available</value></data>
+  <data name="Main_OpenedAppDetailsFormat" xml:space="preserve"><value>Opened app details for {0}</value></data>
+  <data name="Main_StatusNoDeviceFormat" xml:space="preserve"><value>No device connected · adb: {0}</value></data>
+  <data name="Main_StatusConnectedFormat" xml:space="preserve"><value>{0} device(s) connected · adb: {1}</value></data>
+  <data name="Main_StatusUnavailableFormat" xml:space="preserve"><value>{0} device(s) present but unavailable (unauthorized/offline) · adb: {1}</value></data>
+  <!-- ============ Sidebar navigation ============ -->
+  <data name="Nav_Devices" xml:space="preserve"><value>Devices</value></data>
+  <data name="Nav_Logcat" xml:space="preserve"><value>Logcat</value></data>
+  <data name="Nav_Apps" xml:space="preserve"><value>Apps</value></data>
+  <data name="Nav_Files" xml:space="preserve"><value>Files</value></data>
+  <data name="Nav_ScreenInput" xml:space="preserve"><value>Screen &amp; Input</value></data>
+  <data name="Nav_Perf" xml:space="preserve"><value>Performance</value></data>
+  <data name="Nav_SysDebug" xml:space="preserve"><value>System Debug</value></data>
+  <data name="Nav_More" xml:space="preserve"><value>More Tools</value></data>
+  <data name="Nav_Settings" xml:space="preserve"><value>Settings</value></data>
+  <!-- ============ Tray ============ -->
+  <data name="Tray_ShowMainWindow" xml:space="preserve"><value>Show Main Window</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>Exit</value></data>
+  <data name="Tray_HiddenBalloonTitle" xml:space="preserve"><value>Hidden to tray</value></data>
+  <data name="Tray_HiddenBalloonText" xml:space="preserve"><value>The app is still running. Double-click the tray icon to reopen the window.</value></data>
+  <!-- ============ Settings page ============ -->
+  <data name="Settings_AdbConfigTitle" xml:space="preserve"><value>ADB Environment</value></data>
+  <data name="Settings_AdbPathLabel" xml:space="preserve"><value>Full path to adb.exe (leave empty to auto-detect)</value></data>
+  <data name="Settings_Browse" xml:space="preserve"><value>Browse...</value></data>
+  <data name="Settings_TestAdb" xml:space="preserve"><value>Test (adb version)</value></data>
+  <data name="Settings_Notes" xml:space="preserve"><value>Notes</value></data>
+  <data name="Settings_NotesText" xml:space="preserve"><value>· Auto-detection order: app directory platform-tools → %LOCALAPPDATA%\Android\Sdk\platform-tools → system PATH
+· Multiple tools sharing one adb may conflict on server port 5037 and make devices go offline; a dedicated server port is planned for a future version
+· After changing the path, click "Test" to confirm adb works</value></data>
+  <data name="Settings_CacheTitle" xml:space="preserve"><value>App Cache</value></data>
+  <data name="Settings_RefreshStats" xml:space="preserve"><value>Refresh Stats</value></data>
+  <data name="Settings_ClearPcCache" xml:space="preserve"><value>Clear PC Cache</value></data>
+  <data name="Settings_ClearDeviceFiles" xml:space="preserve"><value>Clean Device Files</value></data>
+  <data name="Settings_CacheHelpText" xml:space="preserve"><value>PC cache = app name/component cache (appmeta.json) + temp APK files; settings (adb path, etc.) are not affected. Device-side files = background log (adbtoolkit_logcat.txt) and screen-recording leftovers (adbtoolkit_record.mp4).</value></data>
+  <data name="Settings_TestResultTitle" xml:space="preserve"><value>Test Result</value></data>
+  <data name="Settings_AppearanceTitle" xml:space="preserve"><value>Appearance &amp; Updates</value></data>
+  <data name="Settings_ThemeLabel" xml:space="preserve"><value>Theme (restart the app to apply)</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>Light</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>Dark</value></data>
+  <data name="Settings_ThemeRestartFormat" xml:space="preserve"><value>Theme changed to {0}. Restart the app to apply.</value></data>
+  <data name="Settings_LanguageLabel" xml:space="preserve"><value>Language (restart the app to apply)</value></data>
+  <data name="Settings_LangZh" xml:space="preserve"><value>简体中文</value></data>
+  <data name="Settings_LangEn" xml:space="preserve"><value>English</value></data>
+  <data name="Settings_LanguageRestartHint" xml:space="preserve"><value>Language changed. Restart the app to apply.</value></data>
+  <data name="Settings_HideToTray" xml:space="preserve"><value>Hide to tray when closing the window</value></data>
+  <data name="Settings_BrowseTitle" xml:space="preserve"><value>Select adb.exe</value></data>
+  <data name="Settings_SavedFormat" xml:space="preserve"><value>Saved: {0}</value></data>
+  <data name="Settings_TestFailedFormat" xml:space="preserve"><value>Test failed: {0}</value></data>
+  <data name="Settings_CheckingUpdate" xml:space="preserve"><value>Checking for updates...</value></data>
+  <data name="Settings_NewVersionFound" xml:space="preserve"><value>New version found</value></data>
+  <data name="Settings_OpenDownloadPrompt" xml:space="preserve"><value>Open the download URL now?</value></data>
+  <data name="Settings_OpenLogsFailedFormat" xml:space="preserve"><value>Failed to open log directory: {0}</value></data>
+  <data name="Settings_CacheMetaFormat" xml:space="preserve"><value>App name/component cache (appmeta.json): {0}, {1} apps</value></data>
+  <data name="Settings_CacheMetaNone" xml:space="preserve"><value>App name/component cache (appmeta.json): none</value></data>
+  <data name="Settings_CacheTempFormat" xml:space="preserve"><value>Temp APK files (%TEMP%\AdbToolkit): {0}, {1} files</value></data>
+  <data name="Settings_CacheTempNone" xml:space="preserve"><value>Temp APK files (%TEMP%\AdbToolkit): none</value></data>
+  <data name="Settings_ClearPcCacheCaption" xml:space="preserve"><value>Clear PC Cache</value></data>
+  <data name="Settings_ClearPcCacheConfirm" xml:space="preserve"><value>The following caches created by this tool will be cleared:
+· App name/component cache (appmeta.json) — app names will need to be re-fetched via right-click
+· Temp APK files (%TEMP%\AdbToolkit)
+
+Settings (adb path, etc.) are not affected. Continue?</value></data>
+  <data name="Settings_CacheCleared" xml:space="preserve"><value>PC cache cleared</value></data>
+  <data name="Settings_NoToolFilesOnDevice" xml:space="preserve"><value>No files created by this tool on the device</value></data>
+  <data name="Settings_CleanedDeviceFilesFormat" xml:space="preserve"><value>Cleaned device-side files: {0}</value></data>
+  <data name="Settings_AboutTitle" xml:space="preserve"><value>About &amp; Privacy</value></data>
+  <data name="Settings_AboutText" xml:space="preserve"><value>AdbForge is a local desktop tool for Android / AOSP developers. All features communicate with the device via local adb:
+· No user data or device info is collected or uploaded
+· The only possible network access is the optional update check (only to the server URL you configure above)
+· Run logs are kept locally in %APPDATA%\AdbToolkit\logs and can be opened with one click above</value></data>
+  <!-- ============ Device manager ============ -->
+  <data name="DevMgr_DeviceList" xml:space="preserve"><value>Devices</value></data>
+  <data name="DevMgr_DeviceListHint" xml:space="preserve"><value>Devices refresh every 2 seconds; if unauthorized, confirm the USB debugging prompt on the phone.</value></data>
+  <data name="DevMgr_StateConnected" xml:space="preserve"><value>Connected</value></data>
+  <data name="DevMgr_StateOffline" xml:space="preserve"><value>Offline</value></data>
+  <data name="DevMgr_StateUnauthorized" xml:space="preserve"><value>Unauthorized</value></data>
+  <data name="DevMgr_StateUnknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="DevMgr_RefreshEvery2s" xml:space="preserve"><value>Refreshed every 2s</value></data>
+  <data name="DevMgr_FgWindowsTitle" xml:space="preserve"><value>Foreground &amp; Visible Windows</value></data>
+  <data name="DevMgr_Package" xml:space="preserve"><value>Package</value></data>
+  <data name="DevMgr_Page" xml:space="preserve"><value>Page</value></data>
+  <data name="DevMgr_Component" xml:space="preserve"><value>Component</value></data>
+  <data name="DevMgr_OpenAppDetails" xml:space="preserve"><value>Open App Details</value></data>
+  <data name="DevMgr_SourceTooltip" xml:space="preserve"><value>Activity = top page; Window = focused window (fallback for popups)</value></data>
+  <data name="DevMgr_AllWindows" xml:space="preserve"><value>All visible windows (including system)</value></data>
+  <data name="DevMgr_TagApp" xml:space="preserve"><value>App</value></data>
+  <data name="DevMgr_TagSystem" xml:space="preserve"><value>System</value></data>
+  <data name="DevMgr_TagForeground" xml:space="preserve"><value>Foreground</value></data>
+  <data name="DevMgr_WirelessTitle" xml:space="preserve"><value>Wireless Connection</value></data>
+  <data name="DevMgr_DeviceAddr" xml:space="preserve"><value>Device address (IP:port)</value></data>
+  <data name="DevMgr_PairCode" xml:space="preserve"><value>Pairing code (Android 11+, optional)</value></data>
+  <data name="DevMgr_PairAndConnect" xml:space="preserve"><value>Pair &amp; Connect</value></data>
+  <data name="DevMgr_Disconnect" xml:space="preserve"><value>Disconnect</value></data>
+  <data name="DevMgr_WirelessHint" xml:space="preserve"><value>Tip: on Android 11+ the pairing port differs from the connect port. Get the pairing address from the phone under "Developer options → Wireless debugging → Pair device with pairing code" and enter it above.</value></data>
+  <data name="DevMgr_RebootTitle" xml:space="preserve"><value>Reboot &amp; Mode Switch</value></data>
+  <data name="DevMgr_RebootSystem" xml:space="preserve"><value>Reboot System</value></data>
+  <data name="DevMgr_RebootModeSystem" xml:space="preserve"><value>system</value></data>
+  <data name="DevMgr_RebootSentFormat" xml:space="preserve"><value>Reboot command sent ({0}); the device will restart</value></data>
+  <data name="DevMgr_EnterAddr" xml:space="preserve"><value>Enter a device address, e.g. 192.168.11.148:5555</value></data>
+  <data name="DevMgr_PairResultFormat" xml:space="preserve"><value>Pair: {0}</value></data>
+  <data name="DevMgr_ConnectResultFormat" xml:space="preserve"><value>Connect: {0}</value></data>
+  <data name="DevMgr_DisconnectResultFormat" xml:space="preserve"><value>Disconnect: {0}</value></data>
+  <data name="DevMgr_Output" xml:space="preserve"><value>Output</value></data>
+  <!-- ============ Files ============ -->
+  <data name="Files_DirPrefix" xml:space="preserve"><value>[Dir]</value></data>
+  <!-- ============ Logcat ============ -->
+  <data name="Logcat_StartCapture" xml:space="preserve"><value>Start Capture</value></data>
+  <data name="Logcat_Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="Logcat_MinLevel" xml:space="preserve"><value>Min Level</value></data>
+  <data name="Logcat_Keyword" xml:space="preserve"><value>Keyword</value></data>
+  <data name="Logcat_AutoScroll" xml:space="preserve"><value>Auto-scroll</value></data>
+  <data name="Logcat_Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="Logcat_Save" xml:space="preserve"><value>Save...</value></data>
+  <data name="Logcat_NotStarted" xml:space="preserve"><value>Not capturing</value></data>
+  <data name="Logcat_ProcessExitedFormat" xml:space="preserve"><value>logcat process exited (code {0})</value></data>
+  <data name="Logcat_CapturingFormat" xml:space="preserve"><value>Capturing (device {0} · buffer {1} · *:{2})</value></data>
+  <data name="Logcat_CapturingOverflowFormat" xml:space="preserve"><value>Capturing · {0:N0} lines buffered ({1:N0} dropped due to display overload)</value></data>
+  <data name="Logcat_CapturingBufferFormat" xml:space="preserve"><value>Capturing · {0:N0} lines buffered</value></data>
+  <data name="Logcat_Cleared" xml:space="preserve"><value>Device-side log buffer cleared</value></data>
+  <data name="Logcat_SaveFilter" xml:space="preserve"><value>Text file (*.txt)|*.txt|Log file (*.log)|*.log</value></data>
+  <data name="Logcat_SavedFormat" xml:space="preserve"><value>Saved {0:N0} lines to {1}</value></data>
+  <!-- ============ Apps ============ -->
+  <data name="Apps_ClickRefreshHint" xml:space="preserve"><value>Click "Refresh" to load the app list</value></data>
+  <data name="Apps_RefreshList" xml:space="preserve"><value>Refresh List</value></data>
+  <data name="Apps_InstallApk" xml:space="preserve"><value>Install APK (multi-select)...</value></data>
+  <data name="Apps_ShowSystem" xml:space="preserve"><value>Show system apps</value></data>
+  <data name="Apps_KeepData" xml:space="preserve"><value>Keep data on uninstall (-k)</value></data>
+  <data name="Apps_GrantPermissions" xml:space="preserve"><value>Grant permissions on install (-g)</value></data>
+  <data name="Apps_Search" xml:space="preserve"><value>Search</value></data>
+  <data name="Apps_MenuGetLabel" xml:space="preserve"><value>Get app name (parse APK)</value></data>
+  <data name="Apps_MenuDetail" xml:space="preserve"><value>App details...</value></data>
+  <data name="Apps_MenuCopyLabel" xml:space="preserve"><value>Copy app name</value></data>
+  <data name="Apps_MenuCopyPkg" xml:space="preserve"><value>Copy package name</value></data>
+  <data name="Apps_MenuCopyPath" xml:space="preserve"><value>Copy APK path</value></data>
+  <data name="Apps_MenuExtractApk" xml:space="preserve"><value>Extract APK to local...</value></data>
+  <data name="Apps_MenuOpenSystemDetail" xml:space="preserve"><value>Open system details page</value></data>
+  <data name="Apps_Uninstall" xml:space="preserve"><value>Uninstall</value></data>
+  <data name="Apps_ColAppName" xml:space="preserve"><value>App name</value></data>
+  <data name="Apps_ColApkPath" xml:space="preserve"><value>APK path</value></data>
+  <data name="Apps_ColAction" xml:space="preserve"><value>Action</value></data>
+  <data name="Apps_LoadingSystemList" xml:space="preserve"><value>Loading system app list...</value></data>
+  <data name="Apps_LoadingThirdPartyList" xml:space="preserve"><value>Loading third-party app list...</value></data>
+  <data name="Apps_LoadedCountFormat" xml:space="preserve"><value>{0:N0} apps in total (app names appear after right-click "Get app name" or "App details")</value></data>
+  <data name="Apps_ApkTooLargeFormat" xml:space="preserve"><value>The APK of {0} exceeds 150MB; parsing skipped</value></data>
+  <data name="Apps_PullingApkFormat" xml:space="preserve"><value>Pulling and parsing APK of {0} ({1})...</value></data>
+  <data name="Apps_SelectAppFirst" xml:space="preserve"><value>Select an app first</value></data>
+  <data name="Apps_LabelResultFormat" xml:space="preserve"><value>App name: {0} ({1})</value></data>
+  <data name="Apps_LabelParseFailedFormat" xml:space="preserve"><value>Could not parse the app name ({0}); package name shown instead</value></data>
+  <data name="Apps_QueryApkPathsFormat" xml:space="preserve"><value>Querying APK paths of {0}...</value></data>
+  <data name="Apps_NoApkPathsFormat" xml:space="preserve"><value>No APK path found for {0}</value></data>
+  <data name="Apps_PickExtractFolder" xml:space="preserve"><value>Choose where to save the APKs (enter the target folder and click "Open")</value></data>
+  <data name="Apps_ExtractingFormat" xml:space="preserve"><value>Extracting ({0}/{1}) {2} ...</value></data>
+  <data name="Apps_ExtractedFormat" xml:space="preserve"><value>Extracted {0} APK file(s) to {1}</value></data>
+  <data name="Apps_ExtractDoneFormat" xml:space="preserve"><value>Extraction finished {0}/{1} (target {2})</value></data>
+  <data name="Apps_SystemDetailOpenedFormat" xml:space="preserve"><value>Opened system details page for {0}</value></data>
+  <data name="Apps_FetchingDetailFormat" xml:space="preserve"><value>Fetching details of {0}...</value></data>
+  <data name="Apps_DtlNameFormat" xml:space="preserve"><value>App name: {0}</value></data>
+  <data name="Apps_DtlPkgFormat" xml:space="preserve"><value>Package: {0}</value></data>
+  <data name="Apps_DtlVersionFormat" xml:space="preserve"><value>Version: {0} (versionCode {1})</value></data>
+  <data name="Apps_DtlSdkFormat" xml:space="preserve"><value>SDK: minSdk {0} / targetSdk {1}</value></data>
+  <data name="Apps_DtlApkPathFormat" xml:space="preserve"><value>APK path: {0}</value></data>
+  <data name="Apps_DtlApkSizeFormat" xml:space="preserve"><value>APK size: {0}</value></data>
+  <data name="Apps_DtlFirstInstallFormat" xml:space="preserve"><value>First installed: {0}</value></data>
+  <data name="Apps_DtlLastUpdateFormat" xml:space="preserve"><value>Last updated: {0}</value></data>
+  <data name="Apps_DtlInstallerFormat" xml:space="preserve"><value>Installed from: {0}</value></data>
+  <data name="Apps_DtlFlagsFormat" xml:space="preserve"><value>Flags: {0}</value></data>
+  <data name="Apps_SecPermsFormat" xml:space="preserve"><value>Requested permissions ({0})</value></data>
+  <data name="Apps_SecActivitiesFormat" xml:space="preserve"><value>Activities ({0})</value></data>
+  <data name="Apps_SecServicesFormat" xml:space="preserve"><value>Services ({0})</value></data>
+  <data name="Apps_SecReceiversFormat" xml:space="preserve"><value>Receivers ({0})</value></data>
+  <data name="Apps_SecProvidersFormat" xml:space="preserve"><value>Providers ({0})</value></data>
+  <data name="Apps_DtlWindowTitleFormat" xml:space="preserve"><value>Details of {0}</value></data>
+  <data name="Apps_DtlOpenedFormat" xml:space="preserve"><value>Details of {0} opened</value></data>
+  <data name="Apps_SectionHeaderFormat" xml:space="preserve"><value>{0}:</value></data>
+  <data name="Apps_SectionEmpty" xml:space="preserve"><value>  (none)</value></data>
+  <data name="Apps_SectionTruncatedFormat" xml:space="preserve"><value>  … ({0} more omitted)</value></data>
+  <data name="Apps_PickApkTitle" xml:space="preserve"><value>Select APKs to install (hold Ctrl / Shift for multi-select)</value></data>
+  <data name="Apps_ApkFilter" xml:space="preserve"><value>APK file (*.apk)|*.apk|All files (*.*)|*.*</value></data>
+  <data name="Apps_InstallingFormat" xml:space="preserve"><value>Installing ({0}/{1}) {2} ...</value></data>
+  <data name="Apps_InstallFailedItemFormat" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Apps_BatchInstallOkFormat" xml:space="preserve"><value>Batch install finished: {0}/{1} succeeded</value></data>
+  <data name="Apps_BatchInstallFailFormat" xml:space="preserve"><value>Batch install finished: {0}/{1} succeeded, {2} failed — {3}</value></data>
+  <data name="Apps_BatchFailSeparator" xml:space="preserve"><value>; </value></data>
+  <data name="Apps_UninstallConfirmFormat" xml:space="preserve"><value>Uninstall {0}? {1}</value></data>
+  <data name="Apps_KeepDataSuffix" xml:space="preserve"><value>(keep data)</value></data>
+  <data name="Apps_UninstallConfirmCaption" xml:space="preserve"><value>Confirm Uninstall</value></data>
+  <data name="Apps_UninstallingFormat" xml:space="preserve"><value>Uninstalling {0} ...</value></data>
+  <data name="Apps_UninstalledFormat" xml:space="preserve"><value>Uninstalled {0}</value></data>
+  <data name="Apps_UninstallFailedFormat" xml:space="preserve"><value>Uninstall failed: {0}</value></data>
+  <data name="Apps_ErrAlreadyExists" xml:space="preserve"><value>App already exists (replace install can fix it)</value></data>
+  <data name="Apps_ErrInvalidApk" xml:space="preserve"><value>Invalid APK file</value></data>
+  <data name="Apps_ErrStorage" xml:space="preserve"><value>Insufficient device storage</value></data>
+  <data name="Apps_ErrDowngrade" xml:space="preserve"><value>A higher version is already installed; downgrade not allowed</value></data>
+  <data name="Apps_ErrNoCert" xml:space="preserve"><value>APK is unsigned or has an invalid signature</value></data>
+  <data name="Apps_ErrUpdateIncompatible" xml:space="preserve"><value>Signature differs from the installed app; uninstall it first</value></data>
+  <data name="Apps_ErrIncompatible" xml:space="preserve"><value>Incompatible ABI / platform</value></data>
+  <!-- ============ Files ============ -->
+  <data name="Files_BrowseTitle" xml:space="preserve"><value>Device Files</value></data>
+  <data name="Files_SetRoot" xml:space="preserve"><value>Set Root</value></data>
+  <data name="Files_RefreshSelected" xml:space="preserve"><value>Refresh Selected</value></data>
+  <data name="Files_QuickRoots" xml:space="preserve"><value>Quick roots: </value></data>
+  <data name="Files_MenuPushFile" xml:space="preserve"><value>Push file to this directory...</value></data>
+  <data name="Files_MenuPushFolder" xml:space="preserve"><value>Push folder to this directory...</value></data>
+  <data name="Files_MenuPull" xml:space="preserve"><value>Pull to local...</value></data>
+  <data name="Files_MenuCreateDir" xml:space="preserve"><value>New folder...</value></data>
+  <data name="Files_MenuDelete" xml:space="preserve"><value>Delete (recursive)</value></data>
+  <data name="Files_MenuCopyPath" xml:space="preserve"><value>Copy full path</value></data>
+  <data name="Files_PushTitle" xml:space="preserve"><value>Push to Selected Directory</value></data>
+  <data name="Files_BrowseFiles" xml:space="preserve"><value>Browse files...</value></data>
+  <data name="Files_Push" xml:space="preserve"><value>Push</value></data>
+  <data name="Files_PushHelp" xml:space="preserve"><value>Target: directory selected in the tree > parent of the selected file > root. Folders are copied into the target as a whole.</value></data>
+  <data name="Files_PullTitle" xml:space="preserve"><value>Pull to Local</value></data>
+  <data name="Files_PullTargetHint" xml:space="preserve"><value>Pulls the item selected in the tree (or the root path if none); double-click a file to pull it directly</value></data>
+  <data name="Files_LocalDirLabel" xml:space="preserve"><value>Local save directory</value></data>
+  <data name="Files_Pull" xml:space="preserve"><value>Pull</value></data>
+  <data name="Files_OpenFolder" xml:space="preserve"><value>Open Folder</value></data>
+  <data name="Files_DirOpsTitle" xml:space="preserve"><value>Directory Operations</value></data>
+  <data name="Files_CreateDir" xml:space="preserve"><value>Create</value></data>
+  <data name="Files_CreateDirHelp" xml:space="preserve"><value>Created under the selected directory (or the parent of the selected file).</value></data>
+  <data name="Files_DeleteSelected" xml:space="preserve"><value>Delete Selected (recursive)</value></data>
+  <data name="Files_SelectedFormat" xml:space="preserve"><value>Selected: {0}</value></data>
+  <data name="Files_AutoLoadHint" xml:space="preserve"><value>Expanding a directory loads its children automatically</value></data>
+  <data name="Files_PathMustStartSlash" xml:space="preserve"><value>Path must start with /, e.g. /</value></data>
+  <data name="Files_LoadingFormat" xml:space="preserve"><value>Loading {0} ...</value></data>
+  <data name="Files_LoadedCountFormat" xml:space="preserve"><value>{0} — {1} items</value></data>
+  <data name="Files_ReadFailedFormat" xml:space="preserve"><value>Failed to read {0}: {1}</value></data>
+  <data name="Files_ReadingFormat" xml:space="preserve"><value>Reading {0} ...</value></data>
+  <data name="Files_NotExpandableFormat" xml:space="preserve"><value>{0} cannot be expanded (may point to a file or require root)</value></data>
+  <data name="Files_EnterDirName" xml:space="preserve"><value>Enter a directory name</value></data>
+  <data name="Files_CreateFailedFormat" xml:space="preserve"><value>Create failed: {0}</value></data>
+  <data name="Files_CreatedFormat" xml:space="preserve"><value>Created {0}</value></data>
+  <data name="Files_SelectDeleteTarget" xml:space="preserve"><value>Select the item to delete in the tree first</value></data>
+  <data name="Files_NodeKindDir" xml:space="preserve"><value>directory</value></data>
+  <data name="Files_NodeKindFile" xml:space="preserve"><value>file</value></data>
+  <data name="Files_DeleteConfirmFormat" xml:space="preserve"><value>Delete {0} {1}? (directories are deleted recursively)</value></data>
+  <data name="Files_DeleteConfirmCaption" xml:space="preserve"><value>Confirm Delete</value></data>
+  <data name="Files_DeleteFailedFormat" xml:space="preserve"><value>Delete failed: {0}</value></data>
+  <data name="Files_DeletedFormat" xml:space="preserve"><value>Deleted {0}</value></data>
+  <data name="Files_EnterValidLocalPath" xml:space="preserve"><value>Enter a valid local file/folder path</value></data>
+  <data name="Files_PushingFormat" xml:space="preserve"><value>Pushing {0} → {1} ...</value></data>
+  <data name="Files_PushFailedFormat" xml:space="preserve"><value>Push failed: {0}</value></data>
+  <data name="Files_PushDoneFormat" xml:space="preserve"><value>Push finished → {0}</value></data>
+  <data name="Files_FolderPickerMarker" xml:space="preserve"><value>Open this folder</value></data>
+  <data name="Files_PickPushFolder" xml:space="preserve"><value>Choose the folder to push (enter the folder and click "Open")</value></data>
+  <data name="Files_NoFolderPicked" xml:space="preserve"><value>No folder chosen</value></data>
+  <data name="Files_PickPushFileTitle" xml:space="preserve"><value>Choose the file to push</value></data>
+  <data name="Files_SelectPullTarget" xml:space="preserve"><value>Select the item to pull in the tree first</value></data>
+  <data name="Files_SaveAsTitle" xml:space="preserve"><value>Save file to local</value></data>
+  <data name="Files_PullingFormat" xml:space="preserve"><value>Pulling {0} ...</value></data>
+  <data name="Files_PulledToFormat" xml:space="preserve"><value>Pulled to {0}</value></data>
+  <data name="Files_PullFailedFormat" xml:space="preserve"><value>Pull failed: {0}</value></data>
+  <data name="Files_PickSaveFolder" xml:space="preserve"><value>Choose where to save (enter the target folder and click "Open")</value></data>
+  <data name="Files_NoSaveFolderPicked" xml:space="preserve"><value>No save location chosen</value></data>
+  <data name="Files_NewDirCaption" xml:space="preserve"><value>New Folder</value></data>
+  <data name="Files_NewDirPromptFormat" xml:space="preserve"><value>A folder will be created under {0}:</value></data>
+  <data name="Files_NewDirDefaultName" xml:space="preserve"><value>NewFolder</value></data>
+  <data name="Files_SelectNodeFirst" xml:space="preserve"><value>Select a node first</value></data>
+  <data name="Files_Loading" xml:space="preserve"><value>Loading…</value></data>
+  <!-- ============ More tools ============ -->
+  <data name="More_ImeTitle" xml:space="preserve"><value>Input Method Switcher</value></data>
+  <data name="More_ImeSwitch" xml:space="preserve"><value>Switch</value></data>
+  <data name="More_ImeSwitchedFormat" xml:space="preserve"><value>Input method switched: {0}</value></data>
+  <data name="More_ImeCountFormat" xml:space="preserve"><value>{0} input method(s) in total</value></data>
+  <data name="More_NotifyTitle" xml:space="preserve"><value>Notification Tester</value></data>
+  <data name="More_NotifyLabelTitle" xml:space="preserve"><value>Title</value></data>
+  <data name="More_NotifySend" xml:space="preserve"><value>Send Test Notification</value></data>
+  <data name="More_NotifyView" xml:space="preserve"><value>View Notifications</value></data>
+  <data name="More_NotifySent" xml:space="preserve"><value>Test notification sent</value></data>
+  <data name="More_NotifyFailedFormat" xml:space="preserve"><value>Failed (requires Android 10+): {0}</value></data>
+  <data name="More_NotifyDefaultTitle" xml:space="preserve"><value>Test notification</value></data>
+  <data name="More_NotifyDefaultContent" xml:space="preserve"><value>A test notification from AdbToolkit</value></data>
+  <data name="More_TruncatedSuffix" xml:space="preserve"><value>
+...(truncated)</value></data>
+  <data name="More_ProxyTitle" xml:space="preserve"><value>Device Global Proxy</value></data>
+  <data name="More_ProxyCurrentFormat" xml:space="preserve"><value>Current: {0}</value></data>
+  <data name="More_ProxyNotSet" xml:space="preserve"><value>(not set)</value></data>
+  <data name="More_ProxySet" xml:space="preserve"><value>Set Proxy</value></data>
+  <data name="More_ProxyClear" xml:space="preserve"><value>Clear Proxy</value></data>
+  <data name="More_ProxySetFormat" xml:space="preserve"><value>Proxy set: {0}</value></data>
+  <data name="More_ProxyCleared" xml:space="preserve"><value>Proxy cleared</value></data>
+  <data name="More_ProxyHelp" xml:space="preserve"><value>Use together with a PC packet-capture tool, e.g. 192.168.1.100:8888.</value></data>
+  <data name="More_UsersTitle" xml:space="preserve"><value>Multi-User Debugging</value></data>
+  <data name="More_UserDeleteSelected" xml:space="preserve"><value>Delete Selected</value></data>
+  <data name="More_UserCreate" xml:space="preserve"><value>Create</value></data>
+  <data name="More_UserRefreshList" xml:space="preserve"><value>Refresh User List</value></data>
+  <data name="More_UserRemovedFormat" xml:space="preserve"><value>User {0} removed</value></data>
+  <data name="More_UserCurrentSuffix" xml:space="preserve"><value>  ← current</value></data>
+  <data name="More_UsersParseFailed" xml:space="preserve"><value>(could not parse the user list)</value></data>
+  <data name="More_PermTitle" xml:space="preserve"><value>Runtime Permissions Grant / Revoke</value></data>
+  <data name="More_PermGrant" xml:space="preserve"><value>Grant</value></data>
+  <data name="More_PermRevoke" xml:space="preserve"><value>Revoke</value></data>
+  <data name="More_PermGrantedFormat" xml:space="preserve"><value>Granted {0} → {1}</value></data>
+  <data name="More_PermRevokedFormat" xml:space="preserve"><value>Revoked {0} → {1}</value></data>
+  <data name="More_PermHelp" xml:space="preserve"><value>Example package com.example.app, permission android.permission.CAMERA.</value></data>
+  <data name="More_BugreportTitle" xml:space="preserve"><value>Bugreport Capture</value></data>
+  <data name="More_BugreportCollect" xml:space="preserve"><value>One-click Capture (1-3 min)</value></data>
+  <data name="More_BugreportOpenFolder" xml:space="preserve"><value>Open Save Folder</value></data>
+  <data name="More_BugreportRunning" xml:space="preserve"><value>Capturing bugreport (about 1-3 minutes, keep the connection)...</value></data>
+  <data name="More_BugreportSavedFormat" xml:space="preserve"><value>Bugreport saved: {0}</value></data>
+  <data name="More_BugreportFailedFormat" xml:space="preserve"><value>Capture failed: {0}</value></data>
+  <data name="More_ServerTitle" xml:space="preserve"><value>ADB Server Management</value></data>
+  <data name="More_ServerHelp" xml:space="preserve"><value>If devices stay offline, try restarting the server; several tools competing for port 5037 can also cause it.</value></data>
+  <data name="More_ServerKilled" xml:space="preserve"><value>adb server stopped</value></data>
+  <data name="More_ServerStarted" xml:space="preserve"><value>adb server started</value></data>
+  <data name="More_SideloadTitle" xml:space="preserve"><value>Sideload OTA (high risk)</value></data>
+  <data name="More_SideloadPick" xml:space="preserve"><value>Choose...</value></data>
+  <data name="More_SideloadRun" xml:space="preserve"><value>Reboot to Sideload and Flash</value></data>
+  <data name="More_PickValidOta" xml:space="preserve"><value>Select a valid OTA zip file</value></data>
+  <data name="More_SideloadConfirm" xml:space="preserve"><value>The device will reboot to Sideload mode and the OTA package will be flashed. Continue?</value></data>
+  <data name="More_RebootFailedFormat" xml:space="preserve"><value>Reboot failed: {0}</value></data>
+  <data name="More_WaitingSideload" xml:space="preserve"><value>Waiting for the device to enter Sideload mode...</value></data>
+  <data name="More_SideloadPushing" xml:space="preserve"><value>Flashing OTA package (see progress on the device screen)...</value></data>
+  <data name="More_SideloadDone" xml:space="preserve"><value>OTA flashing finished</value></data>
+  <data name="More_SideloadFailedFormat" xml:space="preserve"><value>Sideload failed: {0}</value></data>
+  <data name="More_DeviceLogTitle" xml:space="preserve"><value>On-device Background Log (unplugged capture)</value></data>
+  <data name="More_DeviceLogStart" xml:space="preserve"><value>Start</value></data>
+  <data name="More_DeviceLogPull" xml:space="preserve"><value>Pull Log</value></data>
+  <data name="More_DeviceLogHelp" xml:space="preserve"><value>Runs logcat in the background on the device (nohup) writing to /sdcard/adbtoolkit_logcat.txt — suited to aging tests and long unplugged runs; pull it back with one click once reconnected.</value></data>
+  <data name="More_DeviceLogStarted" xml:space="preserve"><value>On-device background log started (keeps collecting while unplugged)</value></data>
+  <data name="More_DeviceLogStopped" xml:space="preserve"><value>On-device background log stopped; click "Pull Log" to fetch it</value></data>
+  <data name="More_DeviceLogPulledFormat" xml:space="preserve"><value>Log pulled: {0}</value></data>
+  <data name="More_Ready" xml:space="preserve"><value>Ready</value></data>
+  <data name="More_PickOtaTitle" xml:space="preserve"><value>Select OTA zip package</value></data>
+  <data name="More_OtaFilter" xml:space="preserve"><value>OTA package (*.zip)|*.zip|All files (*.*)|*.*</value></data>
+  <!-- ============ Performance ============ -->
+  <data name="Perf_DeviceInfoTitle" xml:space="preserve"><value>Device Info Overview</value></data>
+  <data name="Perf_AutoRefresh" xml:space="preserve"><value>Auto Refresh</value></data>
+  <data name="Perf_BatteryTitle" xml:space="preserve"><value>Battery Panel</value></data>
+  <data name="Perf_VirtualLevel" xml:space="preserve"><value>Virtual level</value></data>
+  <data name="Perf_Set" xml:space="preserve"><value>Set</value></data>
+  <data name="Perf_Unplug" xml:space="preserve"><value>Simulate Unplug</value></data>
+  <data name="Perf_Reset" xml:space="preserve"><value>Reset to Real</value></data>
+  <data name="Perf_AutoRefresh3s" xml:space="preserve"><value>Auto refresh (3s)</value></data>
+  <data name="Perf_HardwareTitle" xml:space="preserve"><value>Hardware Status (CPU/GPU Freqs · Temps)</value></data>
+  <data name="Perf_CpuFreq" xml:space="preserve"><value>CPU Frequencies</value></data>
+  <data name="Perf_GpuFreq" xml:space="preserve"><value>GPU / devfreq</value></data>
+  <data name="Perf_Thermal" xml:space="preserve"><value>Temperature (thermal zones)</value></data>
+  <data name="Perf_AppDetailTitle" xml:space="preserve"><value>App Details</value></data>
+  <data name="Perf_Fetch" xml:space="preserve"><value>Fetch</value></data>
+  <data name="Perf_MemTitle" xml:space="preserve"><value>Memory Analysis</value></data>
+  <data name="Perf_StartupTitle" xml:space="preserve"><value>Startup Time (am start -W)</value></data>
+  <data name="Perf_StartTest" xml:space="preserve"><value>Start Test</value></data>
+  <data name="Perf_TestCount" xml:space="preserve"><value>Test runs</value></data>
+  <data name="Perf_GfxTitle" xml:space="preserve"><value>Jank Analysis (gfxinfo)</value></data>
+  <data name="Perf_DropBoxTitle" xml:space="preserve"><value>Crash / ANR History (DropBox)</value></data>
+  <data name="Perf_ViewLatestLog" xml:space="preserve"><value>View Latest Log of This Type</value></data>
+  <data name="Perf_DevModelFormat" xml:space="preserve"><value>Model:          {0} ({1} / {2})</value></data>
+  <data name="Perf_DevCodenameFormat" xml:space="preserve"><value>Codename:       {0} ({1})</value></data>
+  <data name="Perf_DevAndroidFormat" xml:space="preserve"><value>Android:        {0} (SDK {1})</value></data>
+  <data name="Perf_DevBuildIdFormat" xml:space="preserve"><value>Build number:   {0}</value></data>
+  <data name="Perf_DevBuildFormat" xml:space="preserve"><value>Build:          {0} · {1}</value></data>
+  <data name="Perf_DevSerialFormat" xml:space="preserve"><value>Serial:         {0}</value></data>
+  <data name="Perf_DevBootloaderFormat" xml:space="preserve"><value>Bootloader:     {0}</value></data>
+  <data name="Perf_DevSocFormat" xml:space="preserve"><value>SoC:            {0} / {1}</value></data>
+  <data name="Perf_DevAbiFormat" xml:space="preserve"><value>ABI list:       {0}</value></data>
+  <data name="Perf_DevKernelFormat" xml:space="preserve"><value>Kernel:         {0}</value></data>
+  <data name="Perf_DevPatchFormat" xml:space="preserve"><value>Security patch: {0}</value></data>
+  <data name="Perf_ResolutionLabel" xml:space="preserve"><value>Screen resolution</value></data>
+  <data name="Perf_DensityNone" xml:space="preserve"><value>Screen density: —</value></data>
+  <data name="Perf_DensityFormat" xml:space="preserve"><value>Screen density: {0} dpi ({1} bucket)</value></data>
+  <data name="Perf_DensityOverriddenFormat" xml:space="preserve"><value>, overridden in developer options (physical {0})</value></data>
+  <data name="Perf_DevIpFormat" xml:space="preserve"><value>IP address:     {0}</value></data>
+  <data name="Perf_DevMemFormat" xml:space="preserve"><value>Total memory:   {0}</value></data>
+  <data name="Perf_DevBatteryFormat" xml:space="preserve"><value>Battery level:  {0}</value></data>
+  <data name="Perf_DevLowRamFormat" xml:space="preserve"><value>Low-RAM device: {0}</value></data>
+  <data name="Perf_DevHeapFormat" xml:space="preserve"><value>Java heap:      growth limit {0} / max {1}</value></data>
+  <data name="Perf_DevStorageFormat" xml:space="preserve"><value>Storage:        {0}</value></data>
+  <data name="Perf_DeviceInfoLoaded" xml:space="preserve"><value>Device info loaded</value></data>
+  <data name="Perf_EnterPackage" xml:space="preserve"><value>Enter a package name to query</value></data>
+  <data name="Perf_QueryingFormat" xml:space="preserve"><value>Querying {0} ...</value></data>
+  <data name="Perf_AppNotFoundFormat" xml:space="preserve"><value>App {0} not found (check the package name, or the app is not installed)</value></data>
+  <data name="Perf_QueryFailedNotFound" xml:space="preserve"><value>Query failed: app not found</value></data>
+  <data name="Perf_PermsHeaderFormat" xml:space="preserve"><value>Permissions ({0}):</value></data>
+  <data name="Perf_DetailLoadedFormat" xml:space="preserve"><value>Details of {0} loaded</value></data>
+  <data name="Perf_BattCharging" xml:space="preserve"><value>Charging</value></data>
+  <data name="Perf_BattDischarging" xml:space="preserve"><value>Discharging</value></data>
+  <data name="Perf_BattNotCharging" xml:space="preserve"><value>Not charging</value></data>
+  <data name="Perf_BattFull" xml:space="preserve"><value>Full</value></data>
+  <data name="Perf_BattGood" xml:space="preserve"><value>Good</value></data>
+  <data name="Perf_BattOverheat" xml:space="preserve"><value>Overheating</value></data>
+  <data name="Perf_BattDead" xml:space="preserve"><value>Dead</value></data>
+  <data name="Perf_BattOverVoltage" xml:space="preserve"><value>Overvoltage</value></data>
+  <data name="Perf_BattCold" xml:space="preserve"><value>Too cold</value></data>
+  <data name="Perf_BattNotPlugged" xml:space="preserve"><value>Not plugged</value></data>
+  <data name="Perf_BattWireless" xml:space="preserve"><value>Wireless</value></data>
+  <data name="Perf_BattLine1Format" xml:space="preserve"><value>Level: {0}%   Status: {1}   Source: {2}</value></data>
+  <data name="Perf_BattLine2Format" xml:space="preserve"><value>Health: {0}   Temp: {1}   Voltage: {2} mV</value></data>
+  <data name="Perf_BattLine3Format" xml:space="preserve"><value>Technology: {0}   Charge counter: {1}</value></data>
+  <data name="Perf_BattSimulatedFormat" xml:space="preserve"><value>Simulated level {0}% (run "dumpsys battery reset" to restore)</value></data>
+  <data name="Perf_BattReset" xml:space="preserve"><value>Battery simulation reset</value></data>
+  <data name="Perf_MemLoadedFormat" xml:space="preserve"><value>Memory info of {0} fetched</value></data>
+  <data name="Perf_EnterComponent" xml:space="preserve"><value>Enter a component, e.g. com.android.settings/.Settings</value></data>
+  <data name="Perf_TryFormat" xml:space="preserve"><value>Run {0}: {1} ms</value></data>
+  <data name="Perf_TryFailedFormat" xml:space="preserve"><value>Run {0}: failed ({1})</value></data>
+  <data name="Perf_TrySummaryFormat" xml:space="preserve"><value>—— avg {0:F0} ms / fastest {1} ms / slowest {2} ms ——</value></data>
+  <data name="Perf_StartupDone" xml:space="preserve"><value>Startup time test finished</value></data>
+  <data name="Perf_GfxResultFormat" xml:space="preserve"><value>Total frames: {0}
+Janky frames: {1} ({2}%)</value></data>
+  <data name="Perf_GfxLoaded" xml:space="preserve"><value>Frame data fetched (interact with the target app first to produce frames)</value></data>
+  <data name="Perf_CpuFreqFormat" xml:space="preserve"><value>{0}: current {1} / max {2}</value></data>
+  <data name="Perf_DropBoxCountFormat" xml:space="preserve"><value>DropBox has {0} entries; showing latest {1}</value></data>
+  <data name="Perf_SelectDropBoxFirst" xml:space="preserve"><value>Select an entry first</value></data>
+  <data name="Perf_DropBoxLoadedFormat" xml:space="preserve"><value>Loaded latest entry of {0} (may include more timestamps than selected)</value></data>
+  <!-- ============ Screen & Input ============ -->
+  <data name="Screen_ShotRecordTitle" xml:space="preserve"><value>Screenshot / Recording</value></data>
+  <data name="Screen_Screenshot" xml:space="preserve"><value>Screenshot</value></data>
+  <data name="Screen_Bitrate" xml:space="preserve"><value>Bitrate (Mbps)</value></data>
+  <data name="Screen_TimeLimit" xml:space="preserve"><value>Duration (s)</value></data>
+  <data name="Screen_Resolution" xml:space="preserve"><value>Resolution</value></data>
+  <data name="Screen_RecordStart" xml:space="preserve"><value>Start Recording</value></data>
+  <data name="Screen_RecordStop" xml:space="preserve"><value>Stop &amp; Pull</value></data>
+  <data name="Screen_RecordLimitHint" xml:space="preserve"><value>Max 3 minutes (adb limit)</value></data>
+  <data name="Screen_QuickKeysTitle" xml:space="preserve"><value>Quick Keys</value></data>
+  <data name="Screen_KeyboardForwardTitle" xml:space="preserve"><value>Keyboard Forwarding (PC → device)</value></data>
+  <data name="Screen_KeyboardForwardHelp" xml:space="preserve"><value>After opening the keyboard window and clicking it to focus, PC typing (batched via input text), system keys like Enter/arrows (keyevent) and Ctrl/Alt combos (keycombination, Android 11+) are forwarded in real time to the selected device; long presses auto-repeat, fast typing is coalesced.</value></data>
+  <data name="Screen_OpenKeyboardWindow" xml:space="preserve"><value>Open Keyboard Window</value></data>
+  <data name="Screen_TextInjectTitle" xml:space="preserve"><value>Text Injection</value></data>
+  <data name="Screen_SendText" xml:space="preserve"><value>Send Text</value></data>
+  <data name="Screen_EnterKey" xml:space="preserve"><value>Enter Key</value></data>
+  <data name="Screen_TextInjectHelp" xml:space="preserve"><value>ASCII only; for CJK text paste via the device clipboard, or a built-in IME in a future version.</value></data>
+  <data name="Screen_TapSwipeTitle" xml:space="preserve"><value>Tap / Swipe by Coordinates</value></data>
+  <data name="Screen_TapX" xml:space="preserve"><value>Tap X</value></data>
+  <data name="Screen_Tap" xml:space="preserve"><value>Tap</value></data>
+  <data name="Screen_StartPoint" xml:space="preserve"><value>Start</value></data>
+  <data name="Screen_EndPoint" xml:space="preserve"><value>→ End</value></data>
+  <data name="Screen_Swipe" xml:space="preserve"><value>Swipe</value></data>
+  <data name="Screen_UiDumpTitle" xml:space="preserve"><value>UI Hierarchy Dump</value></data>
+  <data name="Screen_UiDumpButton" xml:space="preserve"><value>Dump current UI to PC</value></data>
+  <data name="Screen_UiDumpHelp" xml:space="preserve"><value>uiautomator dump → pulls the XML; useful for automated element location. Keep the screen still while dumping.</value></data>
+  <data name="Screen_MonkeyTitle" xml:space="preserve"><value>Monkey Stress Test</value></data>
+  <data name="Screen_EventCount" xml:space="preserve"><value>Events</value></data>
+  <data name="Screen_Throttle" xml:space="preserve"><value>Throttle ms</value></data>
+  <data name="Screen_KeyWake" xml:space="preserve"><value>Wake</value></data>
+  <data name="Screen_KeySleep" xml:space="preserve"><value>Sleep</value></data>
+  <data name="Screen_KeyPower" xml:space="preserve"><value>Power</value></data>
+  <data name="Screen_KeyBack" xml:space="preserve"><value>Back</value></data>
+  <data name="Screen_KeyHome" xml:space="preserve"><value>Home</value></data>
+  <data name="Screen_KeyMenu" xml:space="preserve"><value>Menu</value></data>
+  <data name="Screen_KeyVolUp" xml:space="preserve"><value>Vol+</value></data>
+  <data name="Screen_KeyVolDown" xml:space="preserve"><value>Vol-</value></data>
+  <data name="Screen_KeyMute" xml:space="preserve"><value>Mute</value></data>
+  <data name="Screen_KeyScreenshot" xml:space="preserve"><value>Screenshot Key</value></data>
+  <data name="Screen_KeyUnlock" xml:space="preserve"><value>Unlock</value></data>
+  <data name="Screen_KeyExpandNotify" xml:space="preserve"><value>Notifications</value></data>
+  <data name="Screen_KeyCollapsePanel" xml:space="preserve"><value>Collapse Panel</value></data>
+  <data name="Screen_DefaultSize" xml:space="preserve"><value>(default)</value></data>
+  <data name="Screen_ExecutedFormat" xml:space="preserve"><value>Executed: {0}</value></data>
+  <data name="Screen_ExecFailedFormat" xml:space="preserve"><value>Execute failed: {0}</value></data>
+  <data name="Screen_TakingShot" xml:space="preserve"><value>Taking screenshot...</value></data>
+  <data name="Screen_RecordingFormat" xml:space="preserve"><value>Recording (max {0}s)... Click "Stop" to finish and pull</value></data>
+  <data name="Screen_PullingRecord" xml:space="preserve"><value>Pulling recording...</value></data>
+  <data name="Screen_RecordSavedFormat" xml:space="preserve"><value>Recording saved: {0}</value></data>
+  <data name="Screen_TextAsciiOnly" xml:space="preserve"><value>Note: input text does not support non-ASCII; type ASCII text only (for CJK paste via the device clipboard)</value></data>
+  <data name="Screen_TextInjected" xml:space="preserve"><value>Text injected</value></data>
+  <data name="Screen_UiDumping" xml:space="preserve"><value>Dumping UI hierarchy (keep the screen still)...</value></data>
+  <data name="Screen_UiDumpFailedFormat" xml:space="preserve"><value>Dump failed: {0}</value></data>
+  <data name="Screen_UiDumpSavedFormat" xml:space="preserve"><value>UI hierarchy saved: {0}</value></data>
+  <data name="Screen_EnterMonkeyPkg" xml:space="preserve"><value>Enter the Monkey target package</value></data>
+  <data name="Screen_MonkeyDone" xml:space="preserve"><value>Monkey test finished, no crash</value></data>
+  <data name="Screen_MonkeyEndedFormat" xml:space="preserve"><value>Monkey ended (code {0}); check crash logs</value></data>
+  <data name="Screen_MonkeyRunningFormat" xml:space="preserve"><value>Monkey running ({0}, {1} events)...</value></data>
+  <data name="Screen_MonkeyStopped" xml:space="preserve"><value>Monkey stopped manually</value></data>
+  <!-- ============ System debug: settings shortcuts ============ -->
+  <data name="SysDbg_Set_SettingsHome" xml:space="preserve"><value>Settings Home</value></data>
+  <data name="SysDbg_Set_SystemUpdate" xml:space="preserve"><value>System Update</value></data>
+  <data name="SysDbg_Set_AboutPhone" xml:space="preserve"><value>About Phone</value></data>
+  <data name="SysDbg_Set_DeviceName" xml:space="preserve"><value>Device Name</value></data>
+  <data name="SysDbg_Set_DevOptions" xml:space="preserve"><value>Developer Options</value></data>
+  <data name="SysDbg_Set_BackupReset" xml:space="preserve"><value>Backup &amp; Reset</value></data>
+  <data name="SysDbg_Set_MultiUser" xml:space="preserve"><value>Multiple Users</value></data>
+  <data name="SysDbg_Set_Storage" xml:space="preserve"><value>Storage</value></data>
+  <data name="SysDbg_Set_Battery" xml:space="preserve"><value>Battery</value></data>
+  <data name="SysDbg_Set_BatteryOpt" xml:space="preserve"><value>Battery Optimization</value></data>
+  <data name="SysDbg_Set_AppManager" xml:space="preserve"><value>Apps</value></data>
+  <data name="SysDbg_Set_AllAppsRunning" xml:space="preserve"><value>All Apps (running)</value></data>
+  <data name="SysDbg_Set_DefaultApps" xml:space="preserve"><value>Default Apps</value></data>
+  <data name="SysDbg_Set_PermissionManager" xml:space="preserve"><value>Permission Manager</value></data>
+  <data name="SysDbg_Set_SpecialAccess" xml:space="preserve"><value>Special App Access</value></data>
+  <data name="SysDbg_Set_UsageAccess" xml:space="preserve"><value>Usage Access</value></data>
+  <data name="SysDbg_Set_NotificationAccess" xml:space="preserve"><value>Notification Access</value></data>
+  <data name="SysDbg_Set_UnknownSources" xml:space="preserve"><value>Install Unknown Apps</value></data>
+  <data name="SysDbg_Set_WebView" xml:space="preserve"><value>WebView Implementation</value></data>
+  <data name="SysDbg_Set_Pip" xml:space="preserve"><value>Picture-in-Picture</value></data>
+  <data name="SysDbg_Set_WlanAdvanced" xml:space="preserve"><value>Wi-Fi Advanced</value></data>
+  <data name="SysDbg_Set_Bluetooth" xml:space="preserve"><value>Bluetooth</value></data>
+  <data name="SysDbg_Set_Location" xml:space="preserve"><value>Location</value></data>
+  <data name="SysDbg_Set_AirplaneMode" xml:space="preserve"><value>Airplane Mode</value></data>
+  <data name="SysDbg_Set_DataUsage" xml:space="preserve"><value>Data Usage</value></data>
+  <data name="SysDbg_Set_MobileNetwork" xml:space="preserve"><value>Mobile Network</value></data>
+  <data name="SysDbg_Set_DataRoaming" xml:space="preserve"><value>Data Roaming</value></data>
+  <data name="SysDbg_Set_Apn" xml:space="preserve"><value>APN Access Points</value></data>
+  <data name="SysDbg_Set_Hotspot" xml:space="preserve"><value>Hotspot &amp; Tethering</value></data>
+  <data name="SysDbg_Set_Cast" xml:space="preserve"><value>Cast</value></data>
+  <data name="SysDbg_Set_SimCard" xml:space="preserve"><value>SIM Card</value></data>
+  <data name="SysDbg_Set_Display" xml:space="preserve"><value>Display</value></data>
+  <data name="SysDbg_Set_NightMode" xml:space="preserve"><value>Night Mode</value></data>
+  <data name="SysDbg_Set_Sound" xml:space="preserve"><value>Sound</value></data>
+  <data name="SysDbg_Set_DoNotDisturb" xml:space="preserve"><value>Do Not Disturb</value></data>
+  <data name="SysDbg_Set_DateTime" xml:space="preserve"><value>Date &amp; Time</value></data>
+  <data name="SysDbg_Set_Locale" xml:space="preserve"><value>Locale</value></data>
+  <data name="SysDbg_Set_LangInput" xml:space="preserve"><value>Languages &amp; Input</value></data>
+  <data name="SysDbg_Set_PhysicalKeyboard" xml:space="preserve"><value>Physical Keyboard</value></data>
+  <data name="SysDbg_Set_UserDictionary" xml:space="preserve"><value>User Dictionary</value></data>
+  <data name="SysDbg_Set_VoiceInput" xml:space="preserve"><value>Voice Input</value></data>
+  <data name="SysDbg_Set_Security" xml:space="preserve"><value>Security</value></data>
+  <data name="SysDbg_Set_TrustedCerts" xml:space="preserve"><value>Trusted Credentials</value></data>
+  <data name="SysDbg_Set_Accessibility" xml:space="preserve"><value>Accessibility</value></data>
+  <data name="SysDbg_Set_Captioning" xml:space="preserve"><value>Captions</value></data>
+  <data name="SysDbg_Set_ScreenSaver" xml:space="preserve"><value>Screen Saver</value></data>
+  <data name="SysDbg_Set_Wallpaper" xml:space="preserve"><value>Wallpaper</value></data>
+  <data name="SysDbg_Set_Dock" xml:space="preserve"><value>Dock</value></data>
+  <data name="SysDbg_Set_Home" xml:space="preserve"><value>Home App</value></data>
+  <data name="SysDbg_Set_SearchAssistant" xml:space="preserve"><value>Search Assistant</value></data>
+  <data name="SysDbg_Set_AccountsSync" xml:space="preserve"><value>Accounts &amp; Sync</value></data>
+  <data name="SysDbg_Set_AddAccount" xml:space="preserve"><value>Add Account</value></data>
+  <data name="SysDbg_Set_FactoryReset" xml:space="preserve"><value>Factory Reset</value></data>
+  <!-- ============ System debug: presets ============ -->
+  <data name="SysDbg_PresetAnimZeroLabel" xml:space="preserve"><value>Zero Animations</value></data>
+  <data name="SysDbg_PresetAnimZeroDesc" xml:space="preserve"><value>Turn off all three animation scales to speed up debugging</value></data>
+  <data name="SysDbg_PresetAnimRestoreLabel" xml:space="preserve"><value>Restore Animations</value></data>
+  <data name="SysDbg_PresetAnimRestoreDesc" xml:space="preserve"><value>Set all three animation scales back to 1</value></data>
+  <data name="SysDbg_PresetStayAwakeOnLabel" xml:space="preserve"><value>Stay Awake on Charge</value></data>
+  <data name="SysDbg_PresetStayAwakeOnDesc" xml:space="preserve"><value>No screen sleep while plugged in</value></data>
+  <data name="SysDbg_PresetStayAwakeOffLabel" xml:space="preserve"><value>Cancel Stay Awake</value></data>
+  <data name="SysDbg_PresetStayAwakeOffDesc" xml:space="preserve"><value>Restore default sleep policy</value></data>
+  <data name="SysDbg_PresetFreeformLabel" xml:space="preserve"><value>Freeform Windows</value></data>
+  <data name="SysDbg_PresetFreeformDesc" xml:space="preserve"><value>Enable freeform multi-window + force resizable activities</value></data>
+  <data name="SysDbg_PresetNtpLabel" xml:space="preserve"><value>NTP Server</value></data>
+  <data name="SysDbg_PresetNtpDesc" xml:space="preserve"><value>Switch NTP to an alternative source (example)</value></data>
+  <data name="SysDbg_PresetLandscapeLabel" xml:space="preserve"><value>Landscape</value></data>
+  <data name="SysDbg_PresetLandscapeDesc" xml:space="preserve"><value>Force landscape (user_rotation=1)</value></data>
+  <data name="SysDbg_PresetPortraitLabel" xml:space="preserve"><value>Portrait</value></data>
+  <data name="SysDbg_PresetPortraitDesc" xml:space="preserve"><value>Force portrait (user_rotation=0)</value></data>
+  <data name="SysDbg_PresetDozeClockLabel" xml:space="preserve"><value>Always-on Lock Clock</value></data>
+  <data name="SysDbg_PresetDozeClockDesc" xml:space="preserve"><value>Show clock/notifications on the lock screen</value></data>
+  <!-- ============ System debug: status & dialogs ============ -->
+  <data name="SysDbg_SettingWrittenFormat" xml:space="preserve"><value>Written {0} = {1}</value></data>
+  <data name="SysDbg_SettingDeletedFormat" xml:space="preserve"><value>Deleted {0}</value></data>
+  <data name="SysDbg_OpenedFormat" xml:space="preserve"><value>Opened: {0}</value></data>
+  <data name="SysDbg_EnterPackage" xml:space="preserve"><value>Enter a package name</value></data>
+  <data name="SysDbg_SelinuxStateFormat" xml:space="preserve"><value>SELinux state: {0}</value></data>
+  <data name="SysDbg_SelinuxConfirm" xml:space="preserve"><value>Changing the SELinux state may introduce security risks; only recommended on debug devices. Continue?</value></data>
+  <data name="SysDbg_ConfirmCaption" xml:space="preserve"><value>Confirm</value></data>
+  <data name="SysDbg_UnknownState" xml:space="preserve"><value>Unknown</value></data>
+  <data name="SysDbg_SelinuxSwitchedFormat" xml:space="preserve"><value>SELinux switched: {0}</value></data>
+  <data name="SysDbg_FailedRootFormat" xml:space="preserve"><value>Failed (root may be required): {0}</value></data>
+  <data name="SysDbg_FilteredByFormat" xml:space="preserve"><value>Filtered by {0}</value></data>
+  <data name="SysDbg_SelectPropFirst" xml:space="preserve"><value>Select a property first</value></data>
+  <data name="SysDbg_ReadOnlyPropText" xml:space="preserve"><value>Properties starting with ro. are read-only and cannot be changed via setprop.</value></data>
+  <data name="SysDbg_ReadOnlyPropCaption" xml:space="preserve"><value>Read-only property</value></data>
+  <data name="SysDbg_ReadOnlyStatusFormat" xml:space="preserve"><value>{0} is read-only (ro. prefix) and cannot be modified</value></data>
+  <data name="SysDbg_SetpropFailedFormat" xml:space="preserve"><value>setprop failed (root may be required): {0}</value></data>
+  <data name="SysDbg_PropModifiedFormat" xml:space="preserve"><value>Modified {0} = {1}</value></data>
+  <data name="SysDbg_PropNotAppliedFormat" xml:space="preserve"><value>setprop executed, but the device reports {0} = {1} (may not have taken effect)</value></data>
+  <data name="SysDbg_SettingsCountFormat" xml:space="preserve"><value>{0}: {1} items in total, {2} after filtering</value></data>
+  <data name="SysDbg_PropCountFormat" xml:space="preserve"><value>getprop: {0} items in total</value></data>
+  <data name="SysDbg_IntentSent" xml:space="preserve"><value>Intent sent</value></data>
+  <data name="SysDbg_IntentFailed" xml:space="preserve"><value>Failed to send Intent</value></data>
+  <data name="SysDbg_ResultOkFormat" xml:space="preserve"><value>[OK] {0}</value></data>
+  <data name="SysDbg_ResultFailFormat" xml:space="preserve"><value>[FAIL] {0} → {1}</value></data>
+  <data name="SysDbg_PresetDoneFormat" xml:space="preserve"><value>Preset "{0}" executed</value></data>
+  <data name="SysDbg_PersistAdbConfirm" xml:space="preserve"><value>adbd will be restarted as root to persist the Wi-Fi debugging port (requires a rooted debug device). Continue?</value></data>
+  <data name="SysDbg_PersistAdbDoneFormat" xml:space="preserve"><value>TCP {0} persisted (survives device reboot; reconnect with adb connect)</value></data>
+  <data name="SysDbg_PstoreEmpty" xml:space="preserve"><value>(empty) No pstore files, or root is required to view them</value></data>
+  <data name="SysDbg_PstoreRefreshed" xml:space="preserve"><value>pstore refreshed</value></data>
+  <data name="SysDbg_PstoreNothingToPull" xml:space="preserve"><value>No pstore files to pull (root may be required)</value></data>
+  <data name="SysDbg_PstorePulledFormat" xml:space="preserve"><value>
+
+Pulled {0}/{1} file(s) to {2}</value></data>
+  <data name="SysDbg_PstoreSavedFormat" xml:space="preserve"><value>Kernel panic logs pulled to {0}</value></data>
+  <data name="SysDbg_ReadFailedFormat" xml:space="preserve"><value>Read failed: {0}</value></data>
+  <data name="SysDbg_PropFileReadFormat" xml:space="preserve"><value>Read {0} ({1:N0} chars)</value></data>
+  <data name="SysDbg_PropFileConfirm" xml:space="preserve"><value>Modifying build.prop can make the device unbootable; only do this on debug/rooted devices.
+Steps: adb root → remount → on-device .bak backup → push overwrite. Continue?</value></data>
+  <data name="SysDbg_HighRiskCaption" xml:space="preserve"><value>High-Risk Operation</value></data>
+  <data name="SysDbg_BackupOk" xml:space="preserve"><value>OK</value></data>
+  <data name="SysDbg_BackupFailed" xml:space="preserve"><value>failed</value></data>
+  <data name="SysDbg_PropFileSavedFormat" xml:space="preserve"><value>Written to {0} (on-device backup: {1} {2}). Reboot the device to verify.</value></data>
+  <data name="SysDbg_PropFileWriteFailedFormat" xml:space="preserve"><value>Write failed (root + remount required): {0}</value></data>
+  <data name="SysDbg_CmdDone" xml:space="preserve"><value>Command finished</value></data>
+  <data name="SysDbg_CmdExitFormat" xml:space="preserve"><value>Command exit code {0}</value></data>
+  <!-- ============ System debug: pages ============ -->
+  <data name="SysDbg_TabSettings" xml:space="preserve"><value>System Settings</value></data>
+  <data name="SysDbg_TabProps" xml:space="preserve"><value>Props (getprop)</value></data>
+  <data name="SysDbg_TabIntent" xml:space="preserve"><value>Intent Builder</value></data>
+  <data name="SysDbg_TabSettingsPages" xml:space="preserve"><value>Settings Pages</value></data>
+  <data name="SysDbg_TabPresets" xml:space="preserve"><value>Debug Presets</value></data>
+  <data name="SysDbg_TabSelinux" xml:space="preserve"><value>SELinux / High-Risk</value></data>
+  <data name="SysDbg_TabTerminal" xml:space="preserve"><value>Terminal</value></data>
+  <data name="SysDbg_Key" xml:space="preserve"><value>Key</value></data>
+  <data name="SysDbg_Value" xml:space="preserve"><value>Value</value></data>
+  <data name="SysDbg_KeyName" xml:space="preserve"><value>Key name</value></data>
+  <data name="SysDbg_SingleItemTitle" xml:space="preserve"><value>Single Item (get / put / delete)</value></data>
+  <data name="SysDbg_Read" xml:space="preserve"><value>Read</value></data>
+  <data name="SysDbg_Write" xml:space="preserve"><value>Write</value></data>
+  <data name="SysDbg_SettingsExample" xml:space="preserve"><value>Example: switch ntp_server to another source — key ntp_server, value cn.ntp.org.cn, namespace global. Changing system settings may affect device behavior; evaluate on your own.</value></data>
+  <data name="SysDbg_PropHint" xml:space="preserve"><value>Typing filters property names live; Enter accepts the first suggestion, Esc closes it; clicking a suggestion filters exactly.</value></data>
+  <data name="SysDbg_MenuEditValue" xml:space="preserve"><value>Edit value...</value></data>
+  <data name="SysDbg_MenuCopyKey" xml:space="preserve"><value>Copy property name</value></data>
+  <data name="SysDbg_MenuCopyValue" xml:space="preserve"><value>Copy value</value></data>
+  <data name="SysDbg_ColProp" xml:space="preserve"><value>Property</value></data>
+  <data name="SysDbg_CommonPropsTitle" xml:space="preserve"><value>Common Properties</value></data>
+  <data name="SysDbg_PropHeapGrowth" xml:space="preserve"><value>dalvik.vm.heapgrowthlimit — per-app heap limit</value></data>
+  <data name="SysDbg_PropHeapStart" xml:space="preserve"><value>dalvik.vm.heapstartsize — initial heap size</value></data>
+  <data name="SysDbg_PropHeapSize" xml:space="preserve"><value>dalvik.vm.heapsize — VM max heap</value></data>
+  <data name="SysDbg_PropLowRam" xml:space="preserve"><value>ro.config.low_ram — low-RAM device</value></data>
+  <data name="SysDbg_PropUsbConfig" xml:space="preserve"><value>persist.sys.usb.config — USB configuration</value></data>
+  <data name="SysDbg_PropAdbPort" xml:space="preserve"><value>service.adb.tcp.port — network debugging port</value></data>
+  <data name="SysDbg_PropPatch" xml:space="preserve"><value>ro.build.version.security_patch — security patch</value></data>
+  <data name="SysDbg_PropPlatform" xml:space="preserve"><value>ro.hardware / ro.board.platform — platform</value></data>
+  <data name="SysDbg_PropSearchHint" xml:space="preserve"><value>Type a keyword in the search box to filter, e.g. heapgrowthlimit.</value></data>
+  <data name="SysDbg_IntentBuildTitle" xml:space="preserve"><value>Build am start Arguments</value></data>
+  <data name="SysDbg_IntentActionLabel" xml:space="preserve"><value>Action (e.g. android.intent.action.VIEW)</value></data>
+  <data name="SysDbg_IntentUriLabel" xml:space="preserve"><value>URI / Data (e.g. https://example.com/page)</value></data>
+  <data name="SysDbg_IntentComponentLabel" xml:space="preserve"><value>Component (e.g. com.android.settings/.Settings)</value></data>
+  <data name="SysDbg_IntentExtrasLabel" xml:space="preserve"><value>Extras (one per line: type:key=value; types es/ei/el/ez/eb)</value></data>
+  <data name="SysDbg_IntentSend" xml:space="preserve"><value>Send Intent</value></data>
+  <data name="SysDbg_IntentOutputTitle" xml:space="preserve"><value>Output / Broadcast Usage</value></data>
+  <data name="SysDbg_IntentBroadcastHint" xml:space="preserve"><value>Broadcast example (run in the Terminal tab): am broadcast -a com.cnd.update.system
+Start a service: am startservice -n package/service</value></data>
+  <data name="SysDbg_AppDetailsDirect" xml:space="preserve"><value>Go to App Details</value></data>
+  <data name="SysDbg_AppDetailsDirectHint" xml:space="preserve"><value>Enter a package name to open its details page (permissions / storage / uninstall), e.g. com.example.app.</value></data>
+  <data name="SysDbg_SecGeneral" xml:space="preserve"><value>System &amp; General</value></data>
+  <data name="SysDbg_SecAppsPerms" xml:space="preserve"><value>Apps &amp; Permissions</value></data>
+  <data name="SysDbg_SecNetwork" xml:space="preserve"><value>Network &amp; Connections</value></data>
+  <data name="SysDbg_SecDevice" xml:space="preserve"><value>Device &amp; Display</value></data>
+  <data name="SysDbg_SettingsPageHint" xml:space="preserve"><value>Clicking opens the matching settings page on the device (am start -a android.settings.*); names may differ slightly depending on the ROM.</value></data>
+  <data name="SysDbg_PresetPanelTitle" xml:space="preserve"><value>One-click Presets (click to run)</value></data>
+  <data name="SysDbg_Run" xml:space="preserve"><value>Run</value></data>
+  <data name="SysDbg_RunResultTitle" xml:space="preserve"><value>Run Result</value></data>
+  <data name="SysDbg_SelinuxTitle" xml:space="preserve"><value>SELinux (root required)</value></data>
+  <data name="SysDbg_CurrentState" xml:space="preserve"><value>Current state: </value></data>
+  <data name="SysDbg_View" xml:space="preserve"><value>View</value></data>
+  <data name="SysDbg_PersistTitle" xml:space="preserve"><value>ADB Network Debug Persistence (root)</value></data>
+  <data name="SysDbg_Port" xml:space="preserve"><value>Port</value></data>
+  <data name="SysDbg_PersistWrite" xml:space="preserve"><value>Write &amp; Restart adbd</value></data>
+  <data name="SysDbg_PersistHelp" xml:space="preserve"><value>setprop service.adb.tcp.port + stop/start adbd — the Wi-Fi debugging port survives device reboots (lost if rebooted via tcpip-mode reboot).</value></data>
+  <data name="SysDbg_PstoreTitle" xml:space="preserve"><value>Kernel Panic Logs (pstore)</value></data>
+  <data name="SysDbg_PstoreView" xml:space="preserve"><value>View /sys/fs/pstore</value></data>
+  <data name="SysDbg_PstorePull" xml:space="preserve"><value>Pull All to Desktop</value></data>
+  <data name="SysDbg_PstoreHint" xml:space="preserve"><value>console-ramoops-* holds the kernel console log from before the last reset — essential for investigating freezes/reboots.</value></data>
+  <data name="SysDbg_PropFileTitle" xml:space="preserve"><value>build.prop View / Edit (high risk, root required)</value></data>
+  <data name="SysDbg_PropFileSave" xml:space="preserve"><value>Save &amp; Write Back...</value></data>
+  <data name="DevMgr_SourceWindow" xml:space="preserve"><value>Window</value></data>
+  <!-- ============ First-run guide ============ -->
+  <data name="FirstRun_Title" xml:space="preserve"><value>Welcome to ADB Toolbox</value></data>
+  <data name="FirstRun_Heading" xml:space="preserve"><value>Welcome to AdbForge · ADB Toolbox</value></data>
+  <data name="FirstRun_Body" xml:space="preserve"><value>A Windows desktop tool for Android / AOSP developers. All features communicate with the device via local adb — no data is collected or uploaded.</value></data>
+  <data name="FirstRun_StepAdb" xml:space="preserve"><value>① ADB environment</value></data>
+  <data name="FirstRun_AdbMissingHint" xml:space="preserve"><value>If adb is not detected, set the adb.exe path manually on the "Settings" page (e.g. D:\02.AndroidSdk\platform-tools\adb.exe).</value></data>
+  <data name="FirstRun_StepTips" xml:space="preserve"><value>② Tips</value></data>
+  <data name="FirstRun_TipsText" xml:space="preserve"><value>· The device bar at the top appears automatically once a device is connected; every page shares it
+· The Settings page can switch to dark mode (restart to apply)
+· Right-click an app in Apps to extract its APK or inspect its activities and permissions</value></data>
+  <data name="FirstRun_GetStarted" xml:space="preserve"><value>Get Started</value></data>
+  <data name="FirstRun_AdbFoundFormat" xml:space="preserve"><value>✓ adb found: {0}</value></data>
+  <data name="FirstRun_AdbNotFoundFormat" xml:space="preserve"><value>✗ adb not found (tried: {0})
+Install Android SDK platform-tools first, or set the adb.exe path on the "Settings" page.</value></data>
+  <!-- ============ Property edit dialog ============ -->
+  <data name="PropEdit_Title" xml:space="preserve"><value>Edit Property Value</value></data>
+  <data name="PropEdit_NewValue" xml:space="preserve"><value>New value</value></data>
+  <data name="PropEdit_Warning" xml:space="preserve"><value>Note: setprop requires root; properties starting with ro. are read-only; non-persistent properties (without the persist prefix) revert on reboot; changing system properties may affect device behavior.</value></data>
+  <!-- ============ App detail window ============ -->
+  <data name="AppDetail_CopyHint" xml:space="preserve"><value>Tip: select all (Ctrl+A) then Ctrl+C to copy everything; right-click inside the text box also copies the selection</value></data>
+  <!-- ============ Keyboard forwarding ============ -->
+  <data name="Kb_Title" xml:space="preserve"><value>Keyboard Forwarding (click this window to focus, then type)</value></data>
+  <data name="Kb_UsageTitle" xml:space="preserve"><value>Usage</value></data>
+  <data name="Kb_UsageText" xml:space="preserve"><value>· Click anywhere in this window to focus; keys are forwarded in real time to the device selected in the main window's top bar
+· Typing (letters/digits/symbols, case preserved) is batched via input text with auto-repeat on long press
+· Enter / Backspace / Arrows / Tab / Esc / Home / End / PgUp / PgDn are sent via keyevent
+· Ctrl / Alt + key is sent via keycombination (Android 11+, e.g. Ctrl+A select all, Ctrl+C copy)
+· CJK text cannot be typed via input text (ASCII only); paste it via the device clipboard</value></data>
+  <data name="Kb_Waiting" xml:space="preserve"><value>Waiting for keys…</value></data>
+  <data name="Kb_SelectDeviceInMain" xml:space="preserve"><value>Select a device in the main window's top bar first</value></data>
+  <data name="Kb_NonAsciiHint" xml:space="preserve"><value>Note: non-ASCII text (e.g. Chinese) cannot be typed via input text; paste it via the device clipboard</value></data>
+  <data name="Kb_SentFormat" xml:space="preserve"><value>Sent {0} item(s) · device {1}</value></data>
+  <data name="Kb_SendFailedFormat" xml:space="preserve"><value>Send failed: {0}</value></data>
+  <!-- ============ Update service ============ -->
+  <data name="Settings_UpdateUrlLabel" xml:space="preserve"><value>Update server (empty = check GitHub Releases automatically; or a custom version JSON URL)</value></data>
+  <data name="Update_GitHubChecking" xml:space="preserve"><value>Checking GitHub Releases...</value></data>
+  <data name="Update_GitHubNoRelease" xml:space="preserve"><value>No release published on GitHub yet (you can download from the repo's Releases page)</value></data>
+  <data name="Update_GitHubHttpErrorFormat" xml:space="preserve"><value>GitHub request failed (HTTP {0})</value></data>
+  <data name="Update_GitHubBadFormat" xml:space="preserve"><value>Unexpected GitHub response format</value></data>
+  <data name="Update_AssetFormat" xml:space="preserve"><value>Installer: {0} ({1:F1} MB)</value></data>
+  <data name="Update_DownloadPromptFormat" xml:space="preserve"><value>Download {0} ({1} MB) now?{2}</value></data>
+  <data name="Update_DownloadingFormat" xml:space="preserve"><value>Downloading {0}% ({1:F1}/{2:F1} MB)...</value></data>
+  <data name="Update_DownloadedFormat" xml:space="preserve"><value>Update downloaded: {0}
+Extract and overwrite the existing app to finish updating.</value></data>
+  <data name="Update_DownloadFailedFormat" xml:space="preserve"><value>Download failed: {0}</value></data>
+  <data name="Update_NoAsset" xml:space="preserve"><value>No installer attached to this release; the release page has been opened</value></data>
+  <data name="Update_BadFormat" xml:space="preserve"><value>Invalid update feed (missing version field)</value></data>
+  <data name="Update_InvalidVersion" xml:space="preserve"><value>Invalid version number: {0}</value></data>
+  <data name="Update_UpToDate" xml:space="preserve"><value>Already up to date (v{0})</value></data>
+  <data name="Update_NewVersionFormat" xml:space="preserve"><value>New version v{0} found (current v{1})</value></data>
+  <data name="Update_NotesPrefix" xml:space="preserve"><value>Release notes: {0}</value></data>
+  <data name="Update_UrlPrefix" xml:space="preserve"><value>Download: {0}</value></data>
+  <data name="Update_CannotConnect" xml:space="preserve"><value>Cannot reach the update server: {0}</value></data>
+  <!-- ============ adb service exceptions ============ -->
+  <data name="Adb_CannotStartFormat" xml:space="preserve"><value>Cannot start adb: {0} (set the adb.exe path on the "Settings" page)</value></data>
+  <data name="Adb_ListDirFailedFormat" xml:space="preserve"><value>Failed to list directory: {0}</value></data>
+  <data name="Adb_ScreenshotFailedFormat" xml:space="preserve"><value>Screenshot failed: {0}</value></data>
+  <!-- NEW-ENTRIES -->
+</root>

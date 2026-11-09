@@ -1,16 +1,21 @@
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
 using AdbToolkit.Models;
-using System.Diagnostics;
-using System.IO;
-using System.Windows;
-using AdbToolkit.Models;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 
 namespace AdbToolkit.ViewModels;
 
-/// <summary>设置页：adb 路径、主题、更新检查、应用缓存清理、关于与隐私。</summary>
+/// <summary>通用设置下拉项：Code 为存储值，DisplayName 为本地化显示名。</summary>
+public class SettingOption
+{
+    public string Code { get; init; } = "";
+    public string DisplayName { get; init; } = "";
+}
+
+/// <summary>设置页：adb 路径、主题、语言、托盘行为、更新检查、应用缓存清理、关于与隐私。</summary>
 public class SettingsViewModel : ObservableObject
 {
     public SettingsViewModel()
@@ -23,6 +28,12 @@ public class SettingsViewModel : ObservableObject
         ClearDeviceFilesCommand = new RelayCommand(async () => await RunBusyAsync(ClearDeviceFilesAsync));
         CheckUpdateCommand = new RelayCommand(async () => await RunBusyAsync(CheckUpdateAsync));
         OpenLogsCommand = new RelayCommand(OpenLogs);
+
+        // 选中项必须引用 ItemsSource 列表中的实例，否则 ComboBox 显示空白
+        _selectedTheme = Themes.FirstOrDefault(t => t.Code.Equals(AppSession.Settings.Theme, StringComparison.OrdinalIgnoreCase))
+                         ?? Themes[0];
+        _selectedLanguage = Languages.FirstOrDefault(l => l.Code.Equals(AppSession.Settings.Language, StringComparison.OrdinalIgnoreCase))
+                            ?? Languages[0];
         RefreshCacheInfo();
     }
 
@@ -49,18 +60,59 @@ public class SettingsViewModel : ObservableObject
 
     // ---------- 外观 ----------
 
-    public List<string> Themes { get; } = new() { "浅色", "深色" };
+    public List<SettingOption> Themes { get; } = new()
+    {
+        new() { Code = ThemeManager.Light, DisplayName = Strings.Settings_ThemeLight },
+        new() { Code = ThemeManager.Dark, DisplayName = Strings.Settings_ThemeDark },
+    };
 
-    private string _selectedTheme = AppSession.Settings.Theme == ThemeManager.Dark ? "深色" : "浅色";
-    public string SelectedTheme
+    private SettingOption _selectedTheme = null!;
+    public SettingOption SelectedTheme
     {
         get => _selectedTheme;
         set
         {
             if (!SetProperty(ref _selectedTheme, value)) return;
-            AppSession.Settings.Theme = value == "深色" ? ThemeManager.Dark : ThemeManager.Light;
+            AppSession.Settings.Theme = value.Code;
             AppSession.Settings.Save();
-            TestResult = $"主题已切换为{value}，重启应用后生效";
+            TestResult = string.Format(Strings.Settings_ThemeRestartFormat, value.DisplayName);
+        }
+    }
+
+    // ---------- 语言 ----------
+
+    public List<SettingOption> Languages { get; } = new()
+    {
+        new() { Code = "zh", DisplayName = Strings.Settings_LangZh },
+        new() { Code = "en", DisplayName = Strings.Settings_LangEn },
+    };
+
+    private SettingOption _selectedLanguage = null!;
+    public SettingOption SelectedLanguage
+    {
+        get => _selectedLanguage;
+        set
+        {
+            if (!SetProperty(ref _selectedLanguage, value)) return;
+            AppSession.Settings.Language = value.Code;
+            AppSession.Settings.Save();
+            TestResult = Strings.Settings_LanguageRestartHint;
+        }
+    }
+
+    // ---------- 托盘 ----------
+
+    private bool _hideToTrayOnClose = AppSession.Settings.HideToTrayOnClose;
+    public bool HideToTrayOnClose
+    {
+        get => _hideToTrayOnClose;
+        set
+        {
+            if (SetProperty(ref _hideToTrayOnClose, value))
+            {
+                AppSession.Settings.HideToTrayOnClose = value;
+                AppSession.Settings.Save();
+            }
         }
     }
 
@@ -82,7 +134,7 @@ public class SettingsViewModel : ObservableObject
         }
     }
 
-    // ---------- 缓存 ----------
+    // ---------- 命令 ----------
 
     public RelayCommand BrowseCommand { get; }
     public RelayCommand SaveCommand { get; }
@@ -97,9 +149,9 @@ public class SettingsViewModel : ObservableObject
     {
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            Title = "选择 adb.exe",
+            Title = Strings.Settings_BrowseTitle,
             Filter = "adb.exe|adb.exe",
-            InitialDirectory = System.IO.Path.GetDirectoryName(AdbPath) ?? "C:\\",
+            InitialDirectory = Path.GetDirectoryName(AdbPath) ?? "C:\\",
         };
         if (dialog.ShowDialog() == true) AdbPath = dialog.FileName;
     }
@@ -107,7 +159,7 @@ public class SettingsViewModel : ObservableObject
     private void Save()
     {
         AppSession.ApplyAdbPath(AdbPath.Trim());
-        TestResult = $"已保存：{AppSession.Adb.AdbPath}";
+        TestResult = string.Format(Strings.Settings_SavedFormat, AppSession.Adb.AdbPath);
     }
 
     private async Task TestAsync()
@@ -117,7 +169,7 @@ public class SettingsViewModel : ObservableObject
         var result = await AppSession.Adb.RunAsync("version");
         TestResult = result.Success
             ? result.StdOut.Trim()
-            : $"检测失败：{result.Combined.Trim()}";
+            : string.Format(Strings.Settings_TestFailedFormat, result.Combined.Trim());
     }
 
     private async Task CheckUpdateAsync()
@@ -125,18 +177,71 @@ public class SettingsViewModel : ObservableObject
         var url = UpdateUrl.Trim();
         if (url.Length == 0)
         {
-            TestResult = "未配置更新服务器地址（在上方输入托管版本描述 JSON 的 URL）";
+            await CheckGitHubUpdateAsync();
             return;
         }
 
-        TestResult = "正在检查更新...";
+        TestResult = Strings.Settings_CheckingUpdate;
         var result = await UpdateService.CheckAsync(url);
         TestResult = result.Message;
         if (result.HasNewVersion && !string.IsNullOrEmpty(result.DownloadUrl))
         {
-            var open = MessageBox.Show("现在打开下载地址吗？", "发现新版本",
+            var open = MessageBox.Show(Strings.Settings_OpenDownloadPrompt, Strings.Settings_NewVersionFound,
                 MessageBoxButton.YesNo, MessageBoxImage.Information);
             if (open == MessageBoxResult.Yes) UpdateService.OpenDownloadUrl(result.DownloadUrl);
+        }
+    }
+
+    /// <summary>默认来源：GitHub Releases（发现新版直接下载安装包）。</summary>
+    private async Task CheckGitHubUpdateAsync()
+    {
+        TestResult = Strings.Update_GitHubChecking;
+        var result = await UpdateService.CheckGitHubAsync();
+        TestResult = result.Message;
+
+        if (!result.HasNewVersion) return;
+
+        if (string.IsNullOrEmpty(result.AssetUrl) || string.IsNullOrEmpty(result.AssetName))
+        {
+            // Release 未附带安装包：引导打开 Release 页面
+            TestResult = Strings.Update_NoAsset;
+            if (!string.IsNullOrEmpty(result.PageUrl)) UpdateService.OpenDownloadUrl(result.PageUrl);
+            return;
+        }
+
+        var sizeMb = result.AssetSize / 1024.0 / 1024.0;
+        var go = MessageBox.Show(
+            string.Format(Strings.Update_DownloadPromptFormat,
+                result.AssetName, sizeMb.ToString("F1"),
+                string.IsNullOrEmpty(result.Notes) ? "" : "\n" + result.Notes + "\n"),
+            Strings.Settings_NewVersionFound, MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+        if (go != MessageBoxResult.Yes)
+        {
+            if (!string.IsNullOrEmpty(result.PageUrl)) UpdateService.OpenDownloadUrl(result.PageUrl);
+            return;
+        }
+
+        try
+        {
+            var lastPct = -1L;
+            var dest = await UpdateService.DownloadReleaseAsync(result.AssetUrl, result.AssetName, (read, total) =>
+            {
+                var pct = read * 100 / total;
+                if (pct != lastPct)
+                {
+                    lastPct = pct;
+                    TestResult = string.Format(Strings.Update_DownloadingFormat,
+                        pct, read / 1024.0 / 1024.0, total / 1024.0 / 1024.0);
+                }
+            });
+            TestResult = string.Format(Strings.Update_DownloadedFormat, dest);
+            Process.Start("explorer.exe", $"/select,\"{dest}\"");
+        }
+        catch (Exception ex)
+        {
+            TestResult = string.Format(Strings.Update_DownloadFailedFormat, ex.Message);
+            if (!string.IsNullOrEmpty(result.PageUrl)) UpdateService.OpenDownloadUrl(result.PageUrl);
         }
     }
 
@@ -153,7 +258,7 @@ public class SettingsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            TestResult = "打开日志目录失败：" + ex.Message;
+            TestResult = string.Format(Strings.Settings_OpenLogsFailedFormat, ex.Message);
         }
     }
 
@@ -167,11 +272,12 @@ public class SettingsViewModel : ObservableObject
         if (File.Exists(metaPath))
         {
             var fi = new FileInfo(metaPath);
-            sb.AppendLine($"应用名/组件缓存（appmeta.json）：{DeviceFile.FormatSize(fi.Length)}，{AppMetaCache.Map.Count} 个应用");
+            sb.AppendLine(string.Format(Strings.Settings_CacheMetaFormat,
+                DeviceFile.FormatSize(fi.Length), AppMetaCache.Map.Count));
         }
         else
         {
-            sb.AppendLine("应用名/组件缓存（appmeta.json）：无");
+            sb.AppendLine(Strings.Settings_CacheMetaNone);
         }
 
         var tempDir = AppMetaCache.TempApkDir;
@@ -179,11 +285,12 @@ public class SettingsViewModel : ObservableObject
         {
             var files = Directory.GetFiles(tempDir);
             var total = files.Sum(f => new FileInfo(f).Length);
-            sb.AppendLine($"临时 APK 文件（%TEMP%\\AdbToolkit）：{DeviceFile.FormatSize(total)}，{files.Length} 个文件");
+            sb.AppendLine(string.Format(Strings.Settings_CacheTempFormat,
+                DeviceFile.FormatSize(total), files.Length));
         }
         else
         {
-            sb.AppendLine("临时 APK 文件（%TEMP%\\AdbToolkit）：无");
+            sb.AppendLine(Strings.Settings_CacheTempNone);
         }
 
         CacheInfoText = sb.ToString();
@@ -192,11 +299,8 @@ public class SettingsViewModel : ObservableObject
     private async Task ClearPcCacheAsync()
     {
         var confirm = MessageBox.Show(
-            "将清除以下本工具生成的缓存：\n" +
-            "· 应用名/组件缓存（appmeta.json）——清除后应用名需重新右键获取\n" +
-            "· 临时 APK 文件（%TEMP%\\AdbToolkit）\n\n" +
-            "设置（adb 路径等）不会清除。继续？",
-            "清除 PC 缓存", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            Strings.Settings_ClearPcCacheConfirm,
+            Strings.Settings_ClearPcCacheCaption, MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (confirm != MessageBoxResult.Yes) return;
 
         AppMetaCache.ClearAndReset();
@@ -208,12 +312,12 @@ public class SettingsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            TestResult = "缓存清除失败：" + ex.Message;
+            TestResult = string.Format(Strings.Common_FailedFormat, ex.Message);
             return;
         }
 
         RefreshCacheInfo();
-        TestResult = "PC 缓存已清除";
+        TestResult = Strings.Settings_CacheCleared;
     }
 
     private async Task ClearDeviceFilesAsync()
@@ -221,7 +325,7 @@ public class SettingsViewModel : ObservableObject
         var serial = DeviceStore.SelectedSerial;
         if (serial is null)
         {
-            TestResult = "请先在顶部选择设备";
+            TestResult = Strings.Common_SelectDeviceFirst;
             return;
         }
 
@@ -232,15 +336,15 @@ public class SettingsViewModel : ObservableObject
             .Select(s => s.Trim()).ToList();
         if (names.Count == 0)
         {
-            TestResult = "设备端没有本工具创建的文件";
+            TestResult = Strings.Settings_NoToolFilesOnDevice;
             return;
         }
 
         var r = await AppSession.Adb.RunShellAsync(
             "rm -f /sdcard/adbtoolkit_logcat.txt /sdcard/adbtoolkit_record.mp4", serial);
         TestResult = r.Success
-            ? $"已清理设备端文件：{string.Join("、", names)}"
-            : $"清理失败：{r.Combined.Trim()}";
+            ? string.Format(Strings.Settings_CleanedDeviceFilesFormat, string.Join("、", names))
+            : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
     }
 
     private async Task RunBusyAsync(Func<Task> work)
@@ -251,7 +355,7 @@ public class SettingsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            TestResult = "错误：" + ex.Message;
+            TestResult = string.Format(Strings.Common_ErrorFormat, ex.Message);
         }
     }
 }

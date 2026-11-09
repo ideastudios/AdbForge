@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- ============ 通用 ============ -->
+  <data name="Common_Ok" xml:space="preserve"><value>确定</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="Common_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="Common_Refresh" xml:space="preserve"><value>刷新</value></data>
+  <data name="Common_Error" xml:space="preserve"><value>错误</value></data>
+  <data name="Common_ErrorFormat" xml:space="preserve"><value>错误：{0}</value></data>
+  <data name="Common_FailedFormat" xml:space="preserve"><value>失败：{0}</value></data>
+  <data name="Common_SelectDeviceFirst" xml:space="preserve"><value>请先在顶部选择设备</value></data>
+  <data name="Common_CopiedFormat" xml:space="preserve"><value>已复制：{0}</value></data>
+  <data name="Common_OpenLogsFolder" xml:space="preserve"><value>打开日志文件夹</value></data>
+  <data name="Common_CheckUpdate" xml:space="preserve"><value>检查更新</value></data>
+  <data name="Common_Copy" xml:space="preserve"><value>复制</value></data>
+  <data name="Common_Delete" xml:space="preserve"><value>删除</value></data>
+  <data name="Common_Open" xml:space="preserve"><value>打开</value></data>
+  <!-- ============ 应用 / 主窗口 ============ -->
+  <data name="App_Title" xml:space="preserve"><value>卓匠 · ADB 工具箱</value></data>
+  <data name="App_UnhandledErrorFormat" xml:space="preserve"><value>发生未处理的错误：{0}
+
+详细日志已保存到：
+{1}</value></data>
+  <data name="Main_ForegroundLabel" xml:space="preserve"><value>前台：</value></data>
+  <data name="Main_ForegroundTooltip" xml:space="preserve"><value>设备当前前台应用，每 2 秒自动刷新。点击复制组件名。</value></data>
+  <data name="Main_SidebarTitle" xml:space="preserve"><value>开发者工具</value></data>
+  <data name="Main_SidebarSubtitle" xml:space="preserve"><value>Android · AOSP 辅助开发</value></data>
+  <data name="Main_DetectingAdb" xml:space="preserve"><value>正在检测 adb...</value></data>
+  <data name="Common_OpenFailedFormat" xml:space="preserve"><value>打开失败：{0}</value></data>
+  <data name="Common_Cancelled" xml:space="preserve"><value>已取消</value></data>
+  <data name="Common_SavedFormat" xml:space="preserve"><value>已保存：{0}</value></data>
+  <data name="Main_CopiedForegroundFormat" xml:space="preserve"><value>已复制前台组件：{0}</value></data>
+  <data name="Main_NoForegroundInfo" xml:space="preserve"><value>当前没有前台应用信息</value></data>
+  <data name="Main_OpenedAppDetailsFormat" xml:space="preserve"><value>已打开 {0} 的应用详情</value></data>
+  <data name="Main_StatusNoDeviceFormat" xml:space="preserve"><value>未连接设备　·　adb: {0}</value></data>
+  <data name="Main_StatusConnectedFormat" xml:space="preserve"><value>已连接 {0} 台设备　·　adb: {1}</value></data>
+  <data name="Main_StatusUnavailableFormat" xml:space="preserve"><value>有 {0} 台设备但均不可用（未授权/离线）　·　adb: {1}</value></data>
+  <!-- ============ 侧边栏导航 ============ -->
+  <data name="Nav_Devices" xml:space="preserve"><value>设备管理</value></data>
+  <data name="Nav_Logcat" xml:space="preserve"><value>日志 Logcat</value></data>
+  <data name="Nav_Apps" xml:space="preserve"><value>应用管理</value></data>
+  <data name="Nav_Files" xml:space="preserve"><value>文件传输</value></data>
+  <data name="Nav_ScreenInput" xml:space="preserve"><value>屏幕与输入</value></data>
+  <data name="Nav_Perf" xml:space="preserve"><value>性能诊断</value></data>
+  <data name="Nav_SysDebug" xml:space="preserve"><value>系统调试</value></data>
+  <data name="Nav_More" xml:space="preserve"><value>更多工具</value></data>
+  <data name="Nav_Settings" xml:space="preserve"><value>设置</value></data>
+  <!-- ============ 托盘 ============ -->
+  <data name="Tray_ShowMainWindow" xml:space="preserve"><value>显示主窗口</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>退出</value></data>
+  <data name="Tray_HiddenBalloonTitle" xml:space="preserve"><value>已隐藏到托盘</value></data>
+  <data name="Tray_HiddenBalloonText" xml:space="preserve"><value>应用仍在后台运行，双击托盘图标可重新打开窗口。</value></data>
+  <!-- ============ 设置页 ============ -->
+  <data name="Settings_AdbConfigTitle" xml:space="preserve"><value>ADB 环境配置</value></data>
+  <data name="Settings_AdbPathLabel" xml:space="preserve"><value>adb.exe 完整路径（留空则自动探测）</value></data>
+  <data name="Settings_Browse" xml:space="preserve"><value>浏览...</value></data>
+  <data name="Settings_TestAdb" xml:space="preserve"><value>检测（adb version）</value></data>
+  <data name="Settings_Notes" xml:space="preserve"><value>说明</value></data>
+  <data name="Settings_NotesText" xml:space="preserve"><value>· 自动探测顺序：程序目录 platform-tools → %LOCALAPPDATA%\Android\Sdk\platform-tools → 系统 PATH
+· 多工具共用 adb 时可能因 server 端口 5037 冲突导致设备离线，本工具后续版本将支持独立 server 端口
+· 修改路径后建议点击「检测」确认 adb 可用</value></data>
+  <data name="Settings_CacheTitle" xml:space="preserve"><value>应用缓存</value></data>
+  <data name="Settings_RefreshStats" xml:space="preserve"><value>刷新统计</value></data>
+  <data name="Settings_ClearPcCache" xml:space="preserve"><value>清除 PC 缓存</value></data>
+  <data name="Settings_ClearDeviceFiles" xml:space="preserve"><value>清理设备端文件</value></data>
+  <data name="Settings_CacheHelpText" xml:space="preserve"><value>PC 缓存 = 应用名/组件缓存（appmeta.json）+ 临时 APK 文件；设置（adb 路径等）不受影响。设备端文件 = 后台日志（adbtoolkit_logcat.txt）与录屏残留（adbtoolkit_record.mp4）。</value></data>
+  <data name="Settings_TestResultTitle" xml:space="preserve"><value>检测结果</value></data>
+  <data name="Settings_AppearanceTitle" xml:space="preserve"><value>外观与更新</value></data>
+  <data name="Settings_ThemeLabel" xml:space="preserve"><value>主题（切换后重启应用生效）</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>浅色</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>深色</value></data>
+  <data name="Settings_ThemeRestartFormat" xml:space="preserve"><value>主题已切换为 {0}，重启应用后生效</value></data>
+  <data name="Settings_LanguageLabel" xml:space="preserve"><value>语言（切换后重启应用生效）</value></data>
+  <data name="Settings_LangZh" xml:space="preserve"><value>简体中文</value></data>
+  <data name="Settings_LangEn" xml:space="preserve"><value>English</value></data>
+  <data name="Settings_LanguageRestartHint" xml:space="preserve"><value>语言已切换，重启应用后生效</value></data>
+  <data name="Settings_HideToTray" xml:space="preserve"><value>关闭窗口时隐藏到托盘</value></data>
+  <data name="Settings_BrowseTitle" xml:space="preserve"><value>选择 adb.exe</value></data>
+  <data name="Settings_SavedFormat" xml:space="preserve"><value>已保存：{0}</value></data>
+  <data name="Settings_TestFailedFormat" xml:space="preserve"><value>检测失败：{0}</value></data>
+  <data name="Settings_CheckingUpdate" xml:space="preserve"><value>正在检查更新...</value></data>
+  <data name="Settings_NewVersionFound" xml:space="preserve"><value>发现新版本</value></data>
+  <data name="Settings_OpenDownloadPrompt" xml:space="preserve"><value>现在打开下载地址吗？</value></data>
+  <data name="Settings_OpenLogsFailedFormat" xml:space="preserve"><value>打开日志目录失败：{0}</value></data>
+  <data name="Settings_CacheMetaFormat" xml:space="preserve"><value>应用名/组件缓存（appmeta.json）：{0}，{1} 个应用</value></data>
+  <data name="Settings_CacheMetaNone" xml:space="preserve"><value>应用名/组件缓存（appmeta.json）：无</value></data>
+  <data name="Settings_CacheTempFormat" xml:space="preserve"><value>临时 APK 文件（%TEMP%\AdbToolkit）：{0}，{1} 个文件</value></data>
+  <data name="Settings_CacheTempNone" xml:space="preserve"><value>临时 APK 文件（%TEMP%\AdbToolkit）：无</value></data>
+  <data name="Settings_ClearPcCacheCaption" xml:space="preserve"><value>清除 PC 缓存</value></data>
+  <data name="Settings_ClearPcCacheConfirm" xml:space="preserve"><value>将清除以下本工具生成的缓存：
+· 应用名/组件缓存（appmeta.json）——清除后应用名需重新右键获取
+· 临时 APK 文件（%TEMP%\AdbToolkit）
+
+设置（adb 路径等）不会清除。继续？</value></data>
+  <data name="Settings_CacheCleared" xml:space="preserve"><value>PC 缓存已清除</value></data>
+  <data name="Settings_NoToolFilesOnDevice" xml:space="preserve"><value>设备端没有本工具创建的文件</value></data>
+  <data name="Settings_CleanedDeviceFilesFormat" xml:space="preserve"><value>已清理设备端文件：{0}</value></data>
+  <data name="Settings_AboutTitle" xml:space="preserve"><value>关于与隐私</value></data>
+  <data name="Settings_AboutText" xml:space="preserve"><value>ADB 工具箱是一款面向 Android / AOSP 开发者的本地桌面工具。所有功能均通过本机 adb 与设备通信：
+· 不收集、不上传任何用户数据与设备信息
+· 唯一可能的网络访问是可选的更新检查（仅访问你在上方配置的服务器）
+· 运行日志仅保存在本机 %APPDATA%\AdbToolkit\logs，可在上方一键打开</value></data>
+  <!-- ============ 设备管理 ============ -->
+  <data name="DevMgr_DeviceList" xml:space="preserve"><value>设备列表</value></data>
+  <data name="DevMgr_DeviceListHint" xml:space="preserve"><value>设备每 2 秒自动刷新；未授权时请在手机上确认 USB 调试授权弹窗。</value></data>
+  <data name="DevMgr_StateConnected" xml:space="preserve"><value>已连接</value></data>
+  <data name="DevMgr_StateOffline" xml:space="preserve"><value>离线</value></data>
+  <data name="DevMgr_StateUnauthorized" xml:space="preserve"><value>未授权</value></data>
+  <data name="DevMgr_StateUnknown" xml:space="preserve"><value>未知</value></data>
+  <data name="DevMgr_RefreshEvery2s" xml:space="preserve"><value>每 2 秒刷新</value></data>
+  <data name="DevMgr_FgWindowsTitle" xml:space="preserve"><value>前台与可见窗口</value></data>
+  <data name="DevMgr_Package" xml:space="preserve"><value>包名</value></data>
+  <data name="DevMgr_Page" xml:space="preserve"><value>页面</value></data>
+  <data name="DevMgr_Component" xml:space="preserve"><value>组件</value></data>
+  <data name="DevMgr_OpenAppDetails" xml:space="preserve"><value>打开应用详情</value></data>
+  <data name="DevMgr_SourceTooltip" xml:space="preserve"><value>Activity=栈顶页面；Window=焦点窗口（弹窗场景兜底）</value></data>
+  <data name="DevMgr_AllWindows" xml:space="preserve"><value>所有可见窗口（含系统）</value></data>
+  <data name="DevMgr_TagApp" xml:space="preserve"><value>应用</value></data>
+  <data name="DevMgr_TagSystem" xml:space="preserve"><value>系统</value></data>
+  <data name="DevMgr_TagForeground" xml:space="preserve"><value>前台</value></data>
+  <data name="DevMgr_WirelessTitle" xml:space="preserve"><value>无线连接</value></data>
+  <data name="DevMgr_DeviceAddr" xml:space="preserve"><value>设备地址（IP:端口）</value></data>
+  <data name="DevMgr_PairCode" xml:space="preserve"><value>配对码（Android 11+，可选）</value></data>
+  <data name="DevMgr_PairAndConnect" xml:space="preserve"><value>配对并连接</value></data>
+  <data name="DevMgr_Disconnect" xml:space="preserve"><value>断开</value></data>
+  <data name="DevMgr_WirelessHint" xml:space="preserve"><value>提示：Android 11+ 的配对端口与连接端口不同，请先在手机「开发者选项 → 无线调试 → 使用配对码配对设备」中查看配对地址填入上方输入框。</value></data>
+  <data name="DevMgr_RebootTitle" xml:space="preserve"><value>重启与模式切换</value></data>
+  <data name="DevMgr_RebootSystem" xml:space="preserve"><value>重启系统</value></data>
+  <data name="DevMgr_RebootModeSystem" xml:space="preserve"><value>系统</value></data>
+  <data name="DevMgr_RebootSentFormat" xml:space="preserve"><value>已发送重启指令（{0}），设备将重新启动</value></data>
+  <data name="DevMgr_EnterAddr" xml:space="preserve"><value>请输入设备地址，例如 192.168.11.148:5555</value></data>
+  <data name="DevMgr_PairResultFormat" xml:space="preserve"><value>配对：{0}</value></data>
+  <data name="DevMgr_ConnectResultFormat" xml:space="preserve"><value>连接：{0}</value></data>
+  <data name="DevMgr_DisconnectResultFormat" xml:space="preserve"><value>断开：{0}</value></data>
+  <data name="DevMgr_Output" xml:space="preserve"><value>输出</value></data>
+  <!-- ============ 文件传输 ============ -->
+  <data name="Files_DirPrefix" xml:space="preserve"><value>[目录]</value></data>
+  <!-- ============ Logcat ============ -->
+  <data name="Logcat_StartCapture" xml:space="preserve"><value>开始抓取</value></data>
+  <data name="Logcat_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="Logcat_MinLevel" xml:space="preserve"><value>最低级别</value></data>
+  <data name="Logcat_Keyword" xml:space="preserve"><value>关键字</value></data>
+  <data name="Logcat_AutoScroll" xml:space="preserve"><value>自动滚动</value></data>
+  <data name="Logcat_Clear" xml:space="preserve"><value>清空</value></data>
+  <data name="Logcat_Save" xml:space="preserve"><value>保存...</value></data>
+  <data name="Logcat_NotStarted" xml:space="preserve"><value>未开始抓取</value></data>
+  <data name="Logcat_ProcessExitedFormat" xml:space="preserve"><value>logcat 进程已退出（code {0}）</value></data>
+  <data name="Logcat_CapturingFormat" xml:space="preserve"><value>正在抓取（设备 {0} · buffer {1} · *:{2}）</value></data>
+  <data name="Logcat_CapturingOverflowFormat" xml:space="preserve"><value>正在抓取 · 缓冲 {0:N0} 行（屏显过载丢弃 {1:N0} 行）</value></data>
+  <data name="Logcat_CapturingBufferFormat" xml:space="preserve"><value>正在抓取 · 缓冲 {0:N0} 行</value></data>
+  <data name="Logcat_Cleared" xml:space="preserve"><value>已清空设备端日志缓冲区</value></data>
+  <data name="Logcat_SaveFilter" xml:space="preserve"><value>文本文件 (*.txt)|*.txt|日志文件 (*.log)|*.log</value></data>
+  <data name="Logcat_SavedFormat" xml:space="preserve"><value>已保存 {0:N0} 行到 {1}</value></data>
+  <!-- ============ 应用管理 ============ -->
+  <data name="Apps_ClickRefreshHint" xml:space="preserve"><value>点击「刷新」加载应用列表</value></data>
+  <data name="Apps_RefreshList" xml:space="preserve"><value>刷新列表</value></data>
+  <data name="Apps_InstallApk" xml:space="preserve"><value>安装 APK（可多选）...</value></data>
+  <data name="Apps_ShowSystem" xml:space="preserve"><value>显示系统应用</value></data>
+  <data name="Apps_KeepData" xml:space="preserve"><value>卸载时保留数据 (-k)</value></data>
+  <data name="Apps_GrantPermissions" xml:space="preserve"><value>安装时自动授权 (-g)</value></data>
+  <data name="Apps_Search" xml:space="preserve"><value>搜索</value></data>
+  <data name="Apps_MenuGetLabel" xml:space="preserve"><value>获取应用名（解析 APK）</value></data>
+  <data name="Apps_MenuDetail" xml:space="preserve"><value>应用详情...</value></data>
+  <data name="Apps_MenuCopyLabel" xml:space="preserve"><value>复制应用名</value></data>
+  <data name="Apps_MenuCopyPkg" xml:space="preserve"><value>复制包名</value></data>
+  <data name="Apps_MenuCopyPath" xml:space="preserve"><value>复制 APK 路径</value></data>
+  <data name="Apps_MenuExtractApk" xml:space="preserve"><value>提取 APK 到本地...</value></data>
+  <data name="Apps_MenuOpenSystemDetail" xml:space="preserve"><value>打开系统详情页</value></data>
+  <data name="Apps_Uninstall" xml:space="preserve"><value>卸载</value></data>
+  <data name="Apps_ColAppName" xml:space="preserve"><value>应用名</value></data>
+  <data name="Apps_ColApkPath" xml:space="preserve"><value>APK 路径</value></data>
+  <data name="Apps_ColAction" xml:space="preserve"><value>操作</value></data>
+  <data name="Apps_LoadingSystemList" xml:space="preserve"><value>正在加载系统应用列表...</value></data>
+  <data name="Apps_LoadingThirdPartyList" xml:space="preserve"><value>正在加载第三方应用列表...</value></data>
+  <data name="Apps_LoadedCountFormat" xml:space="preserve"><value>共 {0:N0} 个应用（应用名：右键「获取应用名」或「应用详情」后显示）</value></data>
+  <data name="Apps_ApkTooLargeFormat" xml:space="preserve"><value>{0} 的 APK 超过 150MB，跳过解析</value></data>
+  <data name="Apps_PullingApkFormat" xml:space="preserve"><value>正在拉取并解析 {0} 的 APK（{1}）...</value></data>
+  <data name="Apps_SelectAppFirst" xml:space="preserve"><value>请先选中应用</value></data>
+  <data name="Apps_LabelResultFormat" xml:space="preserve"><value>应用名：{0}（{1}）</value></data>
+  <data name="Apps_LabelParseFailedFormat" xml:space="preserve"><value>未能解析出应用名（{0}），已显示包名</value></data>
+  <data name="Apps_QueryApkPathsFormat" xml:space="preserve"><value>正在查询 {0} 的 APK 路径...</value></data>
+  <data name="Apps_NoApkPathsFormat" xml:space="preserve"><value>未获取到 {0} 的 APK 路径</value></data>
+  <data name="Apps_PickExtractFolder" xml:space="preserve"><value>选择 APK 保存位置（进入目标文件夹后点“打开”）</value></data>
+  <data name="Apps_ExtractingFormat" xml:space="preserve"><value>正在提取 ({0}/{1}) {2} ...</value></data>
+  <data name="Apps_ExtractedFormat" xml:space="preserve"><value>已提取 {0} 个 APK 到 {1}</value></data>
+  <data name="Apps_ExtractDoneFormat" xml:space="preserve"><value>提取完成 {0}/{1}（目标 {2}）</value></data>
+  <data name="Apps_SystemDetailOpenedFormat" xml:space="preserve"><value>已打开 {0} 的系统详情页</value></data>
+  <data name="Apps_FetchingDetailFormat" xml:space="preserve"><value>正在获取 {0} 详情...</value></data>
+  <data name="Apps_DtlNameFormat" xml:space="preserve"><value>应用名：{0}</value></data>
+  <data name="Apps_DtlPkgFormat" xml:space="preserve"><value>包名：{0}</value></data>
+  <data name="Apps_DtlVersionFormat" xml:space="preserve"><value>版本：{0}（versionCode {1}）</value></data>
+  <data name="Apps_DtlSdkFormat" xml:space="preserve"><value>SDK：minSdk {0} / targetSdk {1}</value></data>
+  <data name="Apps_DtlApkPathFormat" xml:space="preserve"><value>APK 路径：{0}</value></data>
+  <data name="Apps_DtlApkSizeFormat" xml:space="preserve"><value>APK 大小：{0}</value></data>
+  <data name="Apps_DtlFirstInstallFormat" xml:space="preserve"><value>首次安装：{0}</value></data>
+  <data name="Apps_DtlLastUpdateFormat" xml:space="preserve"><value>最近更新：{0}</value></data>
+  <data name="Apps_DtlInstallerFormat" xml:space="preserve"><value>安装来源：{0}</value></data>
+  <data name="Apps_DtlFlagsFormat" xml:space="preserve"><value>标志：{0}</value></data>
+  <data name="Apps_SecPermsFormat" xml:space="preserve"><value>申请的权限（{0}）</value></data>
+  <data name="Apps_SecActivitiesFormat" xml:space="preserve"><value>页面 Activities（{0}）</value></data>
+  <data name="Apps_SecServicesFormat" xml:space="preserve"><value>服务 Services（{0}）</value></data>
+  <data name="Apps_SecReceiversFormat" xml:space="preserve"><value>广播接收器 Receivers（{0}）</value></data>
+  <data name="Apps_SecProvidersFormat" xml:space="preserve"><value>内容提供器 Providers（{0}）</value></data>
+  <data name="Apps_DtlWindowTitleFormat" xml:space="preserve"><value>{0} 详情</value></data>
+  <data name="Apps_DtlOpenedFormat" xml:space="preserve"><value>{0} 详情已打开</value></data>
+  <data name="Apps_SectionHeaderFormat" xml:space="preserve"><value>{0}：</value></data>
+  <data name="Apps_SectionEmpty" xml:space="preserve"><value>  （无）</value></data>
+  <data name="Apps_SectionTruncatedFormat" xml:space="preserve"><value>  …（其余 {0} 项省略）</value></data>
+  <data name="Apps_PickApkTitle" xml:space="preserve"><value>选择要安装的 APK（可按住 Ctrl / Shift 多选）</value></data>
+  <data name="Apps_ApkFilter" xml:space="preserve"><value>APK 文件 (*.apk)|*.apk|所有文件 (*.*)|*.*</value></data>
+  <data name="Apps_InstallingFormat" xml:space="preserve"><value>正在安装 ({0}/{1}) {2} ...</value></data>
+  <data name="Apps_InstallFailedItemFormat" xml:space="preserve"><value>{0}（{1}）</value></data>
+  <data name="Apps_BatchInstallOkFormat" xml:space="preserve"><value>批量安装完成：成功 {0}/{1}</value></data>
+  <data name="Apps_BatchInstallFailFormat" xml:space="preserve"><value>批量安装完成：成功 {0}/{1}，失败 {2} —— {3}</value></data>
+  <data name="Apps_BatchFailSeparator" xml:space="preserve"><value>；</value></data>
+  <data name="Apps_UninstallConfirmFormat" xml:space="preserve"><value>确定要卸载 {0} 吗？{1}</value></data>
+  <data name="Apps_KeepDataSuffix" xml:space="preserve"><value>（保留数据）</value></data>
+  <data name="Apps_UninstallConfirmCaption" xml:space="preserve"><value>卸载确认</value></data>
+  <data name="Apps_UninstallingFormat" xml:space="preserve"><value>正在卸载 {0} ...</value></data>
+  <data name="Apps_UninstalledFormat" xml:space="preserve"><value>已卸载 {0}</value></data>
+  <data name="Apps_UninstallFailedFormat" xml:space="preserve"><value>卸载失败：{0}</value></data>
+  <data name="Apps_ErrAlreadyExists" xml:space="preserve"><value>应用已存在（替换安装可解决）</value></data>
+  <data name="Apps_ErrInvalidApk" xml:space="preserve"><value>APK 文件无效</value></data>
+  <data name="Apps_ErrStorage" xml:space="preserve"><value>设备存储空间不足</value></data>
+  <data name="Apps_ErrDowngrade" xml:space="preserve"><value>设备上已是更高版本，无法降级安装</value></data>
+  <data name="Apps_ErrNoCert" xml:space="preserve"><value>APK 未签名或签名无效</value></data>
+  <data name="Apps_ErrUpdateIncompatible" xml:space="preserve"><value>签名与已装应用不一致，需先卸载</value></data>
+  <data name="Apps_ErrIncompatible" xml:space="preserve"><value>ABI / 平台不兼容</value></data>
+  <!-- ============ 文件传输 ============ -->
+  <data name="Files_BrowseTitle" xml:space="preserve"><value>设备文件浏览</value></data>
+  <data name="Files_SetRoot" xml:space="preserve"><value>设为根</value></data>
+  <data name="Files_RefreshSelected" xml:space="preserve"><value>刷新选中</value></data>
+  <data name="Files_QuickRoots" xml:space="preserve"><value>快速设根：</value></data>
+  <data name="Files_MenuPushFile" xml:space="preserve"><value>推送文件到此目录...</value></data>
+  <data name="Files_MenuPushFolder" xml:space="preserve"><value>推送文件夹到此目录...</value></data>
+  <data name="Files_MenuPull" xml:space="preserve"><value>拉取到本机...</value></data>
+  <data name="Files_MenuCreateDir" xml:space="preserve"><value>新建文件夹...</value></data>
+  <data name="Files_MenuDelete" xml:space="preserve"><value>删除（递归）</value></data>
+  <data name="Files_MenuCopyPath" xml:space="preserve"><value>复制完整路径</value></data>
+  <data name="Files_PushTitle" xml:space="preserve"><value>推送到选中目录</value></data>
+  <data name="Files_BrowseFiles" xml:space="preserve"><value>浏览文件...</value></data>
+  <data name="Files_Push" xml:space="preserve"><value>推送</value></data>
+  <data name="Files_PushHelp" xml:space="preserve"><value>目标：树中选中的目录 > 选中文件的父目录 > 根目录。文件夹会整个拷入目标下。</value></data>
+  <data name="Files_PullTitle" xml:space="preserve"><value>拉取到本机</value></data>
+  <data name="Files_PullTargetHint" xml:space="preserve"><value>拉取对象：树中选中项（未选中则拉取根路径）；双击文件可直接拉取</value></data>
+  <data name="Files_LocalDirLabel" xml:space="preserve"><value>本机保存目录</value></data>
+  <data name="Files_Pull" xml:space="preserve"><value>拉取</value></data>
+  <data name="Files_OpenFolder" xml:space="preserve"><value>打开文件夹</value></data>
+  <data name="Files_DirOpsTitle" xml:space="preserve"><value>目录操作</value></data>
+  <data name="Files_CreateDir" xml:space="preserve"><value>新建</value></data>
+  <data name="Files_CreateDirHelp" xml:space="preserve"><value>在选中目录（或选中文件的父目录）下创建。</value></data>
+  <data name="Files_DeleteSelected" xml:space="preserve"><value>删除选中项（递归）</value></data>
+  <data name="Files_SelectedFormat" xml:space="preserve"><value>已选中：{0}</value></data>
+  <data name="Files_AutoLoadHint" xml:space="preserve"><value>展开目录将自动加载子项</value></data>
+  <data name="Files_PathMustStartSlash" xml:space="preserve"><value>路径需以 / 开头，例如 /</value></data>
+  <data name="Files_LoadingFormat" xml:space="preserve"><value>正在加载 {0} ...</value></data>
+  <data name="Files_LoadedCountFormat" xml:space="preserve"><value>{0} — {1} 项</value></data>
+  <data name="Files_ReadFailedFormat" xml:space="preserve"><value>读取 {0} 失败：{1}</value></data>
+  <data name="Files_ReadingFormat" xml:space="preserve"><value>正在读取 {0} ...</value></data>
+  <data name="Files_NotExpandableFormat" xml:space="preserve"><value>{0} 不可展开（可能指向文件或需要 root）</value></data>
+  <data name="Files_EnterDirName" xml:space="preserve"><value>请填写新目录名</value></data>
+  <data name="Files_CreateFailedFormat" xml:space="preserve"><value>创建失败：{0}</value></data>
+  <data name="Files_CreatedFormat" xml:space="preserve"><value>已创建 {0}</value></data>
+  <data name="Files_SelectDeleteTarget" xml:space="preserve"><value>请先在树中选中要删除的项</value></data>
+  <data name="Files_NodeKindDir" xml:space="preserve"><value>目录</value></data>
+  <data name="Files_NodeKindFile" xml:space="preserve"><value>文件</value></data>
+  <data name="Files_DeleteConfirmFormat" xml:space="preserve"><value>确定删除 {0} {1} 吗？（目录会递归删除）</value></data>
+  <data name="Files_DeleteConfirmCaption" xml:space="preserve"><value>删除确认</value></data>
+  <data name="Files_DeleteFailedFormat" xml:space="preserve"><value>删除失败：{0}</value></data>
+  <data name="Files_DeletedFormat" xml:space="preserve"><value>已删除 {0}</value></data>
+  <data name="Files_EnterValidLocalPath" xml:space="preserve"><value>请填写有效的本地文件/文件夹路径</value></data>
+  <data name="Files_PushingFormat" xml:space="preserve"><value>正在推送 {0} → {1} ...</value></data>
+  <data name="Files_PushFailedFormat" xml:space="preserve"><value>推送失败：{0}</value></data>
+  <data name="Files_PushDoneFormat" xml:space="preserve"><value>推送完成 → {0}</value></data>
+  <data name="Files_FolderPickerMarker" xml:space="preserve"><value>打开此文件夹</value></data>
+  <data name="Files_PickPushFolder" xml:space="preserve"><value>选择要推送的文件夹（进入文件夹后点“打开”）</value></data>
+  <data name="Files_NoFolderPicked" xml:space="preserve"><value>未选择文件夹</value></data>
+  <data name="Files_PickPushFileTitle" xml:space="preserve"><value>选择要推送的文件</value></data>
+  <data name="Files_SelectPullTarget" xml:space="preserve"><value>请先在树中选中要拉取的项</value></data>
+  <data name="Files_SaveAsTitle" xml:space="preserve"><value>保存文件到本机</value></data>
+  <data name="Files_PullingFormat" xml:space="preserve"><value>正在拉取 {0} ...</value></data>
+  <data name="Files_PulledToFormat" xml:space="preserve"><value>已拉取到 {0}</value></data>
+  <data name="Files_PullFailedFormat" xml:space="preserve"><value>拉取失败：{0}</value></data>
+  <data name="Files_PickSaveFolder" xml:space="preserve"><value>选择保存位置（进入目标文件夹后点“打开”）</value></data>
+  <data name="Files_NoSaveFolderPicked" xml:space="preserve"><value>未选择保存位置</value></data>
+  <data name="Files_NewDirCaption" xml:space="preserve"><value>新建文件夹</value></data>
+  <data name="Files_NewDirPromptFormat" xml:space="preserve"><value>将在 {0} 下创建：</value></data>
+  <data name="Files_NewDirDefaultName" xml:space="preserve"><value>新建文件夹</value></data>
+  <data name="Files_SelectNodeFirst" xml:space="preserve"><value>请先选中节点</value></data>
+  <data name="Files_Loading" xml:space="preserve"><value>加载中…</value></data>
+  <!-- ============ 更多工具 ============ -->
+  <data name="More_ImeTitle" xml:space="preserve"><value>输入法切换</value></data>
+  <data name="More_ImeSwitch" xml:space="preserve"><value>切换</value></data>
+  <data name="More_ImeSwitchedFormat" xml:space="preserve"><value>输入法已切换：{0}</value></data>
+  <data name="More_ImeCountFormat" xml:space="preserve"><value>共 {0} 个输入法</value></data>
+  <data name="More_NotifyTitle" xml:space="preserve"><value>通知测试器</value></data>
+  <data name="More_NotifyLabelTitle" xml:space="preserve"><value>标题</value></data>
+  <data name="More_NotifySend" xml:space="preserve"><value>发送测试通知</value></data>
+  <data name="More_NotifyView" xml:space="preserve"><value>查看通知列表</value></data>
+  <data name="More_NotifySent" xml:space="preserve"><value>测试通知已发送</value></data>
+  <data name="More_NotifyFailedFormat" xml:space="preserve"><value>失败（需 Android 10+）：{0}</value></data>
+  <data name="More_NotifyDefaultTitle" xml:space="preserve"><value>测试通知</value></data>
+  <data name="More_NotifyDefaultContent" xml:space="preserve"><value>来自 AdbToolkit 的测试通知</value></data>
+  <data name="More_TruncatedSuffix" xml:space="preserve"><value>
+...(已截断)</value></data>
+  <data name="More_ProxyTitle" xml:space="preserve"><value>设备全局代理</value></data>
+  <data name="More_ProxyCurrentFormat" xml:space="preserve"><value>当前：{0}</value></data>
+  <data name="More_ProxyNotSet" xml:space="preserve"><value>（未设置）</value></data>
+  <data name="More_ProxySet" xml:space="preserve"><value>设置代理</value></data>
+  <data name="More_ProxyClear" xml:space="preserve"><value>清除代理</value></data>
+  <data name="More_ProxySetFormat" xml:space="preserve"><value>代理已设置：{0}</value></data>
+  <data name="More_ProxyCleared" xml:space="preserve"><value>代理已清除</value></data>
+  <data name="More_ProxyHelp" xml:space="preserve"><value>配合 PC 抓包工具使用，例如 192.168.1.100:8888。</value></data>
+  <data name="More_UsersTitle" xml:space="preserve"><value>多用户调试</value></data>
+  <data name="More_UserDeleteSelected" xml:space="preserve"><value>删除选中</value></data>
+  <data name="More_UserCreate" xml:space="preserve"><value>创建</value></data>
+  <data name="More_UserRefreshList" xml:space="preserve"><value>刷新用户列表</value></data>
+  <data name="More_UserRemovedFormat" xml:space="preserve"><value>已删除用户 {0}</value></data>
+  <data name="More_UserCurrentSuffix" xml:space="preserve"><value>  ← 当前</value></data>
+  <data name="More_UsersParseFailed" xml:space="preserve"><value>（未能解析用户列表）</value></data>
+  <data name="More_PermTitle" xml:space="preserve"><value>运行时权限授予 / 撤销</value></data>
+  <data name="More_PermGrant" xml:space="preserve"><value>授予 grant</value></data>
+  <data name="More_PermRevoke" xml:space="preserve"><value>撤销 revoke</value></data>
+  <data name="More_PermGrantedFormat" xml:space="preserve"><value>已授予 {0} → {1}</value></data>
+  <data name="More_PermRevokedFormat" xml:space="preserve"><value>已撤销 {0} → {1}</value></data>
+  <data name="More_PermHelp" xml:space="preserve"><value>示例包名 com.example.app，权限 android.permission.CAMERA。</value></data>
+  <data name="More_BugreportTitle" xml:space="preserve"><value>Bugreport 采集</value></data>
+  <data name="More_BugreportCollect" xml:space="preserve"><value>一键采集（1-3 分钟）</value></data>
+  <data name="More_BugreportOpenFolder" xml:space="preserve"><value>打开保存目录</value></data>
+  <data name="More_BugreportRunning" xml:space="preserve"><value>正在采集 Bugreport（约 1-3 分钟，请保持连接）...</value></data>
+  <data name="More_BugreportSavedFormat" xml:space="preserve"><value>Bugreport 已保存：{0}</value></data>
+  <data name="More_BugreportFailedFormat" xml:space="preserve"><value>采集失败：{0}</value></data>
+  <data name="More_ServerTitle" xml:space="preserve"><value>ADB Server 管理</value></data>
+  <data name="More_ServerHelp" xml:space="preserve"><value>设备持续 offline 时可尝试重启 server；多个工具争用 5037 端口也会导致离线。</value></data>
+  <data name="More_ServerKilled" xml:space="preserve"><value>adb server 已停止</value></data>
+  <data name="More_ServerStarted" xml:space="preserve"><value>adb server 已启动</value></data>
+  <data name="More_SideloadTitle" xml:space="preserve"><value>Sideload 刷 OTA（高危）</value></data>
+  <data name="More_SideloadPick" xml:space="preserve"><value>选择...</value></data>
+  <data name="More_SideloadRun" xml:space="preserve"><value>重启到 Sideload 并推送</value></data>
+  <data name="More_PickValidOta" xml:space="preserve"><value>请选择有效的 OTA zip 包</value></data>
+  <data name="More_SideloadConfirm" xml:space="preserve"><value>将重启设备到 Sideload 模式并推送 OTA 包。确认继续？</value></data>
+  <data name="More_RebootFailedFormat" xml:space="preserve"><value>重启失败：{0}</value></data>
+  <data name="More_WaitingSideload" xml:space="preserve"><value>等待设备进入 Sideload 模式...</value></data>
+  <data name="More_SideloadPushing" xml:space="preserve"><value>正在推送 OTA 包（进度请看设备屏幕）...</value></data>
+  <data name="More_SideloadDone" xml:space="preserve"><value>OTA 推送完成</value></data>
+  <data name="More_SideloadFailedFormat" xml:space="preserve"><value>Sideload 失败：{0}</value></data>
+  <data name="More_DeviceLogTitle" xml:space="preserve"><value>设备端后台日志（拔线采集）</value></data>
+  <data name="More_DeviceLogStart" xml:space="preserve"><value>启动</value></data>
+  <data name="More_DeviceLogPull" xml:space="preserve"><value>拉取日志</value></data>
+  <data name="More_DeviceLogHelp" xml:space="preserve"><value>在设备上以 nohup 方式后台写 /sdcard/adbtoolkit_logcat.txt，适合老化测试、拔线长跑场景，回到 PC 后一键拉取。</value></data>
+  <data name="More_DeviceLogStarted" xml:space="preserve"><value>设备端后台日志已启动（拔线也能继续采集）</value></data>
+  <data name="More_DeviceLogStopped" xml:space="preserve"><value>设备端后台日志已停止，可点击「拉取日志」</value></data>
+  <data name="More_DeviceLogPulledFormat" xml:space="preserve"><value>日志已拉取：{0}</value></data>
+  <data name="More_Ready" xml:space="preserve"><value>就绪</value></data>
+  <data name="More_PickOtaTitle" xml:space="preserve"><value>选择 OTA zip 包</value></data>
+  <data name="More_OtaFilter" xml:space="preserve"><value>OTA 包 (*.zip)|*.zip|所有文件 (*.*)|*.*</value></data>
+  <!-- ============ 性能诊断 ============ -->
+  <data name="Perf_DeviceInfoTitle" xml:space="preserve"><value>设备信息全景</value></data>
+  <data name="Perf_AutoRefresh" xml:space="preserve"><value>自动刷新</value></data>
+  <data name="Perf_BatteryTitle" xml:space="preserve"><value>电量面板</value></data>
+  <data name="Perf_VirtualLevel" xml:space="preserve"><value>模拟电量</value></data>
+  <data name="Perf_Set" xml:space="preserve"><value>设置</value></data>
+  <data name="Perf_Unplug" xml:space="preserve"><value>拔出模拟</value></data>
+  <data name="Perf_Reset" xml:space="preserve"><value>恢复真实</value></data>
+  <data name="Perf_AutoRefresh3s" xml:space="preserve"><value>自动刷新（3 秒）</value></data>
+  <data name="Perf_HardwareTitle" xml:space="preserve"><value>硬件状态（CPU/GPU 频率 · 温度）</value></data>
+  <data name="Perf_CpuFreq" xml:space="preserve"><value>CPU 频率</value></data>
+  <data name="Perf_GpuFreq" xml:space="preserve"><value>GPU / devfreq</value></data>
+  <data name="Perf_Thermal" xml:space="preserve"><value>温度（thermal zones）</value></data>
+  <data name="Perf_AppDetailTitle" xml:space="preserve"><value>应用详情</value></data>
+  <data name="Perf_Fetch" xml:space="preserve"><value>获取</value></data>
+  <data name="Perf_MemTitle" xml:space="preserve"><value>内存分析</value></data>
+  <data name="Perf_StartupTitle" xml:space="preserve"><value>启动时间（am start -W）</value></data>
+  <data name="Perf_StartTest" xml:space="preserve"><value>开始测试</value></data>
+  <data name="Perf_TestCount" xml:space="preserve"><value>测试次数</value></data>
+  <data name="Perf_GfxTitle" xml:space="preserve"><value>卡顿分析（gfxinfo）</value></data>
+  <data name="Perf_DropBoxTitle" xml:space="preserve"><value>崩溃 / ANR 历史（DropBox）</value></data>
+  <data name="Perf_ViewLatestLog" xml:space="preserve"><value>查看该类型最新日志</value></data>
+  <data name="Perf_DevModelFormat" xml:space="preserve"><value>机型：        {0}（{1} / {2}）</value></data>
+  <data name="Perf_DevCodenameFormat" xml:space="preserve"><value>设备代号：    {0}（{1}）</value></data>
+  <data name="Perf_DevAndroidFormat" xml:space="preserve"><value>Android 版本：{0}（SDK {1}）</value></data>
+  <data name="Perf_DevBuildIdFormat" xml:space="preserve"><value>系统版本号：  {0}</value></data>
+  <data name="Perf_DevBuildFormat" xml:space="preserve"><value>构建：        {0} · {1}</value></data>
+  <data name="Perf_DevSerialFormat" xml:space="preserve"><value>序列号：      {0}</value></data>
+  <data name="Perf_DevBootloaderFormat" xml:space="preserve"><value>引导程序：    {0}</value></data>
+  <data name="Perf_DevSocFormat" xml:space="preserve"><value>SoC：         {0} / {1}</value></data>
+  <data name="Perf_DevAbiFormat" xml:space="preserve"><value>ABI 列表：    {0}</value></data>
+  <data name="Perf_DevKernelFormat" xml:space="preserve"><value>内核：        {0}</value></data>
+  <data name="Perf_DevPatchFormat" xml:space="preserve"><value>安全补丁：    {0}</value></data>
+  <data name="Perf_ResolutionLabel" xml:space="preserve"><value>屏幕分辨率</value></data>
+  <data name="Perf_DensityNone" xml:space="preserve"><value>屏幕密度：    —</value></data>
+  <data name="Perf_DensityFormat" xml:space="preserve"><value>屏幕密度：    {0} dpi（{1} 档）</value></data>
+  <data name="Perf_DensityOverriddenFormat" xml:space="preserve"><value>，已由开发者选项覆盖（物理 {0}）</value></data>
+  <data name="Perf_DevIpFormat" xml:space="preserve"><value>IP 地址：     {0}</value></data>
+  <data name="Perf_DevMemFormat" xml:space="preserve"><value>内存总量：    {0}</value></data>
+  <data name="Perf_DevBatteryFormat" xml:space="preserve"><value>电池电量：    {0}</value></data>
+  <data name="Perf_DevLowRamFormat" xml:space="preserve"><value>低内存设备：  {0}</value></data>
+  <data name="Perf_DevHeapFormat" xml:space="preserve"><value>Java 堆：     增长上限 {0} / 最大 {1}</value></data>
+  <data name="Perf_DevStorageFormat" xml:space="preserve"><value>存储：        {0}</value></data>
+  <data name="Perf_DeviceInfoLoaded" xml:space="preserve"><value>设备信息已加载</value></data>
+  <data name="Perf_EnterPackage" xml:space="preserve"><value>请填写要查询的包名</value></data>
+  <data name="Perf_QueryingFormat" xml:space="preserve"><value>正在查询 {0} ...</value></data>
+  <data name="Perf_AppNotFoundFormat" xml:space="preserve"><value>未找到应用 {0}（请检查包名，或应用未安装）</value></data>
+  <data name="Perf_QueryFailedNotFound" xml:space="preserve"><value>查询失败：应用不存在</value></data>
+  <data name="Perf_PermsHeaderFormat" xml:space="preserve"><value>权限（{0}）：</value></data>
+  <data name="Perf_DetailLoadedFormat" xml:space="preserve"><value>{0} 详情已加载</value></data>
+  <data name="Perf_BattCharging" xml:space="preserve"><value>充电中</value></data>
+  <data name="Perf_BattDischarging" xml:space="preserve"><value>放电中</value></data>
+  <data name="Perf_BattNotCharging" xml:space="preserve"><value>未充电</value></data>
+  <data name="Perf_BattFull" xml:space="preserve"><value>已充满</value></data>
+  <data name="Perf_BattGood" xml:space="preserve"><value>良好</value></data>
+  <data name="Perf_BattOverheat" xml:space="preserve"><value>过热</value></data>
+  <data name="Perf_BattDead" xml:space="preserve"><value>已损坏</value></data>
+  <data name="Perf_BattOverVoltage" xml:space="preserve"><value>过压</value></data>
+  <data name="Perf_BattCold" xml:space="preserve"><value>过冷</value></data>
+  <data name="Perf_BattNotPlugged" xml:space="preserve"><value>未插入</value></data>
+  <data name="Perf_BattWireless" xml:space="preserve"><value>无线</value></data>
+  <data name="Perf_BattLine1Format" xml:space="preserve"><value>电量：{0}%   状态：{1}   插入方式：{2}</value></data>
+  <data name="Perf_BattLine2Format" xml:space="preserve"><value>健康度：{0}   温度：{1}   电压：{2} mV</value></data>
+  <data name="Perf_BattLine3Format" xml:space="preserve"><value>电池技术：{0}   Charge counter：{1}</value></data>
+  <data name="Perf_BattSimulatedFormat" xml:space="preserve"><value>已模拟电量 {0}%（dumpsys battery reset 恢复）</value></data>
+  <data name="Perf_BattReset" xml:space="preserve"><value>电量模拟已重置</value></data>
+  <data name="Perf_MemLoadedFormat" xml:space="preserve"><value>已获取 {0} 内存信息</value></data>
+  <data name="Perf_EnterComponent" xml:space="preserve"><value>请填写组件，例如 com.android.settings/.Settings</value></data>
+  <data name="Perf_TryFormat" xml:space="preserve"><value>第 {0} 次：{1} ms</value></data>
+  <data name="Perf_TryFailedFormat" xml:space="preserve"><value>第 {0} 次：失败（{1}）</value></data>
+  <data name="Perf_TrySummaryFormat" xml:space="preserve"><value>—— 平均 {0:F0} ms / 最快 {1} ms / 最慢 {2} ms ——</value></data>
+  <data name="Perf_StartupDone" xml:space="preserve"><value>启动时间测试完成</value></data>
+  <data name="Perf_GfxResultFormat" xml:space="preserve"><value>总帧数：{0}
+卡顿帧：{1}（{2}%）</value></data>
+  <data name="Perf_GfxLoaded" xml:space="preserve"><value>帧率数据已获取（建议先操作目标应用产生帧数据）</value></data>
+  <data name="Perf_CpuFreqFormat" xml:space="preserve"><value>{0}：当前 {1} / 上限 {2}</value></data>
+  <data name="Perf_DropBoxCountFormat" xml:space="preserve"><value>DropBox 共 {0} 条，显示最近 {1} 条</value></data>
+  <data name="Perf_SelectDropBoxFirst" xml:space="preserve"><value>请先选中一条记录</value></data>
+  <data name="Perf_DropBoxLoadedFormat" xml:space="preserve"><value>已加载 {0} 最新一条（时间戳可能多于所选）</value></data>
+  <!-- ============ 屏幕与输入 ============ -->
+  <data name="Screen_ShotRecordTitle" xml:space="preserve"><value>截图 / 录屏</value></data>
+  <data name="Screen_Screenshot" xml:space="preserve"><value>截图</value></data>
+  <data name="Screen_Bitrate" xml:space="preserve"><value>码率(Mbps)</value></data>
+  <data name="Screen_TimeLimit" xml:space="preserve"><value>时长(s)</value></data>
+  <data name="Screen_Resolution" xml:space="preserve"><value>分辨率</value></data>
+  <data name="Screen_RecordStart" xml:space="preserve"><value>开始录屏</value></data>
+  <data name="Screen_RecordStop" xml:space="preserve"><value>停止并拉取</value></data>
+  <data name="Screen_RecordLimitHint" xml:space="preserve"><value>最长 3 分钟（adb 限制）</value></data>
+  <data name="Screen_QuickKeysTitle" xml:space="preserve"><value>快捷键面板</value></data>
+  <data name="Screen_KeyboardForwardTitle" xml:space="preserve"><value>键盘透传（PC → 设备）</value></data>
+  <data name="Screen_KeyboardForwardHelp" xml:space="preserve"><value>打开键盘窗口并点击获得焦点后，PC 键盘的打字（input text 批量发送）、回车/方向键等系统键（keyevent）、Ctrl/Alt 组合（keycombination，Android 11+）都会实时转发到当前选中的设备；长按自动重复，快速打字自动合并。</value></data>
+  <data name="Screen_OpenKeyboardWindow" xml:space="preserve"><value>打开键盘窗口</value></data>
+  <data name="Screen_TextInjectTitle" xml:space="preserve"><value>文本注入</value></data>
+  <data name="Screen_SendText" xml:space="preserve"><value>发送文本</value></data>
+  <data name="Screen_EnterKey" xml:space="preserve"><value>回车键</value></data>
+  <data name="Screen_TextInjectHelp" xml:space="preserve"><value>仅支持 ASCII；中文请借助设备端剪贴板粘贴，或后续接入自研 IME。</value></data>
+  <data name="Screen_TapSwipeTitle" xml:space="preserve"><value>坐标点击 / 滑动</value></data>
+  <data name="Screen_TapX" xml:space="preserve"><value>点击 X</value></data>
+  <data name="Screen_Tap" xml:space="preserve"><value>点击</value></data>
+  <data name="Screen_StartPoint" xml:space="preserve"><value>起点</value></data>
+  <data name="Screen_EndPoint" xml:space="preserve"><value>→ 终点</value></data>
+  <data name="Screen_Swipe" xml:space="preserve"><value>滑动</value></data>
+  <data name="Screen_UiDumpTitle" xml:space="preserve"><value>UI 层级 dump</value></data>
+  <data name="Screen_UiDumpButton" xml:space="preserve"><value>dump 当前界面到本机</value></data>
+  <data name="Screen_UiDumpHelp" xml:space="preserve"><value>uiautomator dump → 拉取 XML，可用于自动化元素定位。dump 时界面需保持静止。</value></data>
+  <data name="Screen_MonkeyTitle" xml:space="preserve"><value>Monkey 压力测试</value></data>
+  <data name="Screen_EventCount" xml:space="preserve"><value>事件数</value></data>
+  <data name="Screen_Throttle" xml:space="preserve"><value>节流ms</value></data>
+  <data name="Screen_KeyWake" xml:space="preserve"><value>亮屏</value></data>
+  <data name="Screen_KeySleep" xml:space="preserve"><value>灭屏</value></data>
+  <data name="Screen_KeyPower" xml:space="preserve"><value>电源</value></data>
+  <data name="Screen_KeyBack" xml:space="preserve"><value>返回</value></data>
+  <data name="Screen_KeyHome" xml:space="preserve"><value>主页</value></data>
+  <data name="Screen_KeyMenu" xml:space="preserve"><value>菜单</value></data>
+  <data name="Screen_KeyVolUp" xml:space="preserve"><value>音量+</value></data>
+  <data name="Screen_KeyVolDown" xml:space="preserve"><value>音量-</value></data>
+  <data name="Screen_KeyMute" xml:space="preserve"><value>静音</value></data>
+  <data name="Screen_KeyScreenshot" xml:space="preserve"><value>截屏键</value></data>
+  <data name="Screen_KeyUnlock" xml:space="preserve"><value>解锁</value></data>
+  <data name="Screen_KeyExpandNotify" xml:space="preserve"><value>下拉通知</value></data>
+  <data name="Screen_KeyCollapsePanel" xml:space="preserve"><value>收起面板</value></data>
+  <data name="Screen_DefaultSize" xml:space="preserve"><value>（默认）</value></data>
+  <data name="Screen_ExecutedFormat" xml:space="preserve"><value>已执行：{0}</value></data>
+  <data name="Screen_ExecFailedFormat" xml:space="preserve"><value>执行失败：{0}</value></data>
+  <data name="Screen_TakingShot" xml:space="preserve"><value>正在截图...</value></data>
+  <data name="Screen_RecordingFormat" xml:space="preserve"><value>录屏中（最长 {0}s）... 点击「停止」结束并拉取</value></data>
+  <data name="Screen_PullingRecord" xml:space="preserve"><value>正在拉取录像...</value></data>
+  <data name="Screen_RecordSavedFormat" xml:space="preserve"><value>录像已保存：{0}</value></data>
+  <data name="Screen_TextAsciiOnly" xml:space="preserve"><value>提示：input text 不支持中文，请输入 ASCII 文本（中文可借助设备端剪贴板粘贴）</value></data>
+  <data name="Screen_TextInjected" xml:space="preserve"><value>文本已注入</value></data>
+  <data name="Screen_UiDumping" xml:space="preserve"><value>正在 dump UI 层级（请保持界面静止）...</value></data>
+  <data name="Screen_UiDumpFailedFormat" xml:space="preserve"><value>dump 失败：{0}</value></data>
+  <data name="Screen_UiDumpSavedFormat" xml:space="preserve"><value>UI 层级已保存：{0}</value></data>
+  <data name="Screen_EnterMonkeyPkg" xml:space="preserve"><value>请填写 Monkey 目标包名</value></data>
+  <data name="Screen_MonkeyDone" xml:space="preserve"><value>Monkey 测试完成，未崩溃</value></data>
+  <data name="Screen_MonkeyEndedFormat" xml:space="preserve"><value>Monkey 已结束（code {0}），建议查看 crash 日志</value></data>
+  <data name="Screen_MonkeyRunningFormat" xml:space="preserve"><value>Monkey 运行中（{0}，{1} 事件）...</value></data>
+  <data name="Screen_MonkeyStopped" xml:space="preserve"><value>Monkey 已手动停止</value></data>
+  <!-- ============ 系统调试：Settings 快捷入口 ============ -->
+  <data name="SysDbg_Set_SettingsHome" xml:space="preserve"><value>设置主页</value></data>
+  <data name="SysDbg_Set_SystemUpdate" xml:space="preserve"><value>系统更新</value></data>
+  <data name="SysDbg_Set_AboutPhone" xml:space="preserve"><value>关于手机</value></data>
+  <data name="SysDbg_Set_DeviceName" xml:space="preserve"><value>设备名称</value></data>
+  <data name="SysDbg_Set_DevOptions" xml:space="preserve"><value>开发者选项</value></data>
+  <data name="SysDbg_Set_BackupReset" xml:space="preserve"><value>备份与重置</value></data>
+  <data name="SysDbg_Set_MultiUser" xml:space="preserve"><value>多用户</value></data>
+  <data name="SysDbg_Set_Storage" xml:space="preserve"><value>存储空间</value></data>
+  <data name="SysDbg_Set_Battery" xml:space="preserve"><value>电池</value></data>
+  <data name="SysDbg_Set_BatteryOpt" xml:space="preserve"><value>电池优化</value></data>
+  <data name="SysDbg_Set_AppManager" xml:space="preserve"><value>应用管理</value></data>
+  <data name="SysDbg_Set_AllAppsRunning" xml:space="preserve"><value>全部应用（运行中）</value></data>
+  <data name="SysDbg_Set_DefaultApps" xml:space="preserve"><value>默认应用</value></data>
+  <data name="SysDbg_Set_PermissionManager" xml:space="preserve"><value>权限管理器</value></data>
+  <data name="SysDbg_Set_SpecialAccess" xml:space="preserve"><value>特殊应用访问</value></data>
+  <data name="SysDbg_Set_UsageAccess" xml:space="preserve"><value>使用情况访问</value></data>
+  <data name="SysDbg_Set_NotificationAccess" xml:space="preserve"><value>通知使用权</value></data>
+  <data name="SysDbg_Set_UnknownSources" xml:space="preserve"><value>未知来源安装</value></data>
+  <data name="SysDbg_Set_WebView" xml:space="preserve"><value>WebView 实现</value></data>
+  <data name="SysDbg_Set_Pip" xml:space="preserve"><value>画中画</value></data>
+  <data name="SysDbg_Set_WlanAdvanced" xml:space="preserve"><value>WLAN 高级</value></data>
+  <data name="SysDbg_Set_Bluetooth" xml:space="preserve"><value>蓝牙</value></data>
+  <data name="SysDbg_Set_Location" xml:space="preserve"><value>位置信息</value></data>
+  <data name="SysDbg_Set_AirplaneMode" xml:space="preserve"><value>飞行模式</value></data>
+  <data name="SysDbg_Set_DataUsage" xml:space="preserve"><value>流量使用</value></data>
+  <data name="SysDbg_Set_MobileNetwork" xml:space="preserve"><value>移动网络</value></data>
+  <data name="SysDbg_Set_DataRoaming" xml:space="preserve"><value>数据漫游</value></data>
+  <data name="SysDbg_Set_Apn" xml:space="preserve"><value>APN 接入点</value></data>
+  <data name="SysDbg_Set_Hotspot" xml:space="preserve"><value>热点与共享</value></data>
+  <data name="SysDbg_Set_Cast" xml:space="preserve"><value>投屏</value></data>
+  <data name="SysDbg_Set_SimCard" xml:space="preserve"><value>SIM 卡</value></data>
+  <data name="SysDbg_Set_Display" xml:space="preserve"><value>显示</value></data>
+  <data name="SysDbg_Set_NightMode" xml:space="preserve"><value>夜间模式</value></data>
+  <data name="SysDbg_Set_Sound" xml:space="preserve"><value>声音</value></data>
+  <data name="SysDbg_Set_DoNotDisturb" xml:space="preserve"><value>免打扰</value></data>
+  <data name="SysDbg_Set_DateTime" xml:space="preserve"><value>日期和时间</value></data>
+  <data name="SysDbg_Set_Locale" xml:space="preserve"><value>语言区域</value></data>
+  <data name="SysDbg_Set_LangInput" xml:space="preserve"><value>语言和输入法</value></data>
+  <data name="SysDbg_Set_PhysicalKeyboard" xml:space="preserve"><value>实体键盘</value></data>
+  <data name="SysDbg_Set_UserDictionary" xml:space="preserve"><value>用户词典</value></data>
+  <data name="SysDbg_Set_VoiceInput" xml:space="preserve"><value>语音输入</value></data>
+  <data name="SysDbg_Set_Security" xml:space="preserve"><value>安全</value></data>
+  <data name="SysDbg_Set_TrustedCerts" xml:space="preserve"><value>受信任的凭据</value></data>
+  <data name="SysDbg_Set_Accessibility" xml:space="preserve"><value>辅助功能</value></data>
+  <data name="SysDbg_Set_Captioning" xml:space="preserve"><value>字幕</value></data>
+  <data name="SysDbg_Set_ScreenSaver" xml:space="preserve"><value>屏保</value></data>
+  <data name="SysDbg_Set_Wallpaper" xml:space="preserve"><value>壁纸</value></data>
+  <data name="SysDbg_Set_Dock" xml:space="preserve"><value>底座</value></data>
+  <data name="SysDbg_Set_Home" xml:space="preserve"><value>主屏幕</value></data>
+  <data name="SysDbg_Set_SearchAssistant" xml:space="preserve"><value>搜索助手</value></data>
+  <data name="SysDbg_Set_AccountsSync" xml:space="preserve"><value>账号与同步</value></data>
+  <data name="SysDbg_Set_AddAccount" xml:space="preserve"><value>添加账号</value></data>
+  <data name="SysDbg_Set_FactoryReset" xml:space="preserve"><value>恢复出厂</value></data>
+  <!-- ============ 系统调试：预设 ============ -->
+  <data name="SysDbg_PresetAnimZeroLabel" xml:space="preserve"><value>动画归零</value></data>
+  <data name="SysDbg_PresetAnimZeroDesc" xml:space="preserve"><value>关闭三类动画，提速调试</value></data>
+  <data name="SysDbg_PresetAnimRestoreLabel" xml:space="preserve"><value>动画恢复</value></data>
+  <data name="SysDbg_PresetAnimRestoreDesc" xml:space="preserve"><value>恢复三类动画为 1</value></data>
+  <data name="SysDbg_PresetStayAwakeOnLabel" xml:space="preserve"><value>充电保持唤醒</value></data>
+  <data name="SysDbg_PresetStayAwakeOnDesc" xml:space="preserve"><value>插电时不锁屏休眠</value></data>
+  <data name="SysDbg_PresetStayAwakeOffLabel" xml:space="preserve"><value>取消保持唤醒</value></data>
+  <data name="SysDbg_PresetStayAwakeOffDesc" xml:space="preserve"><value>恢复默认休眠策略</value></data>
+  <data name="SysDbg_PresetFreeformLabel" xml:space="preserve"><value>自由窗口</value></data>
+  <data name="SysDbg_PresetFreeformDesc" xml:space="preserve"><value>启用自由窗口多窗口 + 强制 Activity 可调大小</value></data>
+  <data name="SysDbg_PresetNtpLabel" xml:space="preserve"><value>NTP 服务器</value></data>
+  <data name="SysDbg_PresetNtpDesc" xml:space="preserve"><value>切换 NTP 为国内源（例）</value></data>
+  <data name="SysDbg_PresetLandscapeLabel" xml:space="preserve"><value>横屏</value></data>
+  <data name="SysDbg_PresetLandscapeDesc" xml:space="preserve"><value>强制横屏（user_rotation=1）</value></data>
+  <data name="SysDbg_PresetPortraitLabel" xml:space="preserve"><value>竖屏</value></data>
+  <data name="SysDbg_PresetPortraitDesc" xml:space="preserve"><value>强制竖屏（user_rotation=0）</value></data>
+  <data name="SysDbg_PresetDozeClockLabel" xml:space="preserve"><value>熄屏时钟常亮</value></data>
+  <data name="SysDbg_PresetDozeClockDesc" xml:space="preserve"><value>锁屏上显示时钟/通知</value></data>
+  <!-- ============ 系统调试：状态与弹窗 ============ -->
+  <data name="SysDbg_SettingWrittenFormat" xml:space="preserve"><value>已写入 {0} = {1}</value></data>
+  <data name="SysDbg_SettingDeletedFormat" xml:space="preserve"><value>已删除 {0}</value></data>
+  <data name="SysDbg_OpenedFormat" xml:space="preserve"><value>已打开：{0}</value></data>
+  <data name="SysDbg_EnterPackage" xml:space="preserve"><value>请输入包名</value></data>
+  <data name="SysDbg_SelinuxStateFormat" xml:space="preserve"><value>SELinux 状态：{0}</value></data>
+  <data name="SysDbg_SelinuxConfirm" xml:space="preserve"><value>修改 SELinux 状态可能带来安全风险，仅建议在调试机上使用。继续？</value></data>
+  <data name="SysDbg_ConfirmCaption" xml:space="preserve"><value>确认</value></data>
+  <data name="SysDbg_UnknownState" xml:space="preserve"><value>未知</value></data>
+  <data name="SysDbg_SelinuxSwitchedFormat" xml:space="preserve"><value>已切换 SELinux：{0}</value></data>
+  <data name="SysDbg_FailedRootFormat" xml:space="preserve"><value>执行失败（需要 root）：{0}</value></data>
+  <data name="SysDbg_FilteredByFormat" xml:space="preserve"><value>已按 {0} 过滤</value></data>
+  <data name="SysDbg_SelectPropFirst" xml:space="preserve"><value>请先选中一个属性</value></data>
+  <data name="SysDbg_ReadOnlyPropText" xml:space="preserve"><value>ro. 开头的属性是只读的，无法通过 setprop 修改。</value></data>
+  <data name="SysDbg_ReadOnlyPropCaption" xml:space="preserve"><value>只读属性</value></data>
+  <data name="SysDbg_ReadOnlyStatusFormat" xml:space="preserve"><value>{0} 为只读属性（ro. 前缀），无法修改</value></data>
+  <data name="SysDbg_SetpropFailedFormat" xml:space="preserve"><value>setprop 失败（可能需要 root）：{0}</value></data>
+  <data name="SysDbg_PropModifiedFormat" xml:space="preserve"><value>已修改 {0} = {1}</value></data>
+  <data name="SysDbg_PropNotAppliedFormat" xml:space="preserve"><value>已执行 setprop，但设备回读为 {0} = {1}（可能未生效）</value></data>
+  <data name="SysDbg_SettingsCountFormat" xml:space="preserve"><value>{0} 共 {1} 项，筛选后 {2} 项</value></data>
+  <data name="SysDbg_PropCountFormat" xml:space="preserve"><value>getprop 共 {0} 项</value></data>
+  <data name="SysDbg_IntentSent" xml:space="preserve"><value>Intent 已发送</value></data>
+  <data name="SysDbg_IntentFailed" xml:space="preserve"><value>Intent 发送失败</value></data>
+  <data name="SysDbg_ResultOkFormat" xml:space="preserve"><value>[OK] {0}</value></data>
+  <data name="SysDbg_ResultFailFormat" xml:space="preserve"><value>[失败] {0} → {1}</value></data>
+  <data name="SysDbg_PresetDoneFormat" xml:space="preserve"><value>预设「{0}」已执行</value></data>
+  <data name="SysDbg_PersistAdbConfirm" xml:space="preserve"><value>将以 root 重启 adbd 使 WiFi 调试端口持久化（需要已 root 的调试机）。继续？</value></data>
+  <data name="SysDbg_PersistAdbDoneFormat" xml:space="preserve"><value>已持久化 TCP {0}（重启设备后仍生效，需重新 adb connect）</value></data>
+  <data name="SysDbg_PstoreEmpty" xml:space="preserve"><value>（空）没有 pstore 文件，或需要 root 才能查看</value></data>
+  <data name="SysDbg_PstoreRefreshed" xml:space="preserve"><value>pstore 已刷新</value></data>
+  <data name="SysDbg_PstoreNothingToPull" xml:space="preserve"><value>没有可拉取的 pstore 文件（可能需要 root）</value></data>
+  <data name="SysDbg_PstorePulledFormat" xml:space="preserve"><value>
+
+已拉取 {0}/{1} 个文件到 {2}</value></data>
+  <data name="SysDbg_PstoreSavedFormat" xml:space="preserve"><value>内核恐慌日志已拉取到 {0}</value></data>
+  <data name="SysDbg_ReadFailedFormat" xml:space="preserve"><value>读取失败：{0}</value></data>
+  <data name="SysDbg_PropFileReadFormat" xml:space="preserve"><value>已读取 {0}（{1:N0} 字符）</value></data>
+  <data name="SysDbg_PropFileConfirm" xml:space="preserve"><value>修改 build.prop 可能导致设备无法开机，仅建议在调试机/root 机上操作。
+将执行：adb root → remount → 设备端备份 .bak → push 覆盖。继续？</value></data>
+  <data name="SysDbg_HighRiskCaption" xml:space="preserve"><value>高危操作确认</value></data>
+  <data name="SysDbg_BackupOk" xml:space="preserve"><value>OK</value></data>
+  <data name="SysDbg_BackupFailed" xml:space="preserve"><value>失败</value></data>
+  <data name="SysDbg_PropFileSavedFormat" xml:space="preserve"><value>已写入 {0}（设备端备份：{1} {2}）。建议重启设备验证。</value></data>
+  <data name="SysDbg_PropFileWriteFailedFormat" xml:space="preserve"><value>写入失败（需要 root + remount）：{0}</value></data>
+  <data name="SysDbg_CmdDone" xml:space="preserve"><value>命令执行完成</value></data>
+  <data name="SysDbg_CmdExitFormat" xml:space="preserve"><value>命令退出码 {0}</value></data>
+  <!-- ============ 系统调试：页面 ============ -->
+  <data name="SysDbg_TabSettings" xml:space="preserve"><value>系统设置</value></data>
+  <data name="SysDbg_TabProps" xml:space="preserve"><value>属性 getprop</value></data>
+  <data name="SysDbg_TabIntent" xml:space="preserve"><value>Intent 构造器</value></data>
+  <data name="SysDbg_TabSettingsPages" xml:space="preserve"><value>设置页面</value></data>
+  <data name="SysDbg_TabPresets" xml:space="preserve"><value>调试预设</value></data>
+  <data name="SysDbg_TabSelinux" xml:space="preserve"><value>SELinux / 高危</value></data>
+  <data name="SysDbg_TabTerminal" xml:space="preserve"><value>终端</value></data>
+  <data name="SysDbg_Key" xml:space="preserve"><value>键</value></data>
+  <data name="SysDbg_Value" xml:space="preserve"><value>值</value></data>
+  <data name="SysDbg_KeyName" xml:space="preserve"><value>键名</value></data>
+  <data name="SysDbg_SingleItemTitle" xml:space="preserve"><value>读写单项（get / put / delete）</value></data>
+  <data name="SysDbg_Read" xml:space="preserve"><value>读取</value></data>
+  <data name="SysDbg_Write" xml:space="preserve"><value>写入</value></data>
+  <data name="SysDbg_SettingsExample" xml:space="preserve"><value>示例：把 ntp_server 切到国内源 —— 键 ntp_server，值 cn.ntp.org.cn，命名空间 global。修改系统设置可能影响设备行为，请自行评估。</value></data>
+  <data name="SysDbg_PropHint" xml:space="preserve"><value>输入即时过滤属性名；Enter 采纳第一条提示，Esc 关闭提示；点击提示直接精确过滤。</value></data>
+  <data name="SysDbg_MenuEditValue" xml:space="preserve"><value>修改值...</value></data>
+  <data name="SysDbg_MenuCopyKey" xml:space="preserve"><value>复制属性名</value></data>
+  <data name="SysDbg_MenuCopyValue" xml:space="preserve"><value>复制值</value></data>
+  <data name="SysDbg_ColProp" xml:space="preserve"><value>属性</value></data>
+  <data name="SysDbg_CommonPropsTitle" xml:space="preserve"><value>常用属性快查</value></data>
+  <data name="SysDbg_PropHeapGrowth" xml:space="preserve"><value>dalvik.vm.heapgrowthlimit — 单应用堆上限</value></data>
+  <data name="SysDbg_PropHeapStart" xml:space="preserve"><value>dalvik.vm.heapstartsize — 初始堆大小</value></data>
+  <data name="SysDbg_PropHeapSize" xml:space="preserve"><value>dalvik.vm.heapsize — 虚拟机最大堆</value></data>
+  <data name="SysDbg_PropLowRam" xml:space="preserve"><value>ro.config.low_ram — 是否低内存设备</value></data>
+  <data name="SysDbg_PropUsbConfig" xml:space="preserve"><value>persist.sys.usb.config — USB 配置</value></data>
+  <data name="SysDbg_PropAdbPort" xml:space="preserve"><value>service.adb.tcp.port — 网络调试端口</value></data>
+  <data name="SysDbg_PropPatch" xml:space="preserve"><value>ro.build.version.security_patch — 安全补丁</value></data>
+  <data name="SysDbg_PropPlatform" xml:space="preserve"><value>ro.hardware / ro.board.platform — 平台</value></data>
+  <data name="SysDbg_PropSearchHint" xml:space="preserve"><value>在左侧搜索框输入关键字即可过滤，例如 heapgrowthlimit。</value></data>
+  <data name="SysDbg_IntentBuildTitle" xml:space="preserve"><value>构造 am start 参数</value></data>
+  <data name="SysDbg_IntentActionLabel" xml:space="preserve"><value>Action（如 android.intent.action.VIEW）</value></data>
+  <data name="SysDbg_IntentUriLabel" xml:space="preserve"><value>URI / Data（如 https://example.com/page）</value></data>
+  <data name="SysDbg_IntentComponentLabel" xml:space="preserve"><value>Component（如 com.android.settings/.Settings）</value></data>
+  <data name="SysDbg_IntentExtrasLabel" xml:space="preserve"><value>Extras（每行一条：类型:键=值，类型支持 es/ei/el/ez/eb）</value></data>
+  <data name="SysDbg_IntentSend" xml:space="preserve"><value>发送 Intent</value></data>
+  <data name="SysDbg_IntentOutputTitle" xml:space="preserve"><value>输出 / 广播用法</value></data>
+  <data name="SysDbg_IntentBroadcastHint" xml:space="preserve"><value>发广播示例（可在终端标签页执行）：am broadcast -a com.cnd.update.system
+启动服务：am startservice -n 包/服务名</value></data>
+  <data name="SysDbg_AppDetailsDirect" xml:space="preserve"><value>应用详情直达</value></data>
+  <data name="SysDbg_AppDetailsDirectHint" xml:space="preserve"><value>输入包名直达该应用详情页（权限 / 存储 / 卸载入口），例如 com.example.app。</value></data>
+  <data name="SysDbg_SecGeneral" xml:space="preserve"><value>系统与通用</value></data>
+  <data name="SysDbg_SecAppsPerms" xml:space="preserve"><value>应用与权限</value></data>
+  <data name="SysDbg_SecNetwork" xml:space="preserve"><value>网络与连接</value></data>
+  <data name="SysDbg_SecDevice" xml:space="preserve"><value>设备与显示</value></data>
+  <data name="SysDbg_SettingsPageHint" xml:space="preserve"><value>点击即在设备上打开对应设置页（am start -a android.settings.*），个别页面名称因 ROM 定制可能略有差异。</value></data>
+  <data name="SysDbg_PresetPanelTitle" xml:space="preserve"><value>一键预设开关（点击即执行）</value></data>
+  <data name="SysDbg_Run" xml:space="preserve"><value>执行</value></data>
+  <data name="SysDbg_RunResultTitle" xml:space="preserve"><value>执行结果</value></data>
+  <data name="SysDbg_SelinuxTitle" xml:space="preserve"><value>SELinux（需要 root）</value></data>
+  <data name="SysDbg_CurrentState" xml:space="preserve"><value>当前状态：</value></data>
+  <data name="SysDbg_View" xml:space="preserve"><value>查看</value></data>
+  <data name="SysDbg_PersistTitle" xml:space="preserve"><value>ADB 网络调试持久化（root）</value></data>
+  <data name="SysDbg_Port" xml:space="preserve"><value>端口</value></data>
+  <data name="SysDbg_PersistWrite" xml:space="preserve"><value>写入并重启 adbd</value></data>
+  <data name="SysDbg_PersistHelp" xml:space="preserve"><value>setprop service.adb.tcp.port + stop/start adbd，重启设备后 WiFi 调试端口依然生效（tcpip 方式重启即失效）。</value></data>
+  <data name="SysDbg_PstoreTitle" xml:space="preserve"><value>内核恐慌日志（pstore）</value></data>
+  <data name="SysDbg_PstoreView" xml:space="preserve"><value>查看 /sys/fs/pstore</value></data>
+  <data name="SysDbg_PstorePull" xml:space="preserve"><value>拉取全部到桌面</value></data>
+  <data name="SysDbg_PstoreHint" xml:space="preserve"><value>console-ramoops-* 是上次复位前的内核控制台日志，排查死机/重启必看。</value></data>
+  <data name="SysDbg_PropFileTitle" xml:space="preserve"><value>build.prop 查看 / 编辑（高危，需 root）</value></data>
+  <data name="SysDbg_PropFileSave" xml:space="preserve"><value>保存写回...</value></data>
+  <data name="DevMgr_SourceWindow" xml:space="preserve"><value>窗口</value></data>
+  <!-- ============ 首次运行引导 ============ -->
+  <data name="FirstRun_Title" xml:space="preserve"><value>欢迎使用 ADB 工具箱</value></data>
+  <data name="FirstRun_Heading" xml:space="preserve"><value>欢迎使用 卓匠 · ADB 工具箱</value></data>
+  <data name="FirstRun_Body" xml:space="preserve"><value>面向 Android / AOSP 开发者的 Windows 桌面工具，所有功能均通过本机 adb 与设备通信，不收集、不上传任何数据。</value></data>
+  <data name="FirstRun_StepAdb" xml:space="preserve"><value>① adb 环境</value></data>
+  <data name="FirstRun_AdbMissingHint" xml:space="preserve"><value>未检测到 adb 时，可在「设置」页手动指定 adb.exe 路径（如 D:\02.AndroidSdk\platform-tools\adb.exe）。</value></data>
+  <data name="FirstRun_StepTips" xml:space="preserve"><value>② 使用建议</value></data>
+  <data name="FirstRun_TipsText" xml:space="preserve"><value>· 插入设备后顶栏会自动出现，所有页面共用这个设备选择
+· 设置页可切换深色模式（重启生效）
+· 应用管理右键可提取 APK、查看任意应用的页面与权限</value></data>
+  <data name="FirstRun_GetStarted" xml:space="preserve"><value>开始使用</value></data>
+  <data name="FirstRun_AdbFoundFormat" xml:space="preserve"><value>✓ 已检测到 adb：{0}</value></data>
+  <data name="FirstRun_AdbNotFoundFormat" xml:space="preserve"><value>✗ 未检测到 adb（当前尝试：{0}）
+请先安装 Android SDK platform-tools，或到「设置」页手动指定 adb.exe 路径。</value></data>
+  <!-- ============ 属性编辑弹窗 ============ -->
+  <data name="PropEdit_Title" xml:space="preserve"><value>修改属性值</value></data>
+  <data name="PropEdit_NewValue" xml:space="preserve"><value>新值</value></data>
+  <data name="PropEdit_Warning" xml:space="preserve"><value>说明：setprop 需要 root 权限；ro. 开头的只读属性无法修改；非持久属性（无 persist 前缀）重启后会还原；修改系统属性可能影响设备行为。</value></data>
+  <!-- ============ 应用详情窗口 ============ -->
+  <data name="AppDetail_CopyHint" xml:space="preserve"><value>提示：全选（Ctrl+A）后 Ctrl+C 即可复制全部内容；文本框内右键也可复制选中文本</value></data>
+  <!-- ============ 键盘透传 ============ -->
+  <data name="Kb_Title" xml:space="preserve"><value>键盘透传（点击此窗口获得焦点后开始输入）</value></data>
+  <data name="Kb_UsageTitle" xml:space="preserve"><value>使用说明</value></data>
+  <data name="Kb_UsageText" xml:space="preserve"><value>· 点击本窗口任意位置获得焦点，按键即实时转发到主窗口顶部选中的设备
+· 打字（字母/数字/符号，含大小写）通过 input text 批量合并发送，长按自动重复
+· 回车 / 退格 / 方向键 / Tab / Esc / Home / End / PgUp / PgDn 通过 keyevent 发送
+· Ctrl / Alt + 按键通过 keycombination 发送（需 Android 11+，例如 Ctrl+A 全选、Ctrl+C 复制）
+· 中文无法通过 input text 输入（仅 ASCII），中文请用设备端剪贴板粘贴</value></data>
+  <data name="Kb_Waiting" xml:space="preserve"><value>等待按键…</value></data>
+  <data name="Kb_SelectDeviceInMain" xml:space="preserve"><value>请先在主窗口顶部选择设备</value></data>
+  <data name="Kb_NonAsciiHint" xml:space="preserve"><value>提示：中文等非 ASCII 字符无法通过 input text 输入，请使用设备端剪贴板粘贴</value></data>
+  <data name="Kb_SentFormat" xml:space="preserve"><value>已发送 {0} 项 · 设备 {1}</value></data>
+  <data name="Kb_SendFailedFormat" xml:space="preserve"><value>发送失败：{0}</value></data>
+  <!-- ============ 更新服务 ============ -->
+  <data name="Settings_UpdateUrlLabel" xml:space="preserve"><value>更新服务器（留空则自动检查 GitHub Releases；也可填写自定义版本描述 JSON 的 URL）</value></data>
+  <data name="Update_GitHubChecking" xml:space="preserve"><value>正在检查 GitHub Releases...</value></data>
+  <data name="Update_GitHubNoRelease" xml:space="preserve"><value>GitHub 上还没有发布版本（可在仓库 Releases 页手动下载）</value></data>
+  <data name="Update_GitHubHttpErrorFormat" xml:space="preserve"><value>GitHub 请求失败（HTTP {0}）</value></data>
+  <data name="Update_GitHubBadFormat" xml:space="preserve"><value>GitHub 返回数据格式异常</value></data>
+  <data name="Update_AssetFormat" xml:space="preserve"><value>安装包：{0}（{1:F1} MB）</value></data>
+  <data name="Update_DownloadPromptFormat" xml:space="preserve"><value>立即下载 {0}（{1} MB）吗？{2}</value></data>
+  <data name="Update_DownloadingFormat" xml:space="preserve"><value>正在下载 {0}%（{1:F1}/{2:F1} MB）...</value></data>
+  <data name="Update_DownloadedFormat" xml:space="preserve"><value>更新已下载：{0}
+解压覆盖现有程序即可完成更新。</value></data>
+  <data name="Update_DownloadFailedFormat" xml:space="preserve"><value>下载失败：{0}</value></data>
+  <data name="Update_NoAsset" xml:space="preserve"><value>该 Release 未附带安装包，已打开 Release 页面</value></data>
+  <data name="Update_BadFormat" xml:space="preserve"><value>更新描述格式错误（缺少 version 字段）</value></data>
+  <data name="Update_InvalidVersion" xml:space="preserve"><value>更新版本号无效：{0}</value></data>
+  <data name="Update_UpToDate" xml:space="preserve"><value>已是最新版本（v{0}）</value></data>
+  <data name="Update_NewVersionFormat" xml:space="preserve"><value>发现新版本 v{0}（当前 v{1}）</value></data>
+  <data name="Update_NotesPrefix" xml:space="preserve"><value>更新说明：{0}</value></data>
+  <data name="Update_UrlPrefix" xml:space="preserve"><value>下载地址：{0}</value></data>
+  <data name="Update_CannotConnect" xml:space="preserve"><value>无法连接更新服务器：{0}</value></data>
+  <!-- ============ adb 服务异常 ============ -->
+  <data name="Adb_CannotStartFormat" xml:space="preserve"><value>无法启动 adb：{0}（可在「设置」页修改 adb.exe 路径）</value></data>
+  <data name="Adb_ListDirFailedFormat" xml:space="preserve"><value>读取目录失败：{0}</value></data>
+  <data name="Adb_ScreenshotFailedFormat" xml:space="preserve"><value>截图失败：{0}</value></data>
+  <!-- NEW-ENTRIES -->
+</root>

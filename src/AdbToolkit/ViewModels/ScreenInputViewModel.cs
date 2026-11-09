@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Threading;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 
 namespace AdbToolkit.ViewModels;
@@ -19,23 +20,23 @@ public class ScreenInputViewModel : ObservableObject
 
         QuickKeys = new List<QuickKey>
         {
-            new("亮屏", "input keyevent 224"),
-            new("灭屏", "input keyevent 223"),
-            new("电源", "input keyevent 26"),
-            new("返回", "input keyevent 4"),
-            new("主页", "input keyevent 3"),
-            new("菜单", "input keyevent 82"),
-            new("音量+", "input keyevent 24"),
-            new("音量-", "input keyevent 25"),
-            new("静音", "input keyevent 164"),
-            new("截屏键", "input keyevent 120"),
-            new("解锁", "wm dismiss-keyguard"),
-            new("下拉通知", "cmd statusbar expand-notifications"),
-            new("收起面板", "cmd statusbar collapse"),
+            new(Strings.Screen_KeyWake, "input keyevent 224"),
+            new(Strings.Screen_KeySleep, "input keyevent 223"),
+            new(Strings.Screen_KeyPower, "input keyevent 26"),
+            new(Strings.Screen_KeyBack, "input keyevent 4"),
+            new(Strings.Screen_KeyHome, "input keyevent 3"),
+            new(Strings.Screen_KeyMenu, "input keyevent 82"),
+            new(Strings.Screen_KeyVolUp, "input keyevent 24"),
+            new(Strings.Screen_KeyVolDown, "input keyevent 25"),
+            new(Strings.Screen_KeyMute, "input keyevent 164"),
+            new(Strings.Screen_KeyScreenshot, "input keyevent 120"),
+            new(Strings.Screen_KeyUnlock, "wm dismiss-keyguard"),
+            new(Strings.Screen_KeyExpandNotify, "cmd statusbar expand-notifications"),
+            new(Strings.Screen_KeyCollapsePanel, "cmd statusbar collapse"),
         };
 
         Bitrates = new List<string> { "4", "8", "12", "20" };
-        Sizes = new List<string> { "（默认）", "1280x720", "1920x1080" };
+        Sizes = new List<string> { Strings.Screen_DefaultSize, "1280x720", "1920x1080" };
 
         ShotCommand = new RelayCommand(async () => await RunBusyAsync(ShotAsync));
         OpenFolderCommand = new RelayCommand(OpenFolder);
@@ -79,7 +80,7 @@ public class ScreenInputViewModel : ObservableObject
         set => SetProperty(ref _timeLimit, value);
     }
 
-    private string _selectedSize = "（默认）";
+    private string _selectedSize = Strings.Screen_DefaultSize;
     public string SelectedSize
     {
         get => _selectedSize;
@@ -138,7 +139,7 @@ public class ScreenInputViewModel : ObservableObject
         private set => SetProperty(ref _busy, value);
     }
 
-    private string _status = "就绪";
+    private string _status = Strings.More_Ready;
     public string Status
     {
         get => _status;
@@ -162,16 +163,18 @@ public class ScreenInputViewModel : ObservableObject
         if (IsBusy) return;
         IsBusy = true;
         try { await work(); }
-        catch (Exception ex) { Status = "错误：" + ex.Message; }
+        catch (Exception ex) { Status = string.Format(Strings.Common_ErrorFormat, ex.Message); }
         finally { IsBusy = false; }
     }
 
     private async Task RunQuietAsync(string shellCommand)
     {
         var serial = DeviceStore.SelectedSerial;
-        if (serial is null) { Status = "请先在顶部选择设备"; return; }
+        if (serial is null) { Status = Strings.Common_SelectDeviceFirst; return; }
         var r = await AppSession.Adb.RunShellAsync(shellCommand, serial);
-        Status = r.Success ? $"已执行：{shellCommand}" : $"执行失败：{r.Combined.Trim()}";
+        Status = r.Success
+            ? string.Format(Strings.Screen_ExecutedFormat, shellCommand)
+            : string.Format(Strings.Screen_ExecFailedFormat, r.Combined.Trim());
     }
 
     private static string Quote(string s) =>
@@ -180,14 +183,14 @@ public class ScreenInputViewModel : ObservableObject
     private async Task ShotAsync()
     {
         var serial = DeviceStore.SelectedSerial;
-        if (serial is null) { Status = "请先在顶部选择设备"; return; }
+        if (serial is null) { Status = Strings.Common_SelectDeviceFirst; return; }
 
         Directory.CreateDirectory(ShotFolder);
         var file = Path.Combine(ShotFolder, $"screenshot_{DateTime.Now:yyyyMMdd_HHmmss}.png");
-        Status = "正在截图...";
+        Status = Strings.Screen_TakingShot;
         var png = await AppSession.Adb.CaptureScreenAsync(serial);
         await File.WriteAllBytesAsync(file, png);
-        Status = $"已保存：{file}";
+        Status = string.Format(Strings.Common_SavedFormat, file);
     }
 
     private void OpenFolder()
@@ -200,10 +203,10 @@ public class ScreenInputViewModel : ObservableObject
     {
         await Task.CompletedTask;
         var serial = DeviceStore.SelectedSerial;
-        if (serial is null) { Status = "请先在顶部选择设备"; return; }
+        if (serial is null) { Status = Strings.Common_SelectDeviceFirst; return; }
 
         var devicePath = "/sdcard/adbtoolkit_record.mp4";
-        var size = SelectedSize == "（默认）" ? null : SelectedSize;
+        var size = SelectedSize == Strings.Screen_DefaultSize ? null : SelectedSize;
         IsRecording = true;
         _recordProcess = AppSession.Adb.StartScreenrecord(
             serial, devicePath,
@@ -211,7 +214,7 @@ public class ScreenInputViewModel : ObservableObject
             Math.Clamp(TimeLimit, 3, 180),
             size,
             _ => { /* 到时自然结束，文件留在设备上等手动停止/拉取 */ });
-        Status = $"录屏中（最长 {TimeLimit}s）... 点击「停止」结束并拉取";
+        Status = string.Format(Strings.Screen_RecordingFormat, TimeLimit);
     }
 
     private async Task RecordStopAsync()
@@ -231,38 +234,42 @@ public class ScreenInputViewModel : ObservableObject
 
         Directory.CreateDirectory(ShotFolder);
         var local = Path.Combine(ShotFolder, $"record_{DateTime.Now:yyyyMMdd_HHmmss}.mp4");
-        Status = "正在拉取录像...";
+        Status = Strings.Screen_PullingRecord;
         var r = await AppSession.Adb.PullAsync(serial, "/sdcard/adbtoolkit_record.mp4", local);
-        Status = r.Success ? $"录像已保存：{local}" : $"拉取失败：{r.Combined.Trim()}";
+        Status = r.Success
+            ? string.Format(Strings.Screen_RecordSavedFormat, local)
+            : string.Format(Strings.Files_PullFailedFormat, r.Combined.Trim());
         await AppSession.Adb.RunShellAsync("rm -f /sdcard/adbtoolkit_record.mp4", serial);
     }
 
     private async Task SendTextAsync()
     {
         var serial = DeviceStore.SelectedSerial;
-        if (serial is null) { Status = "请先在顶部选择设备"; return; }
+        if (serial is null) { Status = Strings.Common_SelectDeviceFirst; return; }
         var text = InputText;
         if (text.Length == 0) return;
 
         if (text.Any(c => c > 127))
         {
-            Status = "提示：input text 不支持中文，请输入 ASCII 文本（中文可借助设备端剪贴板粘贴）";
+            Status = Strings.Screen_TextAsciiOnly;
             return;
         }
         var r = await AppSession.Adb.RunShellAsync($"input text {Quote(text)}", serial);
-        Status = r.Success ? "文本已注入" : $"失败：{r.Combined.Trim()}";
+        Status = r.Success
+            ? Strings.Screen_TextInjected
+            : string.Format(Strings.Common_FailedFormat, r.Combined.Trim());
     }
 
     private async Task UiDumpAsync()
     {
         var serial = DeviceStore.SelectedSerial;
-        if (serial is null) { Status = "请先在顶部选择设备"; return; }
+        if (serial is null) { Status = Strings.Common_SelectDeviceFirst; return; }
 
-        Status = "正在 dump UI 层级（请保持界面静止）...";
+        Status = Strings.Screen_UiDumping;
         var dump = await AppSession.Adb.RunShellAsync("uiautomator dump /sdcard/uidump.xml", serial);
         if (!dump.Success)
         {
-            Status = $"dump 失败：{dump.Combined.Trim()}";
+            Status = string.Format(Strings.Screen_UiDumpFailedFormat, dump.Combined.Trim());
             return;
         }
 
@@ -270,15 +277,17 @@ public class ScreenInputViewModel : ObservableObject
         var local = Path.Combine(ShotFolder, $"uidump_{DateTime.Now:yyyyMMdd_HHmmss}.xml");
         var pull = await AppSession.Adb.PullAsync(serial, "/sdcard/uidump.xml", local);
         await AppSession.Adb.RunShellAsync("rm -f /sdcard/uidump.xml", serial);
-        Status = pull.Success ? $"UI 层级已保存：{local}" : $"拉取失败：{pull.Combined.Trim()}";
+        Status = pull.Success
+            ? string.Format(Strings.Screen_UiDumpSavedFormat, local)
+            : string.Format(Strings.Files_PullFailedFormat, pull.Combined.Trim());
     }
 
     private async Task MonkeyStartAsync()
     {
         var serial = DeviceStore.SelectedSerial;
-        if (serial is null) { Status = "请先在顶部选择设备"; return; }
+        if (serial is null) { Status = Strings.Common_SelectDeviceFirst; return; }
         var pkg = MonkeyPackage.Trim();
-        if (pkg.Length == 0) { Status = "请填写 Monkey 目标包名"; return; }
+        if (pkg.Length == 0) { Status = Strings.Screen_EnterMonkeyPkg; return; }
 
         var seedPart = int.TryParse(MonkeySeed, out var seed) && seed > 0 ? $"-s {seed} " : "";
         var cmd = $"monkey -p {pkg} {seedPart}--throttle {MonkeyThrottle} -v {MonkeyCount}";
@@ -299,10 +308,12 @@ public class ScreenInputViewModel : ObservableObject
                 System.Windows.Application.Current.Dispatcher.BeginInvoke(() =>
                 {
                     IsMonkeyRunning = false;
-                    Status = code == 0 ? "Monkey 测试完成，未崩溃" : $"Monkey 已结束（code {code}），建议查看 crash 日志";
+                    Status = code == 0
+                        ? Strings.Screen_MonkeyDone
+                        : string.Format(Strings.Screen_MonkeyEndedFormat, code);
                 });
             });
-        Status = $"Monkey 运行中（{pkg}，{MonkeyCount} 事件）...";
+        Status = string.Format(Strings.Screen_MonkeyRunningFormat, pkg, MonkeyCount);
         await Task.CompletedTask;
     }
 
@@ -314,7 +325,7 @@ public class ScreenInputViewModel : ObservableObject
         if (p is null) return;
         try { if (!p.HasExited) p.Kill(entireProcessTree: true); } catch { }
         p.Dispose();
-        Status = "Monkey 已手动停止";
+        Status = Strings.Screen_MonkeyStopped;
     }
 
     /// <summary>离开页面时回收子进程。</summary>

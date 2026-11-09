@@ -21,6 +21,12 @@ public class AppSettings
     /// <summary>主题："light" / "dark"（启动时应用，修改后需重启）。</summary>
     public string Theme { get; set; } = ThemeManager.Light;
 
+    /// <summary>界面语言："zh" / "en"（启动时应用，修改后需重启）。</summary>
+    public string Language { get; set; } = "zh";
+
+    /// <summary>关闭主窗口时是否隐藏到系统托盘（关闭 = 直接退出）。</summary>
+    public bool HideToTrayOnClose { get; set; }
+
     /// <summary>更新服务器地址（托管版本描述 JSON）；为空表示不检查。</summary>
     public string UpdateUrl { get; set; } = "";
 

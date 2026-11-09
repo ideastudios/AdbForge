@@ -1,6 +1,12 @@
 <UserControl x:Class="AdbToolkit.Views.AppsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:res="clr-namespace:AdbToolkit.Resources">
+
+    <!-- 应用级隐式 TextBlock 样式不穿透 UserControl 模板边界，本地补一份保证文字跟随主题 -->
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}"/>
+    </UserControl.Resources>
 
     <Grid AllowDrop="True" Drop="Page_Drop" DragOver="Page_DragOver">
         <Grid.RowDefinitions>
@@ -12,19 +18,19 @@
         <!-- ======= 工具栏 ======= -->
         <Border Grid.Row="0" Style="{StaticResource Card}" Padding="12" Margin="0,0,0,12">
             <WrapPanel VerticalAlignment="Center">
-                <Button Content="刷新列表" Style="{StaticResource BtnAccent}"
+                <Button Content="{x:Static res:Strings.Apps_RefreshList}" Style="{StaticResource BtnAccent}"
                         Command="{Binding LoadCommand}"/>
-                <Button Content="安装 APK（可多选）..." Margin="8,0,0,0"
+                <Button Content="{x:Static res:Strings.Apps_InstallApk}" Margin="8,0,0,0"
                         Command="{Binding InstallCommand}"/>
 
-                <CheckBox Content="显示系统应用" IsChecked="{Binding ShowSystem}"
+                <CheckBox Content="{x:Static res:Strings.Apps_ShowSystem}" IsChecked="{Binding ShowSystem}"
                           VerticalAlignment="Center" Margin="16,0,0,0"/>
-                <CheckBox Content="卸载时保留数据 (-k)" IsChecked="{Binding KeepData}"
+                <CheckBox Content="{x:Static res:Strings.Apps_KeepData}" IsChecked="{Binding KeepData}"
                           VerticalAlignment="Center" Margin="12,0,0,0"/>
-                <CheckBox Content="安装时自动授权 (-g)" IsChecked="{Binding GrantPermissions}"
+                <CheckBox Content="{x:Static res:Strings.Apps_GrantPermissions}" IsChecked="{Binding GrantPermissions}"
                           VerticalAlignment="Center" Margin="12,0,0,0"/>
 
-                <TextBlock Text="搜索" VerticalAlignment="Center"
+                <TextBlock Text="{x:Static res:Strings.Apps_Search}" VerticalAlignment="Center"
                            Margin="16,0,6,0" FontSize="12"
                            Foreground="{StaticResource Text.Secondary}"/>
                 <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
@@ -43,30 +49,30 @@
                       ContextMenuOpening="AppsList_ContextMenuOpening">
                 <ListView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="获取应用名（解析 APK）" Click="GetLabel_Click"/>
-                        <MenuItem Header="应用详情..." Click="ShowDetail_Click"/>
+                        <MenuItem Header="{x:Static res:Strings.Apps_MenuGetLabel}" Click="GetLabel_Click"/>
+                        <MenuItem Header="{x:Static res:Strings.Apps_MenuDetail}" Click="ShowDetail_Click"/>
                         <Separator/>
-                        <MenuItem Header="复制应用名" Click="CopyLabel_Click"/>
-                        <MenuItem Header="复制包名" Click="CopyPkg_Click"/>
-                        <MenuItem Header="复制 APK 路径" Click="CopyPath_Click"/>
-                        <MenuItem Header="提取 APK 到本地..." Click="ExtractApk_Click"/>
+                        <MenuItem Header="{x:Static res:Strings.Apps_MenuCopyLabel}" Click="CopyLabel_Click"/>
+                        <MenuItem Header="{x:Static res:Strings.Apps_MenuCopyPkg}" Click="CopyPkg_Click"/>
+                        <MenuItem Header="{x:Static res:Strings.Apps_MenuCopyPath}" Click="CopyPath_Click"/>
+                        <MenuItem Header="{x:Static res:Strings.Apps_MenuExtractApk}" Click="ExtractApk_Click"/>
                         <Separator/>
-                        <MenuItem Header="打开系统详情页" Click="OpenSystemDetail_Click"/>
-                        <MenuItem Header="卸载" Click="Uninstall_Click"/>
+                        <MenuItem Header="{x:Static res:Strings.Apps_MenuOpenSystemDetail}" Click="OpenSystemDetail_Click"/>
+                        <MenuItem Header="{x:Static res:Strings.Apps_Uninstall}" Click="Uninstall_Click"/>
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="应用名" Width="180"
+                        <GridViewColumn Header="{x:Static res:Strings.Apps_ColAppName}" Width="180"
                                         DisplayMemberBinding="{Binding Label}"/>
-                        <GridViewColumn Header="包名" Width="270"
+                        <GridViewColumn Header="{x:Static res:Strings.DevMgr_Package}" Width="270"
                                         DisplayMemberBinding="{Binding Package}"/>
-                        <GridViewColumn Header="APK 路径" Width="450"
+                        <GridViewColumn Header="{x:Static res:Strings.Apps_ColApkPath}" Width="450"
                                         DisplayMemberBinding="{Binding ApkPath}"/>
-                        <GridViewColumn Header="操作" Width="90">
+                        <GridViewColumn Header="{x:Static res:Strings.Apps_ColAction}" Width="90">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="卸载"
+                                    <Button Content="{x:Static res:Strings.Apps_Uninstall}"
                                             Style="{StaticResource BtnDanger}"
                                             Padding="8,2" FontSize="11.5"
                                             Command="{Binding DataContext.UninstallCommand,

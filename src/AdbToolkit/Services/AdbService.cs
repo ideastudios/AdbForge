@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using AdbToolkit.Models;
+using AdbToolkit.Resources;
 
 namespace AdbToolkit.Services;
 
@@ -102,7 +103,7 @@ public partial class AdbService
             if (currentLine == null) return;
             if (hasSurface && viewVisible)
             {
-                var fg = ExtractForeground(currentLine, "窗口");
+                var fg = ExtractForeground(currentLine, Strings.DevMgr_SourceWindow);
                 if (fg != null) result.Add(fg);
             }
             currentLine = null;
@@ -153,7 +154,7 @@ public partial class AdbService
         catch (Exception ex)
         {
             throw new InvalidOperationException(
-                $"无法启动 adb：{AdbPath}（可在「设置」页修改 adb.exe 路径）", ex);
+                string.Format(Strings.Adb_CannotStartFormat, AdbPath), ex);
         }
 
         var outTask = process.StandardOutput.ReadToEndAsync(ct);
@@ -315,7 +316,7 @@ public partial class AdbService
         }
 
         if (files.Count == 0 && !result.Success)
-            throw new InvalidOperationException($"读取目录失败：{result.Combined.Trim()}");
+            throw new InvalidOperationException(string.Format(Strings.Adb_ListDirFailedFormat, result.Combined.Trim()));
 
         return files
             .OrderByDescending(f => f.IsDir || f.IsSymlink) // 目录（含软链目录）排前
@@ -337,7 +338,7 @@ public partial class AdbService
         if (process.ExitCode != 0 || ms.Length == 0)
         {
             var err = await process.StandardError.ReadToEndAsync(ct);
-            throw new InvalidOperationException($"截图失败：{err.Trim()}");
+            throw new InvalidOperationException(string.Format(Strings.Adb_ScreenshotFailedFormat, err.Trim()));
         }
         return ms.ToArray();
     }

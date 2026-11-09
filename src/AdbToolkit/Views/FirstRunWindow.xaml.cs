@@ -1,5 +1,6 @@
 using System.IO;
 using System.Windows;
+using AdbToolkit.Resources;
 using AdbToolkit.Services;
 
 namespace AdbToolkit.Views;
@@ -14,13 +15,12 @@ public partial class FirstRunWindow : Window
         var adbPath = AppSession.Adb.AdbPath;
         if (File.Exists(adbPath))
         {
-            AdbStatusText.Text = $"✓ 已检测到 adb：{adbPath}";
+            AdbStatusText.Text = string.Format(Strings.FirstRun_AdbFoundFormat, adbPath);
             AdbStatusText.Foreground = FindBrush("Status.OK");
         }
         else
         {
-            AdbStatusText.Text = $"✗ 未检测到 adb（当前尝试：{adbPath}）\n" +
-                                 "请先安装 Android SDK platform-tools，或到「设置」页手动指定 adb.exe 路径。";
+            AdbStatusText.Text = string.Format(Strings.FirstRun_AdbNotFoundFormat, adbPath);
             AdbStatusText.Foreground = FindBrush("Status.Error");
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using AdbToolkit.Models;
+using AdbToolkit.Resources;
 
 namespace AdbToolkit.ViewModels;
 
@@ -60,5 +61,5 @@ public class FileTreeNode : ObservableObject
 
     public string SizeText => IsPlaceholder || IsExpandable ? "" : DeviceFile.FormatSize(Size);
 
-    public static FileTreeNode Placeholder() => new() { Name = "加载中…", IsPlaceholder = true };
+    public static FileTreeNode Placeholder() => new() { Name = Strings.Files_Loading, IsPlaceholder = true };
 }
