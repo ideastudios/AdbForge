@@ -223,11 +223,27 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="Template">
             <Setter.Value>
+                <!-- GridView 模式需 GridViewRowPresenter 按列渲染，普通列表用 ContentPresenter；
+                     由 GridView.ColumnCollection 附加属性（GridView 模式下 ListView 自动设置）切换 -->
                 <ControlTemplate TargetType="ListViewItem">
                     <Border x:Name="Root" Background="Transparent" Padding="{TemplateBinding Padding}">
-                        <ContentPresenter/>
+                        <Grid>
+                            <GridViewRowPresenter x:Name="RowPresenter"
+                                                  Content="{TemplateBinding Content}"
+                                                  Columns="{TemplateBinding GridView.ColumnCollection}"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <ContentPresenter x:Name="ListPresenter"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              Visibility="Collapsed"/>
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="GridView.ColumnCollection" Value="{x:Null}">
+                            <Setter TargetName="RowPresenter" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="ListPresenter" Property="Visibility" Value="Visible"/>
+                        </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Root" Property="Background" Value="{DynamicResource Bg.Active}"/>
                         </Trigger>

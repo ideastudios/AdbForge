@@ -11,7 +11,7 @@
     <!-- 默认语言：简体中文（英文资源在 Strings.en.resx，启动时按设置切换 CurrentUICulture） -->
     <NeutralLanguage>zh-CN</NeutralLanguage>
     <LangVersion>latest</LangVersion>
-    <Version>0.4.0</Version>
+    <Version>0.4.1</Version>
     <Product>卓匠 AdbForge - ADB 开发者工具箱</Product>
     <AssemblyTitle>卓匠 · ADB 工具箱</AssemblyTitle>
     <AssemblyName>AdbForge</AssemblyName>
