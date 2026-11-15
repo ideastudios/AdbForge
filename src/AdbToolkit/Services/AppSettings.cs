@@ -33,6 +33,9 @@ public class AppSettings
     /// <summary>是否已完成首次运行引导。</summary>
     public bool FirstRunDone { get; set; }
 
+    /// <summary>已弹过"隐藏到托盘"气泡提示的应用版本；同版本只提示一次，升级后重提一次。</summary>
+    public string TrayTipShownVersion { get; set; } = "";
+
     private static string Dir => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AdbToolkit");
 

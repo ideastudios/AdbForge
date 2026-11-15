@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Reflection;
 using System.Windows;
 using AdbToolkit.Resources;
 
@@ -11,7 +12,6 @@ namespace AdbToolkit.Services;
 public static class TrayService
 {
     private static System.Windows.Forms.NotifyIcon? _icon;
-    private static bool _tipShown;
 
     /// <summary>确保托盘图标已创建并显示（已存在时不重复创建、不重复弹气泡）。</summary>
     public static void Ensure(Window window)
@@ -35,12 +35,19 @@ public static class TrayService
         });
         icon.ContextMenuStrip = menu;
 
-        if (!_tipShown)
+        // 本版本首次隐藏到托盘时弹一次气泡（版本号持久化到设置，重启后同版本不再弹）
+        var version = Assembly.GetEntryAssembly()?.GetName().Version;
+        if (version != null)
         {
-            _tipShown = true;
-            icon.BalloonTipTitle = Strings.Tray_HiddenBalloonTitle;
-            icon.BalloonTipText = Strings.Tray_HiddenBalloonText;
-            icon.ShowBalloonTip(1500);
+            var versionText = version.ToString(3);
+            if (AppSession.Settings.TrayTipShownVersion != versionText)
+            {
+                AppSession.Settings.TrayTipShownVersion = versionText;
+                AppSession.Settings.Save();
+                icon.BalloonTipTitle = Strings.Tray_HiddenBalloonTitle;
+                icon.BalloonTipText = Strings.Tray_HiddenBalloonText;
+                icon.ShowBalloonTip(1500);
+            }
         }
 
         _icon = icon;
