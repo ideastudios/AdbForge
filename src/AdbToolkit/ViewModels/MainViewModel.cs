@@ -81,8 +81,19 @@ public class MainViewModel : ObservableObject
         {
             if (!SetProperty(ref _selectedNav, value)) return;
             OnPropertyChanged(nameof(CurrentTitle));
-            CurrentView = CreateView(value);
+            CurrentView = GetOrCreateView(value);
         }
+    }
+
+    /// <summary>页面缓存：切换导航复用 View/VM，避免重建整棵 UI 树（切换更快、页面状态不丢）。</summary>
+    private readonly Dictionary<Type, UserControl> _pageCache = new();
+
+    private object GetOrCreateView(NavItem? item)
+    {
+        if (item is null) return CreateView(item);
+        if (!_pageCache.TryGetValue(item.PageType, out var page))
+            _pageCache[item.PageType] = page = (UserControl)CreateView(item);
+        return page;
     }
 
     private object? _currentView;

@@ -111,6 +111,15 @@ public partial class PerfViewModel : ObservableObject
         }
     }
 
+    /// <summary>离开页面时挂起自动刷新（AutoRefresh 开关意图保留，回到页面时恢复）。</summary>
+    public void SuspendTimers() => _autoTimer.Stop();
+
+    /// <summary>回到页面时恢复自动刷新（仅当用户开启过自动刷新）。</summary>
+    public void ResumeTimers()
+    {
+        if (_autoRefresh && !_autoTimer.IsEnabled) _autoTimer.Start();
+    }
+
     // ---------- 内存 ----------
     private string _memPackage = "";
     public string MemPackage { get => _memPackage; set => SetProperty(ref _memPackage, value); }
